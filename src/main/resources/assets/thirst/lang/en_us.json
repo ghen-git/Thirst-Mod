@@ -1,0 +1,5 @@
+{
+  "death.attack.dehydrate": "%1$s died from dehydration",
+  "death.attack.dehydrate.player": "%1$s died from dehydration while fighting %2$s",
+  "item.thirst.water_bowl": "Water Bowl"
+}

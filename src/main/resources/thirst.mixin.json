@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "dev.ghen.thirst.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "thirst.refmap.json",
+  "mixins": [
+    "MixinAbstractCauldronBlock",
+    "MixinBottleItem",
+    "MixinBucketItem",
+    "MixinCauldronBlock",
+    "MixinItemStack",
+    "MixinLayeredCauldronBlock"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}
