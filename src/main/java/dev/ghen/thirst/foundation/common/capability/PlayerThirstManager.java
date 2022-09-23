@@ -16,6 +16,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -103,6 +104,19 @@ public class PlayerThirstManager
         if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer)
         {
             event.player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(event.player));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerBreak(LivingDestroyBlockEvent event)
+    {
+        if(event.getEntity() instanceof ServerPlayer)
+        {
+            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+            {
+                Player player = (Player) event.getEntity();
+                cap.addExhaustion(player, 0.005f);
+            });
         }
     }
 

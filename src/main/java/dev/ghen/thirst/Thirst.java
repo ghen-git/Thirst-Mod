@@ -11,6 +11,7 @@ import dev.ghen.thirst.content.ItemInit;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.content.thirst.ThirstHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodData;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;

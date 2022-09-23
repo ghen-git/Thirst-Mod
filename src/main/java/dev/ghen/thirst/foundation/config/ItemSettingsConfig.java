@@ -29,7 +29,7 @@ public class ItemSettingsConfig
                 .defineList("drinks", Arrays.asList
                                 (
                                         Arrays.asList("minecraft:potion", 6, 8),
-                                        Arrays.asList("thirst:water_terracotta_bowl", 4, 5),
+                                        Arrays.asList("thirst:terracotta_water_bowl", 4, 5),
                                         Arrays.asList("farmersrespite:green_tea", 10, 14),
                                         Arrays.asList("farmersrespite:yellow_tea", 10, 14),
                                         Arrays.asList("farmersrespite:black_tea", 10, 14),
