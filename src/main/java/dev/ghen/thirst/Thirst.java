@@ -1,32 +1,23 @@
 package dev.ghen.thirst;
 
-import dev.ghen.thirst.client.gui.ThirstBarRenderer;
-import dev.ghen.thirst.client.gui.appleskin.HUDOverlayHandler;
-import dev.ghen.thirst.client.gui.appleskin.TooltipOverlayHandler;
-import dev.ghen.thirst.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
+import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
+import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
+import dev.ghen.thirst.foundation.common.capability.IThirstCap;
 import com.mojang.logging.LogUtils;
-import dev.ghen.thirst.common.event.WaterPurity;
-import dev.ghen.thirst.config.ItemSettingsConfig;
-import dev.ghen.thirst.init.ItemInit;
-import dev.ghen.thirst.network.ThirstModPacketHandler;
-import net.minecraft.core.BlockSource;
+import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
+import dev.ghen.thirst.content.ItemInit;
+import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
+import dev.ghen.thirst.content.thirst.ThirstHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.slf4j.Logger;
 
 @Mod(Thirst.ID)
@@ -40,11 +31,7 @@ public class Thirst
 
     public Thirst()
     {
-        ModLoadingContext modLoadingContext = ModLoadingContext.get();
-
-        IEventBus modBus = FMLJavaModLoadingContext.get()
-                .getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::clientSetup);
@@ -60,12 +47,16 @@ public class Thirst
     {
         WaterPurity.init();
         ThirstModPacketHandler.init();
+
+        if(ModList.get().isLoaded("coldsweat"))
+            ThirstHelper.shouldUseColdSweatCaps(true);
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
     {
         if(ModList.get().isLoaded("appleskin"))
         {
+            //appleskin integration classes initialization
             HUDOverlayHandler.init();
             TooltipOverlayHandler.init();
         }
@@ -78,6 +69,7 @@ public class Thirst
         event.register(IThirstCap.class);
     }
 
+    //this is from Create but it looked very cool
     public static ResourceLocation asResource(String path)
     {
         return new ResourceLocation(ID, path);

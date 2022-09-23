@@ -1,5 +1,8 @@
 {
   "death.attack.dehydrate": "%1$s died from dehydration",
   "death.attack.dehydrate.player": "%1$s died from dehydration while fighting %2$s",
-  "item.thirst.water_bowl": "Water Bowl"
+  "item.thirst.wooden_water_bowl": "Wooden Water Bowl",
+  "item.thirst.terracotta_water_bowl": "Terracotta Water Bowl",
+  "item.thirst.terracotta_bowl": "Terracotta Bowl",
+  "item.thirst.clay_bowl": "Clay Bowl"
 }

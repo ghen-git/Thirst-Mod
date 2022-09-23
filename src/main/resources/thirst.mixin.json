@@ -1,15 +1,17 @@
 {
   "required": true,
-  "package": "dev.ghen.thirst.mixin",
+  "package": "dev.ghen.thirst.foundation.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
-    "MixinAbstractCauldronBlock",
+    "MixinBootstrap",
     "MixinBottleItem",
     "MixinBucketItem",
-    "MixinCauldronBlock",
     "MixinItemStack",
-    "MixinLayeredCauldronBlock"
+    "MixinLayeredCauldronBlock",
+    "accessors.CampfireBlockEntityAccessor",
+    "MixinCampfireBlockEntity",
+    "MixinAbstractFurnaceBlockEntity"
   ],
   "client": [
   ],

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient":
+  {
+    "item": "thirst:clay_bowl"
+  },
+  "result": "thirst:terracotta_bowl",
+  "experience": 0.35,
+  "cookingtime": 600
+}

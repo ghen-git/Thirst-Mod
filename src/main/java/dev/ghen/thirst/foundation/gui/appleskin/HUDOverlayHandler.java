@@ -1,0 +1,336 @@
+package dev.ghen.thirst.foundation.gui.appleskin;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
+import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.content.thirst.ThirstHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
+import java.util.Vector;
+
+@OnlyIn(Dist.CLIENT)
+public class HUDOverlayHandler
+
+{
+    /**
+     * This is some of the most esoteric garbage code you'll ever see. Read at your own risk
+     * also this is adapted from AppleSkin
+     * */
+    private static float unclampedFlashAlpha = 0f;
+    private static float flashAlpha = 0f;
+    private static byte alphaDir = 1;
+    protected static int foodIconsOffset;
+
+    public static final Vector<IntPoint> healthBarOffsets = new Vector<>();
+    public static final Vector<IntPoint> foodBarOffsets = new Vector<>();
+    private static final Random random = new Random();
+
+    private static ResourceLocation modIcons = new ResourceLocation(Thirst.ID, "textures/gui/appleskin_icons.png");
+
+    public static void init()
+    {
+        MinecraftForge.EVENT_BUS.register(new HUDOverlayHandler());
+
+        OverlayRegistry.registerOverlayBelow(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Exhaustion", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
+            Minecraft mc = Minecraft.getInstance();
+            boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements())
+            {
+                renderExhaustion(gui, mStack, partialTicks, screenWidth, screenHeight);
+            }
+        });
+
+        OverlayRegistry.registerOverlayAbove(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Overlay", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
+            Minecraft mc = Minecraft.getInstance();
+            boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements())
+            {
+                renderThirstOverlay(gui, mStack, partialTicks, screenWidth, screenHeight);
+            }
+        });
+    }
+
+    public static void renderExhaustion(ForgeIngameGui gui, PoseStack mStack, float partialTicks, int screenWidth, int screenHeight)
+    {
+        foodIconsOffset = gui.right_height;
+
+        /*if (!ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get())
+            return;*/
+
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        assert player != null;
+
+        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91;
+        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
+        float exhaustion = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null).getExhaustion();
+
+        drawExhaustionOverlay(exhaustion, mc, mStack, right, top, 1f);
+    }
+
+    public static void renderThirstOverlay(ForgeIngameGui gui, PoseStack mStack, float partialTicks, int screenWidth, int screenHeight)
+    {
+        if (!shouldRenderAnyOverlays())
+            return;
+
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+        assert player != null;
+        IThirstCap thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
+        PoseStack poseStack = mStack;
+
+        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
+        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91; // right of food bar
+
+        generateHungerBarOffsets(top, right, mc.gui.getGuiTicks(), player);
+
+        // cancel render overlay event when configuration disabled.
+        /*if (!ModConfig.SHOW_SATURATION_OVERLAY.get())
+            saturationRenderEvent.setCanceled(true);*/
+
+        drawSaturationOverlay(0, thirstData.getQuenched(), mc, mStack, right, top, 1f);
+
+        // try to get the item stack in the player hand
+        ItemStack heldItem = player.getMainHandItem();
+        if (/*ModConfig.SHOW_FOOD_VALUES_OVERLAY_WHEN_OFFHAND.get() && */!ThirstHelper.itemRestoresThirst(heldItem))
+            heldItem = player.getOffhandItem();
+
+        boolean shouldRenderHeldItemValues = !heldItem.isEmpty() && ThirstHelper.itemRestoresThirst(heldItem);
+        if (!shouldRenderHeldItemValues)
+        {
+            resetFlash();
+            return;
+        }
+
+        ThirstValues thirstValues = new ThirstValues(ThirstHelper.getThirst(heldItem), ThirstHelper.getQuenched(heldItem));
+        //FoodValuesEvent foodValuesEvent = new FoodValuesEvent(player, heldItem, FoodHelper.getDefaultFoodValues(heldItem, player), modifiedFoodValues);
+
+        /*if (!ModConfig.SHOW_FOOD_VALUES_OVERLAY.get())
+            return;*/
+
+        // notify everyone that we should render hunger hud overlay
+        /*HUDOverlayEvent.HungerRestored renderRenderEvent = new HUDOverlayEvent.HungerRestored(stats.getFoodLevel(), heldItem, modifiedFoodValues, right, top, poseStack);
+        MinecraftForge.EVENT_BUS.post(renderRenderEvent);
+        if (renderRenderEvent.isCanceled())
+            return;*/
+
+        // calculate the final hunger and saturation
+        int drinkThirst = thirstValues.thirst;
+        float thirstQuenchedIncrement = thirstValues.getQuenchedIncrement();
+
+        // restored hunger/saturation overlay while holding food
+        if(thirstData.getThirst() < 20)
+            drawHungerOverlay(drinkThirst, thirstData.getThirst(), mc, mStack, right, top, flashAlpha);
+        // Redraw saturation overlay for gained
+        if(!(ThirstHelper.isFood(heldItem) && player.getFoodData().getFoodLevel() >= 20))
+            drawSaturationOverlay(thirstValues.quenchedModifier, thirstData.getQuenched(), mc, mStack, right, top, flashAlpha);
+    }
+
+    public static void drawSaturationOverlay(float saturationGained, float saturationLevel, Minecraft mc, PoseStack poseStack, int right, int top, float alpha)
+    {
+        if (saturationLevel + saturationGained < 0)
+            return;
+
+        enableAlpha(alpha);
+        RenderSystem.setShaderTexture(0, modIcons);
+
+        float modifiedSaturation = Math.max(0, Math.min(saturationLevel + saturationGained, 20));
+
+        int startSaturationBar = 0;
+        int endSaturationBar = (int) Math.ceil(modifiedSaturation / 2.0F);
+
+        // when require rendering the gained saturation, start should relocation to current saturation tail.
+        if (saturationGained != 0)
+            startSaturationBar = (int) Math.max(saturationLevel / 2.0F, 0);
+
+        int iconSize = 9;
+
+        for (int i = startSaturationBar; i < endSaturationBar; ++i)
+        {
+            // gets the offset that needs to be render of icon
+            IntPoint offset = foodBarOffsets.get(i);
+            if (offset == null)
+                continue;
+
+            int x = right + offset.x;
+            int y = top + offset.y;
+
+            int v = 0;
+            int u = 0;
+
+            float effectiveSaturationOfBar = (modifiedSaturation / 2.0F) - i;
+
+            if (effectiveSaturationOfBar >= 1)
+                u = 3 * iconSize;
+            else if (effectiveSaturationOfBar > .5)
+                u = 2 * iconSize;
+            else if (effectiveSaturationOfBar > .25)
+                u = 1 * iconSize;
+
+            mc.gui.blit(poseStack, x, y, u, v, iconSize, iconSize);
+        }
+
+        // rebind default icons
+        RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+        disableAlpha(alpha);
+    }
+
+    public static void drawHungerOverlay(int hungerRestored, int foodLevel, Minecraft mc, PoseStack poseStack, int right, int top, float alpha)
+    {
+        if (hungerRestored <= 0)
+            return;
+
+        enableAlpha(alpha);
+        RenderSystem.setShaderTexture(0, ThirstBarRenderer.THIRST_ICONS);
+
+        int modifiedFood = Math.max(0, Math.min(20, foodLevel + hungerRestored));
+
+        int startFoodBars = Math.max(0, foodLevel / 2);
+        int endFoodBars = (int) Math.ceil(modifiedFood / 2.0F);
+
+        int iconStartOffset = 8 -3;
+        int iconSize = 9;
+
+        for (int i = startFoodBars; i < endFoodBars; ++i)
+        {
+            // gets the offset that needs to be render of icon
+            IntPoint offset = foodBarOffsets.get(i);
+            if (offset == null)
+                continue;
+
+            int x = right + offset.x;
+            int y = top + offset.y;
+
+            // location to normal food by default
+            int v = 3 * iconSize;
+            int u = iconStartOffset + 4 * iconSize;
+            int ub = iconStartOffset + 1 * iconSize;
+
+            // relocation to half food
+            if (i * 2 + 1 == modifiedFood)
+                u += 1 * iconSize;
+
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+
+            mc.gui.blit(poseStack, x, y, u, v, iconSize, iconSize, 25, 9);
+        }
+
+        disableAlpha(alpha);
+    }
+
+    public static void drawExhaustionOverlay(float exhaustion, Minecraft mc, PoseStack poseStack, int right, int top, float alpha)
+    {
+        RenderSystem.setShaderTexture(0, modIcons);
+
+        float maxExhaustion = 4.0f;
+        // clamp between 0 and 1
+        float ratio = Math.min(1, Math.max(0, exhaustion / maxExhaustion));
+        int width = (int) (ratio * 81);
+        int height = 9;
+
+        enableAlpha(.75f);
+        mc.gui.blit(poseStack, right - width, top, 81 - width, 18, width, height);
+        disableAlpha(.75f);
+
+        // rebind default icons
+        RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+    }
+
+    public static void enableAlpha(float alpha)
+    {
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
+        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    public static void disableAlpha(float alpha)
+    {
+        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event)
+    {
+        if (event.phase != TickEvent.Phase.END)
+            return;
+
+        unclampedFlashAlpha += alphaDir * 0.125f;
+        if (unclampedFlashAlpha >= 1.5f)
+        {
+            alphaDir = -1;
+        }
+        else if (unclampedFlashAlpha <= -0.5f)
+        {
+            alphaDir = 1;
+        }
+        flashAlpha = Math.max(0F, Math.min(1F, unclampedFlashAlpha)) * 0.65f;
+    }
+
+    public static void resetFlash()
+    {
+        unclampedFlashAlpha = flashAlpha = 0f;
+        alphaDir = 1;
+    }
+
+    private static boolean shouldRenderAnyOverlays()
+    {
+        return true;
+    }
+
+    private static void generateHungerBarOffsets(int top, int right, int ticks, Player player)
+    {
+        final int preferFoodBars = 10;
+
+        boolean shouldAnimatedFood = false;
+
+        IThirstCap thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
+
+        // in vanilla saturation level is zero will show hunger animation
+        float quenched = thirstData.getQuenched();
+        int thirst = thirstData.getThirst();
+        shouldAnimatedFood = quenched <= 0.0F && ticks % (thirst * 3 + 1) == 0;
+
+        if (foodBarOffsets.size() != preferFoodBars)
+            foodBarOffsets.setSize(preferFoodBars);
+
+        // right alignment, single row
+        for (int i = 0; i < preferFoodBars; ++i)
+        {
+            int x = right - i * 8 - 9;
+            int y = top;
+
+            // apply the animated offset
+            if (shouldAnimatedFood)
+                y += random.nextInt(3) - 1;
+
+            // reuse the point object to reduce memory usage
+            IntPoint point = foodBarOffsets.get(i);
+            if (point == null)
+            {
+                point = new IntPoint();
+                foodBarOffsets.set(i, point);
+            }
+
+            point.x = x - right;
+            point.y = y - top;
+        }
+    }
+}
