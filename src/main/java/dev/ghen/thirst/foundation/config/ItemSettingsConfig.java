@@ -84,12 +84,11 @@ public class ItemSettingsConfig
     public static void setup()
     {
         Path configPath = FMLPaths.CONFIGDIR.get();
-        Path csConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "thirst");
+        Path configFolder = Paths.get(configPath.toAbsolutePath().toString(), "thirst");
 
-        // Create the config folder
         try
         {
-            Files.createDirectory(csConfigPath);
+            Files.createDirectory(configFolder);
         }
         catch (Exception ignored) {}
 
