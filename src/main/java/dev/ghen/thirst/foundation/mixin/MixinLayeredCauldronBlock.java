@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinLayeredCauldronBlock
 {
     @Inject(method = "createBlockStateDefinition", at = @At("HEAD"))
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_153549_, CallbackInfo ci)
+    protected void addPurityBlockState(StateDefinition.Builder<Block, BlockState> p_153549_, CallbackInfo ci)
     {
         p_153549_.add(WaterPurity.BLOCK_PURITY);
     }

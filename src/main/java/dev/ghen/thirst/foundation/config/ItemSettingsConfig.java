@@ -2,6 +2,7 @@ package dev.ghen.thirst.foundation.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Files;
@@ -15,8 +16,8 @@ public class ItemSettingsConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> drinks;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> foods;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> DRINKS;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> FOODS;
 
     static final ItemSettingsConfig INSTANCE = new ItemSettingsConfig();
 
@@ -25,7 +26,7 @@ public class ItemSettingsConfig
         BUILDER.push("Drinks")
                 .comment("Defines items that will recover thirst when drunk",
                         "Format: [[\"item-id-1\", hydration-amount, quenching-amount], [\"item-id-2\", hydration-amount, quenching-amount], ...etc]");
-        drinks = BUILDER
+        DRINKS = BUILDER
                 .defineList("drinks", Arrays.asList
                                 (
                                         Arrays.asList("minecraft:potion", 6, 8),
@@ -37,7 +38,22 @@ public class ItemSettingsConfig
                                         Arrays.asList("farmersrespite:dandelion_tea", 12, 22),
                                         Arrays.asList("create:builders_tea", 12, 22),
                                         Arrays.asList("farmersdelight:apple_cider", 8, 13),
-                                        Arrays.asList("farmersdelight:melon_juice", 8, 13)
+                                        Arrays.asList("farmersdelight:melon_juice", 8, 13),
+                                        Arrays.asList("brewinandchewin:beer", 10, 14),
+                                        Arrays.asList("brewinandchewin:vodka", 10, 14),
+                                        Arrays.asList("brewinandchewin:rice_wine", 10, 14),
+                                        Arrays.asList("brewinandchewin:mead", 10, 14),
+                                        Arrays.asList("brewinandchewin:egg_nog", 10, 14),
+                                        Arrays.asList("brewinandchewin:glittering_grenadine", 10, 14),
+                                        Arrays.asList("brewinandchewin:bloody_mary", 12, 22),
+                                        Arrays.asList("brewinandchewin:salty_folly", 12, 22),
+                                        Arrays.asList("brewinandchewin:pale_jane", 12, 22),
+                                        Arrays.asList("brewinandchewin:saccharine_rum", 12, 22),
+                                        Arrays.asList("brewinandchewin:strongroot_ale", 12, 22),
+                                        Arrays.asList("brewinandchewin:dread_nog", 12, 22),
+                                        Arrays.asList("brewinandchewin:kombucha", 14, 22),
+                                        Arrays.asList("brewinandchewin:red_rum", 14, 22),
+                                        Arrays.asList("brewinandchewin:steel_toe_stout", 14, 22)
                                 ),
                         it -> it instanceof List && ((List<?>) it).get(0) instanceof String && ((List<?>) it).get(1) instanceof Number);
 
@@ -46,7 +62,7 @@ public class ItemSettingsConfig
         BUILDER.push("Foods")
                 .comment("Defines items that will recover thirst when eaten",
                         "Format: [[\"item-id-1\", hydration-amount, quenching-amount], [\"item-id-2\", hydration-amount, quenching-amount], ...etc]");
-        foods = BUILDER
+        FOODS = BUILDER
                 .defineList("foods", Arrays.asList
                                 (
                                         Arrays.asList("minecraft:apple", 2, 3),
@@ -92,7 +108,7 @@ public class ItemSettingsConfig
         }
         catch (Exception ignored) {}
 
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, SPEC, "thirst/item_settings.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "thirst/item_settings.toml");
     }
 
     public void copyValues(ItemSettingsConfig config)
@@ -108,21 +124,21 @@ public class ItemSettingsConfig
 
     public List<? extends List<?>> getDrinks()
     {
-        return drinks.get();
+        return DRINKS.get();
     }
 
     public List<? extends List<?>> getFoods()
     {
-        return foods.get();
+        return FOODS.get();
     }
 
     public void setDrinks(List<? extends List<?>> itemMap)
     {
-        drinks.set(itemMap);
+        DRINKS.set(itemMap);
     }
 
     public void setFoods(List<? extends List<?>> itemMap)
     {
-        foods.set(itemMap);
+        FOODS.set(itemMap);
     }
 }

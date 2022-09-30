@@ -1,6 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
 import com.mojang.logging.LogUtils;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.util.ConfigHelper;
 import dev.ghen.thirst.foundation.util.LoadedValue;
@@ -22,7 +23,6 @@ public class ThirstHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static boolean useColdSweatCaps = false;
-    private static final float BASE_DEPLETION = 1.2f;
     private static final float MODIFIER_HARSHNESS = 0.5f;
     public static LoadedValue<Map<Item, Number[]>> VALID_DRINKS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.getInstance().getDrinks()));
     public static LoadedValue<Map<Item, Number[]>> VALID_FOODS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.getInstance().getFoods()));
@@ -111,7 +111,7 @@ public class ThirstHelper
                     temp /= 2;
             }
 
-            float thirstModifier = BASE_DEPLETION * (temp  / humidity);
+            float thirstModifier = CommonConfig.getInstance().getThirstDepletionModifier() * (temp  / humidity);
 
             if(thirstModifier < 1)
             {

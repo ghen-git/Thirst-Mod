@@ -1,5 +1,7 @@
 package dev.ghen.thirst;
 
+import dev.ghen.thirst.foundation.config.ClientConfig;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
 import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
@@ -42,6 +44,8 @@ public class Thirst
 
         //configs
         ItemSettingsConfig.setup();
+        CommonConfig.setup();
+        ClientConfig.setup();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

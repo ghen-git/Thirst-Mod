@@ -11,6 +11,7 @@ public class ContainerWithPurity
     private ItemStack filledItem;
     private ItemStack emptyItem;
     private boolean isDrinkable;
+    private boolean isStatic;
     private Predicate<ItemStack> equalsFilled;
     private Predicate<ItemStack> equalsEmpty;
     private boolean canHarvestRunningWater;
@@ -20,6 +21,7 @@ public class ContainerWithPurity
         this.emptyItem = emptyItem;
         this.filledItem = filledItem;
         this.isDrinkable = true;
+        this.isStatic = false;
         this.canHarvestRunningWater = true;
 
         fillPredicates();
@@ -30,7 +32,23 @@ public class ContainerWithPurity
         this.emptyItem = emptyItem;
         this.filledItem = filledItem;
         this.isDrinkable = isDrinkable;
+        this.isStatic = false;
         this.canHarvestRunningWater = true;
+
+        fillPredicates();
+    }
+
+    /**
+     * Creates a Static container (has purity but can only be
+     * drunk, not used to fill anything)
+     */
+    public ContainerWithPurity(ItemStack filledItem)
+    {
+        this.emptyItem = null;
+        this.filledItem = filledItem;
+        this.isDrinkable = true;
+        this.isStatic = true;
+        this.canHarvestRunningWater = false;
 
         fillPredicates();
     }
@@ -66,7 +84,7 @@ public class ContainerWithPurity
 
     public boolean equalsEmpty(ItemStack item)
     {
-        return equalsEmpty.test(item);
+        return !isStatic && equalsEmpty.test(item);
     }
 
     public boolean equalsFilled(ItemStack item)

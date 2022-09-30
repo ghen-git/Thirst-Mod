@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.gui.appleskin;
 
+import com.farmersrespite.common.block.entity.KettleBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
@@ -22,6 +23,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import squeek.appleskin.ModConfig;
+import squeek.appleskin.helpers.KeyHelper;
 
 @OnlyIn(Dist.CLIENT)
 public class TooltipOverlayHandler
@@ -269,7 +272,7 @@ public class TooltipOverlayHandler
         if (hoveredStack.isEmpty())
             return false;
 
-        boolean shouldShowTooltip = true;//(ModConfig.SHOW_FOOD_VALUES_IN_TOOLTIP.get() && KeyHelper.isShiftKeyDown()) || ModConfig.ALWAYS_SHOW_FOOD_VALUES_TOOLTIP.get();
+        boolean shouldShowTooltip = (ModConfig.SHOW_FOOD_VALUES_IN_TOOLTIP.get() && KeyHelper.isShiftKeyDown()) || ModConfig.ALWAYS_SHOW_FOOD_VALUES_TOOLTIP.get();
         if (!shouldShowTooltip)
             return false;
 

@@ -4,16 +4,23 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
+    "MixinAbstractFurnaceBlockEntity",
     "MixinBootstrap",
     "MixinBottleItem",
     "MixinBucketItem",
+    "MixinCampfireBlockEntity",
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "accessors.CampfireBlockEntityAccessor",
-    "MixinCampfireBlockEntity",
-    "MixinAbstractFurnaceBlockEntity"
+    "accessors.brewinandchewin.KegBlockEntityAccessor",
+    "accessors.farmersdelight.SyncedBlockEntityAccessor",
+    "accessors.farmersrespite.KettleBlockEntityAccessor",
+    "brewinandchewin.MixinKegBlockEntity",
+    "farmersrespite.MixinKettleBlock",
+    "farmersrespite.MixinKettleBlockEntity"
   ],
   "client": [
+    "farmersrespite.MixinKettleScreen"
   ],
   "minVersion": "0.8"
 }
