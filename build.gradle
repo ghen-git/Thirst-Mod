@@ -118,6 +118,7 @@ dependencies {
     implementation fg.deobf("curse.maven:farmers-delight-398521:3834150")
     implementation fg.deobf("curse.maven:farmers-respite-551453:3859156")
     implementation fg.deobf("curse.maven:brewin-and-chewin-637808:3854764")
+    implementation fg.deobf("curse.maven:create-328085:4007544")
 }
 
 mixin {

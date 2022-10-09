@@ -383,7 +383,7 @@ public class WaterPurity
         }
         else if(level.getBlockState(pos).is(Blocks.WATER_CAULDRON))
         {
-            return level.getBlockState(pos).getValue(BLOCK_PURITY);
+            return level.getBlockState(pos).getValue(BLOCK_PURITY) - 1;
         }
         else
             return -1;

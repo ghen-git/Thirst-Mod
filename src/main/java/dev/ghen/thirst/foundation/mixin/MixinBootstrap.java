@@ -38,10 +38,11 @@ public class MixinBootstrap
      * to modify a cauldron interaction with a mixin because spongepowered doesn't support
      * injections in interfaces.
      * */
-    @Inject(method = "bootStrap", at = @At("TAIL"))
+    @Inject(method = "bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/synchronization/ArgumentTypes;bootStrap()V"), remap = false)
     private static void modifyCauldronInteractions(CallbackInfo ci)
     {
         CauldronInteraction.WATER.remove(Items.GLASS_BOTTLE);
+
         CauldronInteraction.WATER.put(Items.GLASS_BOTTLE, (blockState, level, pos, player, hand, itemStack) ->
         {
             if (!level.isClientSide)
@@ -63,9 +64,10 @@ public class MixinBootstrap
         });
 
         CauldronInteraction.WATER.remove(Items.BUCKET);
+
         CauldronInteraction.WATER.put(Items.BUCKET, (blockState, level, pos, player, hand, item) ->
-            fillBucket(blockState, level, pos, player, hand, item, WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), pos, level), (p_175660_) ->
-                    p_175660_.getValue(LayeredCauldronBlock.LEVEL) == 3, SoundEvents.BUCKET_FILL));
+                fillBucket(blockState, level, pos, player, hand, item, WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), pos, level), (p_175660_) ->
+                        p_175660_.getValue(LayeredCauldronBlock.LEVEL) == 3, SoundEvents.BUCKET_FILL));
     }
 
     private static InteractionResult fillBucket(BlockState p_175636_, Level p_175637_, BlockPos p_175638_, Player p_175639_, InteractionHand p_175640_, ItemStack p_175641_, ItemStack p_175642_, Predicate<BlockState> p_175643_, SoundEvent p_175644_) {
