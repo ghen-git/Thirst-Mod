@@ -8,6 +8,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,10 +17,9 @@ public class ItemSettingsConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> DRINKS;
-    private static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> FOODS;
-
-    static final ItemSettingsConfig INSTANCE = new ItemSettingsConfig();
+    public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> DRINKS;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> FOODS;
+    public static final ForgeConfigSpec.ConfigValue<List<String>> ITEMS_BLACKLIST;
 
     static
     {
@@ -94,6 +94,13 @@ public class ItemSettingsConfig
 
         BUILDER.pop();
 
+        BUILDER.push("Blacklist");
+
+        ITEMS_BLACKLIST = BUILDER.comment("A mod may have added thirst compatibility to an item via code. If you want to edit the thirst values",
+                "of that item, add an entry in one of the first two lists. If instead you want to remove thirst support for that item, add an entry in this list",
+                "Format: [\"examplemod:example_item_1\", \"examplemod:example_item_2\"]")
+                .define("itemsBlacklist", new ArrayList<>());
+
         SPEC = BUILDER.build();
     }
 
@@ -109,36 +116,5 @@ public class ItemSettingsConfig
         catch (Exception ignored) {}
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "thirst/item_settings.toml");
-    }
-
-    public void copyValues(ItemSettingsConfig config)
-    {
-        setDrinks(config.getDrinks());
-        setFoods(config.getFoods());
-    }
-
-    public static ItemSettingsConfig getInstance()
-    {
-        return INSTANCE;
-    }
-
-    public List<? extends List<?>> getDrinks()
-    {
-        return DRINKS.get();
-    }
-
-    public List<? extends List<?>> getFoods()
-    {
-        return FOODS.get();
-    }
-
-    public void setDrinks(List<? extends List<?>> itemMap)
-    {
-        DRINKS.set(itemMap);
-    }
-
-    public void setFoods(List<? extends List<?>> itemMap)
-    {
-        FOODS.set(itemMap);
     }
 }

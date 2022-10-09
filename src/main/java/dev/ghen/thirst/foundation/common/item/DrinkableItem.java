@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.common.item;
 
+import dev.ghen.thirst.foundation.tab.ThirstTab;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -18,7 +19,7 @@ public class DrinkableItem extends Item
 
     public DrinkableItem()
     {
-        super(new Properties().stacksTo(64));
+        super(new Properties().stacksTo(64).tab(ThirstTab.THIRST_TAB));
     }
 
     public DrinkableItem(Properties p_41383_)

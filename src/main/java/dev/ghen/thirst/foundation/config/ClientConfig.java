@@ -16,15 +16,12 @@ public class ClientConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.ConfigValue<Boolean> ONLY_SHOW_PURITY_WHEN_SHIFTING;
-
-    static final ClientConfig INSTANCE = new ClientConfig();
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ONLY_SHOW_PURITY_WHEN_SHIFTING;
 
     static
     {
-        BUILDER.push("Purity tooltip")
-                .comment("If the purity tooltip should be shown only when the player is pressing the shift key");
-        ONLY_SHOW_PURITY_WHEN_SHIFTING = BUILDER.define("onlyShowPurityWhenShifting", false);
+        BUILDER.push("Purity tooltip");
+        ONLY_SHOW_PURITY_WHEN_SHIFTING = BUILDER.comment("If the purity tooltip should be shown only when the player is pressing the shift key").define("onlyShowPurityWhenShifting", false);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -42,25 +39,5 @@ public class ClientConfig
         catch (Exception ignored) {}
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, SPEC, "thirst/client.toml");
-    }
-
-    public void copyValues(ClientConfig config)
-    {
-        getOnlyShowPurityWhenShifting(config.getOnlyShowPurityWhenShifting());
-    }
-
-    public static ClientConfig getInstance()
-    {
-        return INSTANCE;
-    }
-
-    public boolean getOnlyShowPurityWhenShifting()
-    {
-        return ONLY_SHOW_PURITY_WHEN_SHIFTING.get();
-    }
-
-    public void getOnlyShowPurityWhenShifting(boolean value)
-    {
-        ONLY_SHOW_PURITY_WHEN_SHIFTING.set(value);
     }
 }

@@ -1,15 +1,29 @@
 package dev.ghen.thirst.foundation.common.capability;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
+import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
+import dev.ghen.thirst.foundation.util.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -20,6 +34,7 @@ import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
@@ -68,6 +83,44 @@ public class PlayerThirstManager
             };
 
             event.addCapability(Thirst.asResource("thirst"), provider);
+        }
+    }
+
+    @SubscribeEvent
+    public static void drinkByHand(PlayerInteractEvent.RightClickBlock event)
+    {
+        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
+        {
+            Minecraft mc = Minecraft.getInstance();
+
+            Player player = mc.player;
+            Level level = mc.level;
+            BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
+
+            if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) &&
+                    level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching()) {
+                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void drinkByHand(PlayerInteractEvent.RightClickEmpty event)
+    {
+        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
+        {
+            Minecraft mc = Minecraft.getInstance();
+
+            Player player = mc.player;
+            Level level = mc.level;
+            BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
+
+            if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) &&
+                    level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching()) {
+                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
+            }
         }
     }
 

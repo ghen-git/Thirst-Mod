@@ -7,5 +7,6 @@
   "item.thirst.clay_bowl": "Clay Bowl",
   "thirst.container.kettle.no_water": "No Water",
   "thirst.container.kettle.has_single_water": "Contains 1 glass of %s water",
-  "thirst.container.kettle.has_many_water": "Contains %1$s glasses of %2$s water"
+  "thirst.container.kettle.has_many_water": "Contains %1$s glasses of %2$s water",
+  "itemGroup.thirst": "Thirst"
 }

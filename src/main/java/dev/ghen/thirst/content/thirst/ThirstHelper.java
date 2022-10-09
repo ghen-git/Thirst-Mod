@@ -8,13 +8,16 @@ import dev.ghen.thirst.foundation.util.LoadedValue;
 import dev.momostudios.coldsweat.api.temperature.Temperature;
 import dev.momostudios.coldsweat.api.util.TempHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 
 import static dev.ghen.thirst.content.purity.WaterPurity.hasPurity;
@@ -24,23 +27,44 @@ public class ThirstHelper
     private static final Logger LOGGER = LogUtils.getLogger();
     private static boolean useColdSweatCaps = false;
     private static final float MODIFIER_HARSHNESS = 0.5f;
-    public static LoadedValue<Map<Item, Number[]>> VALID_DRINKS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.getInstance().getDrinks()));
-    public static LoadedValue<Map<Item, Number[]>> VALID_FOODS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.getInstance().getFoods()));
+    public static LoadedValue<Map<Item, Number[]>> VALID_DRINKS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.DRINKS.get()));
+    public static LoadedValue<Map<Item, Number[]>> VALID_FOODS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.FOODS.get()));
 
     public static boolean itemRestoresThirst(ItemStack itemStack)
     {
-        return  VALID_DRINKS.get().containsKey(itemStack.getItem()) ||
-                VALID_FOODS.get().containsKey(itemStack.getItem());
+        return  isDrink(itemStack) ||
+                isFood(itemStack);
     }
 
     public static boolean isDrink(ItemStack itemStack)
     {
-        return  VALID_DRINKS.get().containsKey(itemStack.getItem());
+        return !ItemSettingsConfig.ITEMS_BLACKLIST.get().contains(itemStack.getItem().toString()) &&
+                VALID_DRINKS.get().containsKey(itemStack.getItem());
     }
+
 
     public static boolean isFood(ItemStack itemStack)
     {
-        return  VALID_FOODS.get().containsKey(itemStack.getItem());
+        return !ItemSettingsConfig.ITEMS_BLACKLIST.get().contains(itemStack.getItem().toString()) &&
+                VALID_FOODS.get().containsKey(itemStack.getItem());
+    }
+
+    /**
+     * Adds a hydration and "quenchness" value to an item via code, and treats it as food.
+     * Can be overwritten by the player in the config.
+     * */
+    public static void addFood(Item item, int thirst, int quenched)
+    {
+        VALID_FOODS.get().put(item, new Number[]{thirst, quenched});
+    }
+
+    /**
+     * Adds a hydration and "quenchness" value to an item via code, and treats it as a drink.
+     * Can be overwritten by the player in the config.
+     * */
+    public static void addDrink(Item item, int thirst, int quenched)
+    {
+        VALID_DRINKS.get().put(item, new Number[]{thirst, quenched});
     }
 
     public static int getThirst(ItemStack itemStack)
@@ -111,7 +135,7 @@ public class ThirstHelper
                     temp /= 2;
             }
 
-            float thirstModifier = CommonConfig.getInstance().getThirstDepletionModifier() * (temp  / humidity);
+            float thirstModifier = CommonConfig.THIRST_DEPLETION_MODIFIER.get().floatValue() * (temp  / humidity);
 
             if(thirstModifier < 1)
             {

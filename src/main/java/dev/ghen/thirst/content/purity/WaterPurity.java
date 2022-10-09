@@ -1,12 +1,12 @@
 package dev.ghen.thirst.content.purity;
 
-import com.brewinandchewin.core.registry.BCBlocks;
 import com.brewinandchewin.core.registry.BCItems;
 import com.farmersrespite.core.registry.FRBlocks;
 import com.farmersrespite.core.registry.FRItems;
 import com.mojang.logging.LogUtils;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.TickHelper;
-import dev.ghen.thirst.content.ItemInit;
+import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
 import dev.ghen.thirst.content.thirst.ThirstHelper;
@@ -356,10 +356,12 @@ public class WaterPurity
     /**
      * Adds the "Purity" tag to an item
      */
-    public static void addPurity(ItemStack item, int purity)
+    public static ItemStack addPurity(ItemStack item, int purity)
     {
         CompoundTag tag = item.getOrCreateTag();
         tag.putInt("Purity", purity);
+
+        return item;
     }
 
 
@@ -368,13 +370,14 @@ public class WaterPurity
      */
     public static int getWaterPurity(Level level, BlockPos pos)
     {
-        int purity = (pos.getY() > 100 || pos.getY() < 48)
-                && (!isBiomeWaterSalty(level.getBiome(pos).value()) || pos.getY() < 16) ? 1 : 0;
+
+        int purity = (pos.getY() > CommonConfig.MOUNTAINS_Y.get().intValue() || pos.getY() < CommonConfig.CAVES_Y.get().intValue())
+                && (!isBiomeWaterSalty(level.getBiome(pos).value()) || pos.getY() < CommonConfig.MOUNTAINS_Y.get().intValue() - 32) ? 1 : 0;
 
         if(level.getFluidState(pos).is(FluidTags.WATER))
         {
             if(!level.getFluidState(pos).isSource())
-                purity += 1;
+                purity = Math.min(purity + CommonConfig.RUNNING_WATER_PURIFICATION_AMOUNT.get().intValue(), MAX_PURITY);
 
             return purity;
         }
@@ -392,61 +395,99 @@ public class WaterPurity
     }
 
     /**
-     * Gives the player effects based on the purity of the water just drank
+     * Gives the player effects based on the purity of the water just drunk
      * and returns whether thirst and quenched should be added or not
      */
     public static boolean givePurityEffects(Player player, ItemStack item)
     {
         if(hasPurity(item))
-        {
-            boolean shouldRegenerate = true;
-            Random random = new Random();
-
-            switch(ThirstHelper.getPurity(item))
-            {
-                case 0:
-                {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 10, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
-
-                    if(random.nextFloat() <= 0.3)
-                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
-
-                    shouldRegenerate = false;
-
-                    break;
-                }
-                case 1:
-                {
-                    float chance = random.nextFloat();
-
-                    if(chance <= 0.5)
-                    {
-                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
-
-                        if(chance <= 0.1)
-                            player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
-
-                        shouldRegenerate = false;
-                    }
-                    break;
-                }
-                case 2:
-                {
-                    if(random.nextFloat() <= 0.1)
-                    {
-                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
-                        shouldRegenerate = false;
-                    }
-                    break;
-                }
-            }
-
-            return shouldRegenerate;
-        }
+            return givePurityEffects(player, ThirstHelper.getPurity(item));
         else
             return true;
+    }
+
+    /**
+     * Calculates purity-derived effects
+     */
+    public static boolean givePurityEffects(Player player, int purity)
+    {
+        boolean shouldRegenerate = true;
+        Random random = new Random();
+        float chance = random.nextFloat();
+
+        switch(purity)
+        {
+            case 0:
+            {
+                if(chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue())
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+
+                }
+
+                if(chance <=  CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue())
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    shouldRegenerate = false;
+                }
+
+                break;
+            }
+            case 1:
+            {
+                if(chance < CommonConfig.SLIGHTLY_DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+
+                }
+
+                if(chance <=  CommonConfig.SLIGHTLY_DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    shouldRegenerate = false;
+                }
+
+                break;
+            }
+            case 2:
+            {
+                if(chance < CommonConfig.ACCEPTABLE_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+
+                }
+
+                if(chance <=  CommonConfig.ACCEPTABLE_POISON_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    shouldRegenerate = false;
+                }
+
+                break;
+            }
+            case 3:
+            {
+                if(chance < CommonConfig.PURIFIED_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+
+                }
+
+                if(chance <=  CommonConfig.PURIFIED_POISON_PERCENTAGE.get().intValue() / 100.0f)
+                {
+                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    shouldRegenerate = false;
+                }
+
+                break;
+            }
+        }
+
+        return shouldRegenerate;
     }
 
     static void registerDispenserBehaviours()
