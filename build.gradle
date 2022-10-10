@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '1.0.2'
+version = '1.1.1'
 group = 'dev.ghen.thirst'
 
 java {
@@ -119,6 +119,7 @@ dependencies {
     implementation fg.deobf("curse.maven:farmers-respite-551453:3859156")
     implementation fg.deobf("curse.maven:brewin-and-chewin-637808:3854764")
     implementation fg.deobf("curse.maven:create-328085:4007544")
+    implementation fg.deobf("curse.maven:flywheel-486392:3934664")
 }
 
 mixin {

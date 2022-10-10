@@ -31,7 +31,7 @@ public class PurificationRecipesMaker
                     Ingredient.of(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), i)),
                     WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), Math.min(i + CommonConfig.CAMPFIRE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY)),
                     0.35f,
-                    400
+                    300
             ));
             recipes.add(new CampfireCookingRecipe(
                     Thirst.asResource("bucket_purification"),
@@ -39,7 +39,7 @@ public class PurificationRecipesMaker
                     Ingredient.of(WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), i)),
                     WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), Math.min(i + CommonConfig.CAMPFIRE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY)),
                     0.35f,
-                    400
+                    300
             ));
         }
 
@@ -58,7 +58,7 @@ public class PurificationRecipesMaker
                     Ingredient.of(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), i)),
                     WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), Math.min(i + CommonConfig.FURNACE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY)),
                     0.35f,
-                    400
+                    200
             ));
             recipes.add(new SmeltingRecipe(
                     Thirst.asResource("bucket_purification"),
@@ -66,7 +66,7 @@ public class PurificationRecipesMaker
                     Ingredient.of(WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), i)),
                     WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), Math.min(i + CommonConfig.FURNACE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY)),
                     0.35f,
-                    400
+                    200
             ));
         }
 

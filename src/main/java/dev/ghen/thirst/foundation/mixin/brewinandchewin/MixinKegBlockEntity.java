@@ -5,6 +5,7 @@ import com.brewinandchewin.common.crafting.KegRecipe;
 import com.farmersrespite.common.block.entity.KettleBlockEntity;
 import com.farmersrespite.common.crafting.KettleRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.mixin.accessors.brewinandchewin.KegBlockEntityAccessor;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersdelight.SyncedBlockEntityAccessor;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersrespite.KettleBlockEntityAccessor;
@@ -40,7 +41,8 @@ public class MixinKegBlockEntity
                 {
                     int purity = WaterPurity.getPurity(keg.getInventory().getStackInSlot(4));
 
-                    purity = purity < WaterPurity.MAX_PURITY ? Math.max(purity - 1, WaterPurity.MIN_PURITY) : purity;
+                    purity = purity < CommonConfig.FERMENTATION_MOLDING_THRESHOLD.get().intValue() ?
+                            Math.max(purity - CommonConfig.FERMENTATION_MOLDING_HARSHNESS.get().intValue(), WaterPurity.MIN_PURITY) : purity;
 
                     WaterPurity.addPurity(keg.getInventory().getStackInSlot(5), purity);
                 }

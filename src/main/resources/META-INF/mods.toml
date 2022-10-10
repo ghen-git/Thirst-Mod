@@ -29,12 +29,12 @@ displayName="Thirst Mod" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="thirst.png" #optional
 # A text field displayed in the mod UI
-credits="Coming soon" #optional
+credits="Cold Sweat, Create, Farmer's Delight and all the mods' sources that helped me actually program this." #optional
 # A text field displayed in the mod UI
 authors="ghen" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Coming soon
+Modern take on the thirst-bar mechanic, compatible with a lot of contemporary mods
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.thirst]] #optional

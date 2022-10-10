@@ -1,6 +1,7 @@
 package dev.ghen.thirst.foundation.mixin;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -48,7 +49,7 @@ public abstract class MixinAbstractFurnaceBlockEntity
             {
                 ItemStack itemstack1 = WaterPurity.getFilledContainer(itemstack, true);
                 int purity = WaterPurity.getPurity(itemstack);
-                WaterPurity.addPurity(itemstack1, Math.min(purity + 2, 3));
+                WaterPurity.addPurity(itemstack1, Math.min(purity +  + CommonConfig.FURNACE_PURIFICATION_LEVELS.get().intValue(), 3));
 
                 if (itemstack2.isEmpty())
                 {

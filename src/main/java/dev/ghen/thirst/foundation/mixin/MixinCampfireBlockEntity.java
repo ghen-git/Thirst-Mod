@@ -1,6 +1,7 @@
 package dev.ghen.thirst.foundation.mixin;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.mixin.accessors.CampfireBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,7 +52,7 @@ public class MixinCampfireBlockEntity
                     {
                         ItemStack itemstack1 = WaterPurity.getFilledContainer(itemstack, true);
                         int purity = WaterPurity.getPurity(itemstack);
-                        WaterPurity.addPurity(itemstack1, Math.min(purity + 1, 3));
+                        WaterPurity.addPurity(itemstack1, Math.min(purity + CommonConfig.CAMPFIRE_PURIFICATION_LEVELS.get().intValue(), 3));
 
                         Containers.dropItemStack(level, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemstack1);
                         campfire.getItems().set(i, ItemStack.EMPTY);

@@ -3,6 +3,7 @@ package dev.ghen.thirst.foundation.mixin.farmersrespite;
 import com.farmersrespite.common.block.entity.KettleBlockEntity;
 import com.farmersrespite.common.crafting.KettleRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersrespite.KettleBlockEntityAccessor;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersdelight.SyncedBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
@@ -36,7 +37,7 @@ public abstract class MixinKettleBlockEntity
                 didInventoryChange = kettleAcc.invokeProcessBrewing((KettleRecipe)recipe.get());
                 if(didInventoryChange)
                 {
-                    int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + 1, WaterPurity.MAX_PURITY);
+                    int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
                     WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2), purity);
                 }
             } else
