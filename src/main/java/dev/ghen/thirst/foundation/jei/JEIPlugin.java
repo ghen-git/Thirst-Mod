@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class JEIPlugin implements IModPlugin
 {
-    private static final Minecraft MC = Minecraft.getInstance();
 
     @Override
     public ResourceLocation getPluginUid()

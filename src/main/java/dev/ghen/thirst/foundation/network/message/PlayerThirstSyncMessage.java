@@ -2,8 +2,11 @@ package dev.ghen.thirst.foundation.network.message;
 
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -39,22 +42,28 @@ public class PlayerThirstSyncMessage
 
         if (context.getDirection().getReceptionSide().isClient())
         {
-            context.enqueueWork(() ->
-            {
-                LocalPlayer player = Minecraft.getInstance().player;
-
-                if (player != null)
-                {
-                    player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    {
-                        cap.setThirst(message.thirst);
-                        cap.setQuenched(message.quenched);
-                        cap.setExhaustion(message.exhaustion);
-                    });
-                }
-            });
+            context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientThirstSyncMessage.handlePacket(message, contextSupplier)));
         }
 
         context.setPacketHandled(true);
+    }
+}
+
+@OnlyIn(Dist.CLIENT)
+class ClientThirstSyncMessage
+{
+    public static void handlePacket(PlayerThirstSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        Player player = Minecraft.getInstance().player;
+
+        if (player != null)
+        {
+            player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+            {
+                cap.setThirst(message.thirst);
+                cap.setQuenched(message.quenched);
+                cap.setExhaustion(message.exhaustion);
+            });
+        }
     }
 }

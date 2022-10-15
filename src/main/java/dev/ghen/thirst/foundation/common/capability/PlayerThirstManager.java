@@ -3,6 +3,7 @@ package dev.ghen.thirst.foundation.common.capability;
 import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.content.thirst.DrinkByHandClient;
 import dev.ghen.thirst.content.thirst.ThirstHelper;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
@@ -22,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -34,6 +37,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import org.slf4j.Logger;
 
@@ -88,38 +92,14 @@ public class PlayerThirstManager
     public static void drinkByHand(PlayerInteractEvent.RightClickBlock event)
     {
         if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
-        {
-            Minecraft mc = Minecraft.getInstance();
-
-            Player player = mc.player;
-            Level level = mc.level;
-            BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
-
-            if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) &&
-                    level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
-                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
-            }
-        }
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
     }
 
     @SubscribeEvent
     public static void drinkByHand(PlayerInteractEvent.RightClickEmpty event)
     {
         if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
-        {
-            Minecraft mc = Minecraft.getInstance();
-
-            Player player = mc.player;
-            Level level = mc.level;
-            BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
-
-            if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) &&
-                    level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
-                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
-            }
-        }
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
     }
 
     @SubscribeEvent
