@@ -227,10 +227,8 @@ public class TooltipOverlayHandler
             this.thirstValues = thirstValues;
 
             hungerBars = (int) Math.ceil(Math.abs(thirstValues.thirst) / 2f);
-            Thirst.LOGGER.info(hungerBars + "");
             if (hungerBars > 10)
             {
-                Thirst.LOGGER.info("COCK?");
                 hungerBarsText = "x" + ((thirstValues.thirst < 0 ? -1 : 1) * hungerBars);
                 hungerBars = 1;
             }
