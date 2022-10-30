@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
-import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;

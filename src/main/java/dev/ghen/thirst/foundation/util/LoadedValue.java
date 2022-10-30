@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 public class LoadedValue<T>
 {
     /**
-     * This class was taken from <a href="https://github.com/Momo-Studios/Cold-Sweat/blob/1.18.x-FG/src/main/java/dev/momostudios/coldsweat/util/config/DynamicValue.java">Cold Sweat</a>
+     * This class was taken from <a href="https://github.com/Momo-Studios/Cold-Sweat/blob/1.18.x-FG/src/main/java/dev/momostudios/coldsweat/util/config/ConfigValue.java">Cold Sweat</a>
      */
 
     T value;

@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.annotation.Nullable;
-
 @Mixin(FluidDrainingBehaviour.class)
 public abstract class MixinFluidDrainingBehaviour
 {
@@ -32,7 +30,7 @@ public abstract class MixinFluidDrainingBehaviour
             if(FluidHelper.isWater(output.getFluid()))
             {
                 CompoundTag tag = output.getOrCreateTag();
-                tag.putInt("Purity", WaterPurity.getWaterPurity(behaviour.getWorld(), rootPos));
+                tag.putInt("Purity", WaterPurity.getBlockPurity(behaviour.getWorld(), rootPos));
                 output.setTag(tag);
                 cir.setReturnValue(output);
             }

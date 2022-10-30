@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -32,7 +31,7 @@ public class MixinBottleItem
 
         shouldModify = level.getFluidState(fluidPos).is(FluidTags.WATER) && level.getFluidState(fluidPos).isSource();
         if(shouldModify)
-            purity = WaterPurity.getWaterPurity(level, fluidPos);
+            purity = WaterPurity.getBlockPurity(level, fluidPos);
     }
 
     @ModifyArg(method = "turnBottleIntoItem", index = 2, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemUtils;createFilledResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))

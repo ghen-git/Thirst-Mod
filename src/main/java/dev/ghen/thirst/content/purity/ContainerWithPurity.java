@@ -2,6 +2,7 @@ package dev.ghen.thirst.content.purity;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import vectorwing.farmersdelight.FarmersDelight;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;

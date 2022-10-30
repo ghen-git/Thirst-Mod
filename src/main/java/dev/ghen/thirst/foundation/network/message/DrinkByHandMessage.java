@@ -45,7 +45,7 @@ public class DrinkByHandMessage
 
                 player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
                 {
-                    int purity = WaterPurity.getWaterPurity(level, message.pos);
+                    int purity = WaterPurity.getBlockPurity(level, message.pos);
                     level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
 
                     if(WaterPurity.givePurityEffects(player, purity))

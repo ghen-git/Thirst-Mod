@@ -23,6 +23,7 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Number> CAVES_Y;
     public static final ForgeConfigSpec.ConfigValue<Number> RUNNING_WATER_PURIFICATION_AMOUNT;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> QUENCH_THIRST_WHEN_DEBUFFED;
     public static final ForgeConfigSpec.ConfigValue<Number> DIRTY_POISON_PERCENTAGE;
     public static final ForgeConfigSpec.ConfigValue<Number> DIRTY_NAUSEA_PERCENTAGE;
     public static final ForgeConfigSpec.ConfigValue<Number> SLIGHTLY_DIRTY_POISON_PERCENTAGE;
@@ -39,10 +40,13 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Number> FERMENTATION_MOLDING_THRESHOLD;
     public static final ForgeConfigSpec.ConfigValue<Number> FERMENTATION_MOLDING_HARSHNESS;
 
+    public static final ForgeConfigSpec.ConfigValue<Number> SAND_FILTER_FILTRATION_AMOUNT;
+    public static final ForgeConfigSpec.ConfigValue<Number> SAND_FILTER_MB_PER_TICK;
+
     static
     {
         BUILDER.push("General");
-        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
+        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", true);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
@@ -55,6 +59,7 @@ public class CommonConfig
         BUILDER.pop();
 
         BUILDER.push("Purity-related Effects");
+        QUENCH_THIRST_WHEN_DEBUFFED =  BUILDER.comment("Whether player should gain hydration even if they recieved a purity-related debuff").define("quenchThirstWhenDebuffed", true);
         DIRTY_POISON_PERCENTAGE =  BUILDER.comment("% of getting poisoned after drinking dirty water").define("dirtyPoisonPercentage", 30);
         DIRTY_NAUSEA_PERCENTAGE =  BUILDER.comment("% of getting sick (hunger and nausea) after drinking dirty water").define("dirtyNauseaPercentage", 100);
         SLIGHTLY_DIRTY_POISON_PERCENTAGE =  BUILDER.comment("% of getting poisoned after drinking slightly dirty water").define("slightlyDirtyPoisonPercentage", 10);
@@ -74,6 +79,11 @@ public class CommonConfig
         BUILDER.push("Fermentation levels");
         FERMENTATION_MOLDING_THRESHOLD = BUILDER.comment("Purification level below which fermented liquids will grow bacteria and get less purified").define("fermentationMoldingThreshold", 3);
         FERMENTATION_MOLDING_HARSHNESS = BUILDER.comment("Decrement of purification levels if water isn't purified enough when fermenting").define("fermentationMoldingHarshness", 2);
+        BUILDER.pop();
+
+        BUILDER.push("Create compatibility");
+        SAND_FILTER_FILTRATION_AMOUNT = BUILDER.comment("Purification levels gained by filtering water through a Sand Filter").define("sandFilterFiltrationAmount", 1);
+        SAND_FILTER_MB_PER_TICK = BUILDER.comment("Millibuckets of water filtered per game tick with a Sand Filter").define("sandFilterMbPerTick", 10);
         BUILDER.pop();
 
         SPEC = BUILDER.build();

@@ -9,14 +9,14 @@ import dev.ghen.thirst.foundation.util.TickHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
-import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -40,6 +40,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -231,7 +232,7 @@ public class WaterPurity
                     level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
 
                     CompoundTag tag = filledItem.getOrCreateTag();
-                    tag.putInt("Purity", getWaterPurity(level, blockPos));
+                    tag.putInt("Purity", getBlockPurity(level, blockPos));
 
                     ItemStack result = ItemUtils.createFilledResult(item, player, filledItem);
 
@@ -254,15 +255,11 @@ public class WaterPurity
             int purity = getPurity(event.getItemStack());
             if(purity >= MIN_PURITY && purity <= MAX_PURITY)
             {
-                String purityText = purity == 0 ? "Dirty" :
-                        purity == 1 ? "Slightly Dirty" :
-                                purity == 2 ? "Acceptable" : "Purified";
+                String purityText = getPurityText(purity);
 
-                int purityColor = purity == 0 ? 11028517 :
-                        purity == 1 ? 7957617:
-                                purity == 2 ? 6128285 : 2208255;
+                int purityColor = getPurityColor(purity);
 
-                event.getToolTip().add(new TextComponent(purityText).setStyle(Style.EMPTY.withColor(purityColor)));
+                event.getToolTip().add((new TranslatableComponent("thirst.purity." + purityText)).setStyle(Style.EMPTY.withColor(purityColor)));
             }
         }
     }
@@ -324,6 +321,39 @@ public class WaterPurity
     }
 
     /**
+     * Reads the purity from a fluid
+     */
+    public static int getPurity(FluidStack fluid)
+    {
+        if(!fluid.getOrCreateTag().contains("Purity"))
+            fluid.getOrCreateTag().putInt("Purity", -1);
+
+        return fluid.getTag().getInt("Purity");
+    }
+
+    /**
+     * Returns the purity string in the language selected by the player
+     */
+    public static String getPurityText(int purity)
+    {
+        String purityText = purity == 0 ? "dirty" :
+                purity == 1 ? "slightly_dirty" :
+                        purity == 2 ? "acceptable" : "purified";
+
+        return (new TranslatableComponent("thirst.purity." + purityText).getString());
+    }
+
+    /**
+     * Returns the purity color in decimal format
+     */
+    public static int getPurityColor(int purity)
+    {
+        return purity == 0 ? 11028517 :
+                purity == 1 ? 7957617 :
+                purity == 2 ? 6128285 : 2208255;
+    }
+
+    /**
      * Returns the already-adjusted water purity level of a
      * block with the BLOCK_PURITY tag
      */
@@ -340,6 +370,14 @@ public class WaterPurity
             return item.getTag().contains("Purity");
     }
 
+    public static boolean hasPurity(FluidStack fluid)
+    {
+        if(!fluid.hasTag())
+            return false;
+        else
+            return fluid.getTag().contains("Purity");
+    }
+
     /**
      * Shorthand for adding purity to an item if in a context where the block
      * the player is pointing at is accessible
@@ -347,7 +385,7 @@ public class WaterPurity
     public static ItemStack addPurity(ItemStack item, BlockPos pos, Level level)
     {
         CompoundTag tag = item.getOrCreateTag();
-        tag.putInt("Purity", getWaterPurity(level, pos));
+        tag.putInt("Purity", getBlockPurity(level, pos));
 
         return  item;
     }
@@ -364,11 +402,22 @@ public class WaterPurity
         return item;
     }
 
+    /**
+     * Adds the "Purity" tag to a fluid
+     */
+    public static FluidStack addPurity(FluidStack fluid, int purity)
+    {
+        CompoundTag tag = fluid.getOrCreateTag();
+        tag.putInt("Purity", purity);
+
+        return fluid;
+    }
+
 
     /**
      * Calculates the water purity of a specific block in the level
      */
-    public static int getWaterPurity(Level level, BlockPos pos)
+    public static int getBlockPurity(Level level, BlockPos pos)
     {
 
         int purity = (pos.getY() > CommonConfig.MOUNTAINS_Y.get().intValue() || pos.getY() < CommonConfig.CAVES_Y.get().intValue())
@@ -391,7 +440,7 @@ public class WaterPurity
 
     public static boolean isBiomeWaterSalty(Biome biome)
     {
-        return biome.getRegistryName().toString().contains("ocean");
+        return biome.getRegistryName() != null && biome.getRegistryName().toString().contains("ocean");
     }
 
     /**
@@ -487,7 +536,7 @@ public class WaterPurity
             }
         }
 
-        return shouldRegenerate;
+        return shouldRegenerate || CommonConfig.QUENCH_THIRST_WHEN_DEBUFFED.get();
     }
 
     static void registerDispenserBehaviours()

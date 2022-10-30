@@ -6,7 +6,7 @@ import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
-import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;

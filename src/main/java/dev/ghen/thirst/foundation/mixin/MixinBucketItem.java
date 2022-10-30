@@ -35,7 +35,7 @@ public class MixinBucketItem
         shouldModify = (level.getFluidState(blockPos).is(FluidTags.WATER) && level.getFluidState(blockPos).isSource());
 
         if(shouldModify)
-            purity = WaterPurity.getWaterPurity(level, blockPos);
+            purity = WaterPurity.getBlockPurity(level, blockPos);
     }
 
     @ModifyArg(method = "use", index = 2, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemUtils;createFilledResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))

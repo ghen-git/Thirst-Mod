@@ -1,5 +1,6 @@
 package dev.ghen.thirst;
 
+import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
@@ -11,7 +12,7 @@ import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
-import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,6 +41,9 @@ public class Thirst
         modBus.addListener(this::registerCapabilities);
 
         ItemInit.ITEMS.register(modBus);
+
+        if(ModList.get().isLoaded("create"))
+            CreateRegistry.register();
 
         //configs
         ItemSettingsConfig.setup();

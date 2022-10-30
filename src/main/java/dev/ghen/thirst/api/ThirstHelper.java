@@ -1,4 +1,4 @@
-package dev.ghen.thirst.content.thirst;
+package dev.ghen.thirst.api;
 
 import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.foundation.config.CommonConfig;

@@ -1,12 +1,11 @@
 package dev.ghen.thirst.foundation.gui.appleskin;
 
-import com.farmersrespite.common.block.entity.KettleBlockEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
-import dev.ghen.thirst.content.thirst.ThirstHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;

@@ -1,16 +1,11 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.AllFluids;
 import com.simibubi.create.content.contraptions.fluids.OpenEndedPipe;
-import com.simibubi.create.content.contraptions.fluids.pipes.VanillaFluidTargets;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.fluid.FluidHelper;
-import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.content.purity.WaterPurity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -18,7 +13,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -56,7 +50,7 @@ public class MixinOpenEndedPipe
                 if(FluidHelper.isWater(stack.getFluid()))
                 {
                     CompoundTag tag = stack.getOrCreateTag();
-                    tag.putInt("Purity", WaterPurity.getWaterPurity(pipe.getWorld(), pipe.getOutputPos()));
+                    tag.putInt("Purity", WaterPurity.getBlockPurity(pipe.getWorld(), pipe.getOutputPos()));
                     stack.setTag(tag);
 
                     if (simulate)

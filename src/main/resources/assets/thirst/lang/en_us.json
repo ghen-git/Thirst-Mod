@@ -8,5 +8,10 @@
   "thirst.container.kettle.no_water": "No Water",
   "thirst.container.kettle.has_single_water": "Contains 1 glass of %s water",
   "thirst.container.kettle.has_many_water": "Contains %1$s glasses of %2$s water",
-  "itemGroup.thirst": "Thirst"
+  "itemGroup.thirst": "Thirst",
+  "thirst.purity.dirty": "Dirty",
+  "thirst.purity.slightly_dirty": "Slightly Dirty",
+  "thirst.purity.acceptable": "Acceptable",
+  "thirst.purity.purified": "Purified",
+  "block.create.sand_filter": "Sand Filter"
 }
