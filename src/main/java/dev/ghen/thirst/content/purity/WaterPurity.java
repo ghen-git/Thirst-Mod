@@ -16,6 +16,7 @@ import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -140,14 +141,6 @@ public class WaterPurity
     }
 
     /**
-     * Registers new custom water fillable
-     */
-    public static void addFillable(Block fillable)
-    {
-        fillablesWithPurity.add(fillable);
-    }
-
-    /**
      * Sets the purity of the water in a water fillable block (such as the cauldron)
      * after the player adds water to it. If the water purity in the block is greater
      * than that of the water in the item, the second one prevails.
@@ -259,7 +252,9 @@ public class WaterPurity
 
                 int purityColor = getPurityColor(purity);
 
-                event.getToolTip().add((new TranslatableComponent("thirst.purity." + purityText)).setStyle(Style.EMPTY.withColor(purityColor)));
+                event.getToolTip()
+                        .add((new TextComponent(purityText))
+                                .setStyle(Style.EMPTY.withColor(purityColor)));
             }
         }
     }
