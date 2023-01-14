@@ -30,7 +30,8 @@ import java.util.Optional;
 @Mixin(EmptyingByBasin.class)
 public class MixinEmptyingByBasin
 {
-    @Shadow private static RecipeWrapper wrapper;
+    @Shadow
+    static RecipeWrapper wrapper;
 
     @Inject(method = "emptyItem", at = @At("HEAD"), cancellable = true, remap = false)
     private static void emptyItem(Level world, ItemStack stack, boolean simulate, CallbackInfoReturnable<Pair<FluidStack, ItemStack>> cir)

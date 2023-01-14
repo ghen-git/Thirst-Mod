@@ -24,7 +24,8 @@ import java.util.List;
 @Mixin(FillingBySpout.class)
 public class MixinFillingBySpout
 {
-    @Shadow private static RecipeWrapper wrapper;
+    @Shadow
+    static RecipeWrapper wrapper;
 
     @Inject(method = "fillItem", at = @At("HEAD"), cancellable = true, remap = false)
     private static void fillItem(Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<ItemStack> cir)
