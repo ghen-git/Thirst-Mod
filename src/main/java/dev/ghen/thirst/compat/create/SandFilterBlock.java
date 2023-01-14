@@ -38,21 +38,6 @@ public class SandFilterBlock extends Block implements IWrenchable, ITE<SandFilte
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState state) {
-        return true;
-    }
-
-    @Override
-    public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
-        return ComparatorUtil.levelOfSmartFluidTank(worldIn, pos);
-    }
-
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter reader, BlockPos pos, PathComputationType type) {
-        return false;
-    }
-
-    @Override
     public Class<SandFilterTileEntity> getTileEntityClass() {
         return SandFilterTileEntity.class;
     }
