@@ -11,9 +11,13 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.tab.ThirstTab;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.item.Item;
+import org.checkerframework.common.returnsreceiver.qual.This;
 
 import static com.simibubi.create.AllTags.pickaxeOnly;
+import static com.simibubi.create.Create.REGISTRATE;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 public class CreateRegistry
@@ -31,6 +35,7 @@ public class CreateRegistry
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
                 .addLayer(() -> RenderType::cutoutMipped)
                 .item(AssemblyOperatorBlockItem::new)
+                .properties((p) -> p.tab(ThirstTab.THIRST_TAB))
                 .transform(customItemModel())
                 .register();
 

@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.mixin;
 
+import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
@@ -38,13 +39,15 @@ public class MixinBootstrap
      * to modify a cauldron interaction with a mixin because spongepowered doesn't support
      * injections in interfaces.
      * */
-    @Inject(method = "bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/synchronization/ArgumentTypes;bootStrap()V"), remap = false)
+    @Inject(method = "bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/synchronization/ArgumentTypes;bootStrap()V"), remap = true)
     private static void modifyCauldronInteractions(CallbackInfo ci)
     {
         CauldronInteraction.WATER.remove(Items.GLASS_BOTTLE);
 
         CauldronInteraction.WATER.put(Items.GLASS_BOTTLE, (blockState, level, pos, player, hand, itemStack) ->
         {
+            Thirst.LOGGER.info("cock");
+
             if (!level.isClientSide)
             {
                 Item item = itemStack.getItem();
@@ -72,8 +75,10 @@ public class MixinBootstrap
 
     private static InteractionResult fillBucket(BlockState p_175636_, Level p_175637_, BlockPos p_175638_, Player p_175639_, InteractionHand p_175640_, ItemStack p_175641_, ItemStack p_175642_, Predicate<BlockState> p_175643_, SoundEvent p_175644_) {
         if (!p_175643_.test(p_175636_)) {
+            Thirst.LOGGER.info("cock2");
             return InteractionResult.PASS;
         } else {
+            Thirst.LOGGER.info("cock3");
             if (!p_175637_.isClientSide) {
                 Item item = p_175641_.getItem();
                 p_175639_.setItemInHand(p_175640_, ItemUtils.createFilledResult(p_175641_, p_175639_, p_175642_));
