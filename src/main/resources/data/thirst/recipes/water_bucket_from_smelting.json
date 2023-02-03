@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient":
+  {
+    "item": "minecraft:water_bucket"
+  },
+  "result": "minecraft:water_bucket",
+  "experience": 0.45,
+  "cookingtime": 260
+}

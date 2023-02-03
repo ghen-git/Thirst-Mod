@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient":
+  {
+    "item": "minecraft:water_bucket"
+  },
+  "result": "minecraft:water_bucket",
+  "experience": 0.45,
+  "cookingtime": 360
+}
