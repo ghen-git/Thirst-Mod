@@ -1,11 +1,5 @@
 package dev.ghen.thirst.content.registry;
 
-import com.simibubi.create.Create;
-import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutBlock;
-import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.data.SharedProperties;
-import com.tterrag.registrate.util.entry.BlockEntry;
 import dev.ghen.thirst.foundation.common.item.DrinkableItem;
 import dev.ghen.thirst.foundation.tab.ThirstTab;
 import net.minecraft.client.renderer.RenderType;
@@ -15,8 +9,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.simibubi.create.AllTags.pickaxeOnly;
-import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 public class ItemInit
 {

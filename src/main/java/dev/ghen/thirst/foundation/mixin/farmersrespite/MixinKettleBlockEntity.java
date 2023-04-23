@@ -1,7 +1,5 @@
 package dev.ghen.thirst.foundation.mixin.farmersrespite;
 
-import com.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.farmersrespite.common.crafting.KettleRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersrespite.KettleBlockEntityAccessor;
@@ -15,10 +13,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import umpaz.farmersrespite.common.block.entity.KettleBlockEntity;
+import umpaz.farmersrespite.common.crafting.KettleRecipe;
 
 import java.util.Optional;
-
-import static com.farmersrespite.common.block.entity.KettleBlockEntity.animationTick;
 
 @Mixin(KettleBlockEntity.class)
 public abstract class MixinKettleBlockEntity
@@ -34,7 +32,7 @@ public abstract class MixinKettleBlockEntity
             Optional<KettleRecipe> recipe = kettleAcc.invokeGetMatchingRecipe(new RecipeWrapper(kettle.getInventory()));
             if (recipe.isPresent() && kettleAcc.invokeCanBrew((KettleRecipe)recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem()))
             {
-                didInventoryChange = kettleAcc.invokeProcessBrewing((KettleRecipe)recipe.get());
+                didInventoryChange = kettleAcc.invokeProcessBrewing((KettleRecipe)recipe.get(), kettle);
                 if(didInventoryChange)
                 {
                     int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
@@ -48,7 +46,6 @@ public abstract class MixinKettleBlockEntity
         ItemStack mealStack = kettle.getMeal();
         if (!mealStack.isEmpty())
         {
-            animationTick(level, pos, state, kettle);
             if (!kettleAcc.invokeDoesMealHaveContainer(mealStack))
             {
                 kettleAcc.invokeMoveMealToOutput();

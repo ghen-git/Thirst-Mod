@@ -22,8 +22,7 @@
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
     "create.MixinOpenEndedPipe",
-    "farmersrespite.MixinKettleBlock",
-    "farmersrespite.MixinKettleBlockEntity"
+    "farmersrespite.MixinKettleBlock"
   ],
   "client": [
     "farmersrespite.MixinKettleScreen"

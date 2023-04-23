@@ -70,7 +70,7 @@ public class DrinkableItem extends Item
             }
         }
 
-        level.gameEvent(entity, GameEvent.DRINKING_FINISH, entity.eyeBlockPosition());
+        level.gameEvent(entity, GameEvent.ITEM_INTERACT_FINISH, entity.getEyePosition());
         return item;
     }
 

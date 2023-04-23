@@ -36,12 +36,12 @@ public class TickHelper
     }
 
     @SubscribeEvent
-    static void runTasks(TickEvent.WorldTickEvent event)
+    static void runTasks(TickEvent.LevelTickEvent event)
     {
-        if(event.world instanceof ServerLevel && tickTimerFsr == 0 && tickTasks.containsKey(event.world.getServer().getTickCount()))
+        if(event.level instanceof ServerLevel && tickTimerFsr == 0 && tickTasks.containsKey(event.level.getServer().getTickCount()))
         {
-            tickTasks.get(event.world.getServer().getTickCount()).forEach(Runnable::run);
-            tickTasks.remove(event.world.getServer().getTickCount());
+            tickTasks.get(event.level.getServer().getTickCount()).forEach(Runnable::run);
+            tickTasks.remove(event.level.getServer().getTickCount());
 
             tickTimerFsr += 3;
         }

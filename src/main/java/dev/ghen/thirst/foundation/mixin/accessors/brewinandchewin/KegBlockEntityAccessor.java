@@ -1,13 +1,11 @@
 package dev.ghen.thirst.foundation.mixin.accessors.brewinandchewin;
 
-import com.brewinandchewin.common.block.entity.KegBlockEntity;
-import com.brewinandchewin.common.crafting.KegRecipe;
-import com.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.farmersrespite.common.crafting.KettleRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
+import umpaz.brewinandchewin.common.block.entity.KegBlockEntity;
+import umpaz.brewinandchewin.common.crafting.KegRecipe;
 
 import java.util.Optional;
 
@@ -21,12 +19,12 @@ public interface KegBlockEntityAccessor
     @Invoker(remap = false)
     boolean invokeCanFerment(KegRecipe recipe);
     @Invoker(remap = false)
-    boolean invokeDoesMealHaveContainer(ItemStack meal);
+    boolean invokeDoesDrinkHaveContainer(ItemStack meal);
     @Invoker(remap = false)
-    void invokeMoveMealToOutput();
+    void invokeMoveDrinkToOutput();
     @Invoker(remap = false)
     void invokeUseStoredContainersOnMeal();
 
     @Invoker(remap = false)
-    boolean invokeProcessFermenting(KegRecipe recipe);
+    boolean invokeProcessFermenting(KegRecipe recipe, KegBlockEntity keg);
 }

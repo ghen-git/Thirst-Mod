@@ -7,9 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
@@ -68,7 +70,7 @@ public class MixinCampfireBlockEntity
     }
 
     @Inject(method = "placeFood", at = @At("HEAD"))
-    private void blockPotions(ItemStack item, int p_59055_, CallbackInfoReturnable<Boolean> cir)
+    private void blockPotions(Entity p_238285_, ItemStack item, int p_238287_, CallbackInfoReturnable<Boolean> cir)
     {
         if(WaterPurity.isWaterFilledContainer(item))
         {
@@ -82,7 +84,7 @@ public class MixinCampfireBlockEntity
     @Inject(method = "particleTick", at = @At("HEAD"), cancellable = true)
     private static void waterVapour(Level level, BlockPos pos, BlockState blockState, CampfireBlockEntity campfire, CallbackInfo ci)
     {
-        Random random = level.random;
+        RandomSource random = level.random;
         int l = blockState.getValue(CampfireBlock.FACING).get2DDataValue();
         boolean cancel = false;
 

@@ -1,8 +1,5 @@
 package dev.ghen.thirst.content.purity;
 
-import com.brewinandchewin.core.registry.BCItems;
-import com.farmersrespite.core.registry.FRBlocks;
-import com.farmersrespite.core.registry.FRItems;
 import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.TickHelper;
@@ -15,9 +12,11 @@ import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -46,8 +45,12 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.slf4j.Logger;
+import umpaz.brewinandchewin.common.registry.BCItems;
+import umpaz.farmersrespite.common.registry.FRBlocks;
+import umpaz.farmersrespite.common.registry.FRItems;
 
 import java.lang.reflect.Method;
+import java.text.Format;
 import java.util.*;
 
 @Mod.EventBusSubscriber
@@ -253,7 +256,8 @@ public class WaterPurity
                 int purityColor = getPurityColor(purity);
 
                 event.getToolTip()
-                        .add((new TextComponent(purityText))
+                        .add(MutableComponent
+                                .create(new LiteralContents(purityText))
                                 .setStyle(Style.EMPTY.withColor(purityColor)));
             }
         }
@@ -335,7 +339,7 @@ public class WaterPurity
                 purity == 1 ? "slightly_dirty" :
                         purity == 2 ? "acceptable" : "purified";
 
-        return (new TranslatableComponent("thirst.purity." + purityText).getString());
+        return MutableComponent.create(new TranslatableContents("thirst.purity." + purityText)).getString();
     }
 
     /**
@@ -414,9 +418,8 @@ public class WaterPurity
      */
     public static int getBlockPurity(Level level, BlockPos pos)
     {
-
         int purity = (pos.getY() > CommonConfig.MOUNTAINS_Y.get().intValue() || pos.getY() < CommonConfig.CAVES_Y.get().intValue())
-                && (!isBiomeWaterSalty(level.getBiome(pos).value()) || pos.getY() < CommonConfig.MOUNTAINS_Y.get().intValue() - 32) ? 1 : 0;
+                && pos.getY() < CommonConfig.MOUNTAINS_Y.get().intValue() - 32 ? 1 : 0;
 
         if(level.getFluidState(pos).is(FluidTags.WATER))
         {
@@ -431,11 +434,6 @@ public class WaterPurity
         }
         else
             return -1;
-    }
-
-    public static boolean isBiomeWaterSalty(Biome biome)
-    {
-        return biome.getRegistryName() != null && biome.getRegistryName().toString().contains("ocean");
     }
 
     /**

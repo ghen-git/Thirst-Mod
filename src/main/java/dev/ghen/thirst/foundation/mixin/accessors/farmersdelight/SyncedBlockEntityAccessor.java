@@ -1,7 +1,5 @@
 package dev.ghen.thirst.foundation.mixin.accessors.farmersdelight;
 
-import com.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.farmersrespite.common.crafting.KettleRecipe;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;

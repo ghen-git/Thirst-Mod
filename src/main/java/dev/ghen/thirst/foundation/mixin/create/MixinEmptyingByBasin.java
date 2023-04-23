@@ -38,50 +38,62 @@ public class MixinEmptyingByBasin
         FluidStack resultingFluid = FluidStack.EMPTY;
         ItemStack resultingItem = ItemStack.EMPTY;
 
-        if (WaterPurity.hasPurity(stack))
+        if (!WaterPurity.hasPurity(stack))
+            return;
+
+        wrapper.setItem(0, stack);
+        Optional<Recipe<RecipeWrapper>> recipe = AllRecipeTypes.EMPTYING.find(wrapper, world);
+
+        if (recipe.isPresent())
         {
-            wrapper.setItem(0, stack);
-            Optional<Recipe<RecipeWrapper>> recipe = AllRecipeTypes.EMPTYING.find(wrapper, world);
-            if (recipe.isPresent()) {
-                EmptyingRecipe emptyingRecipe = (EmptyingRecipe)recipe.get();
-                List<ItemStack> results = emptyingRecipe.rollResults();
-                if (!simulate) {
-                    stack.shrink(1);
-                }
+            EmptyingRecipe emptyingRecipe = (EmptyingRecipe)recipe.get();
+            List<ItemStack> results = emptyingRecipe.rollResults();
+            if (!simulate) {
+                stack.shrink(1);
+            }
 
-                resultingItem = results.isEmpty() ? ItemStack.EMPTY : (ItemStack)results.get(0);
-                resultingFluid = emptyingRecipe.getResultingFluid();
+            resultingItem = results.isEmpty() ? ItemStack.EMPTY : (ItemStack)results.get(0);
+            resultingFluid = emptyingRecipe.getResultingFluid();
 
+            if(!resultingFluid.isEmpty())
+            {
                 CompoundTag tag = resultingFluid.getOrCreateTag();
                 tag.putInt("Purity", WaterPurity.getPurity(stack));
                 resultingFluid.setTag(tag);
-
-                cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
-            } else {
-                ItemStack split = stack.copy();
-                split.setCount(1);
-                LazyOptional<IFluidHandlerItem> capability = split.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-                IFluidHandlerItem tank = (IFluidHandlerItem)capability.orElse(null);
-                if (tank == null) {
-                    CompoundTag tag = resultingFluid.getOrCreateTag();
-                    tag.putInt("Purity", WaterPurity.getPurity(stack));
-                    resultingFluid.setTag(tag);
-
-                    cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
-                } else {
-                    resultingFluid = tank.drain(1000, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
-                    resultingItem = tank.getContainer().copy();
-                    if (!simulate) {
-                        stack.shrink(1);
-                    }
-
-                    CompoundTag tag = resultingFluid.getOrCreateTag();
-                    tag.putInt("Purity", WaterPurity.getPurity(stack));
-                    resultingFluid.setTag(tag);
-
-                    cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
-                }
             }
+
+            cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
+            return;
         }
+
+        ItemStack split = stack.copy();
+        split.setCount(1);
+        LazyOptional<IFluidHandlerItem> capability =
+                split.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+        IFluidHandlerItem tank = (IFluidHandlerItem)capability.orElse(null);
+
+        if (tank == null) {
+            if(!resultingFluid.isEmpty())
+            {
+                CompoundTag tag = resultingFluid.getOrCreateTag();
+                tag.putInt("Purity", WaterPurity.getPurity(stack));
+                resultingFluid.setTag(tag);
+            }
+
+            cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
+            return;
+        }
+
+        resultingFluid = tank.drain(1000, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
+        resultingItem = tank.getContainer().copy();
+        if (!simulate) {
+            stack.shrink(1);
+        }
+
+        CompoundTag tag = resultingFluid.getOrCreateTag();
+        tag.putInt("Purity", WaterPurity.getPurity(stack));
+        resultingFluid.setTag(tag);
+
+        cir.setReturnValue(Pair.of(resultingFluid, resultingItem));
     }
 }

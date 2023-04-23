@@ -5,8 +5,8 @@ import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.util.ConfigHelper;
 import dev.ghen.thirst.foundation.util.LoadedValue;
-import dev.momostudios.coldsweat.api.temperature.Temperature;
-import dev.momostudios.coldsweat.api.util.TempHelper;
+//import dev.momostudios.coldsweat.api.temperature.Temperature;
+//import dev.momostudios.coldsweat.api.util.TempHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -125,8 +125,8 @@ public class ThirstHelper
             //temperature range: -0.8 - 2 == 2.8 midpoint: 0.8
             float temp = biome.getBaseTemperature() + 0.2f;
 
-            if(useColdSweatCaps)
-                temp = (float) (TempHelper.getTemperature(player, Temperature.Type.BODY).get() / 100f);
+            if(useColdSweatCaps);
+                //temp = (float) (TempHelper.getTemperature(player, Temperature.Type.BODY).get() / 100f);
             else
             {
                 if(temp <= 0)

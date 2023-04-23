@@ -25,16 +25,15 @@ public class CreateRegistry
 
     static
     {
-        SAND_FILTER_BLOCK = Create.registrate().block("sand_filter", SandFilterBlock::new)
+        SAND_FILTER_BLOCK = Create.REGISTRATE.block("sand_filter", SandFilterBlock::new)
                 .initialProperties(SharedProperties::copperMetal)
-                .transform(pickaxeOnly())
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
                 .addLayer(() -> RenderType::cutoutMipped)
                 .item(AssemblyOperatorBlockItem::new)
                 .transform(customItemModel())
                 .register();
 
-        SAND_FILTER_TE = Create.registrate()
+        SAND_FILTER_TE = Create.REGISTRATE
                 .tileEntity("sand_filter", SandFilterTileEntity::new)
                 .validBlocks(SAND_FILTER_BLOCK)
                 .register();
