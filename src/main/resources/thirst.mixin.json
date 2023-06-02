@@ -13,7 +13,6 @@
     "MixinLayeredCauldronBlock",
     "accessors.CampfireBlockEntityAccessor",
     "accessors.brewinandchewin.KegBlockEntityAccessor",
-    "accessors.create.IEmptyingByBasinAccessor",
     "accessors.create.IFluidDrainingBehaviourAccessor",
     "accessors.farmersdelight.SyncedBlockEntityAccessor",
     "accessors.farmersrespite.KettleBlockEntityAccessor",
