@@ -30,7 +30,7 @@ public class CreateRegistry
                 .register();
 
         SAND_FILTER_TE = Create.REGISTRATE
-                .blockEntity("sand_filter",BlockEntityBuilder.BlockEntityFactory(SandFilterTileEntity))
+                .blockEntity("sand_filter",SandFilterTileEntity::new)
                 .validBlocks(SAND_FILTER_BLOCK)
                 .register();
     }
