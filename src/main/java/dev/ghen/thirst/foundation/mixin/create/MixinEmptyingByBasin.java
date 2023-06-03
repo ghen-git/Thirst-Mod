@@ -1,9 +1,9 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.contraptions.fluids.potion.PotionFluidHandler;
-import com.simibubi.create.content.contraptions.processing.EmptyingByBasin;
-import com.simibubi.create.content.contraptions.processing.EmptyingRecipe;
+import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
+import com.simibubi.create.content.processing.basin.BasinGenerator;
+import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.foundation.utility.Pair;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.mixin.accessors.create.IEmptyingByBasinAccessor;
@@ -12,9 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(EmptyingByBasin.class)
+@Mixin(BasinGenerator.class)
 public class MixinEmptyingByBasin
 {
     @Shadow private static RecipeWrapper wrapper;
@@ -69,7 +69,7 @@ public class MixinEmptyingByBasin
         ItemStack split = stack.copy();
         split.setCount(1);
         LazyOptional<IFluidHandlerItem> capability =
-                split.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+                split.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
         IFluidHandlerItem tank = (IFluidHandlerItem)capability.orElse(null);
 
         if (tank == null) {

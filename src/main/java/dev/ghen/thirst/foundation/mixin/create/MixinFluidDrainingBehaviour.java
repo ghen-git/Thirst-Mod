@@ -1,6 +1,6 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.content.contraptions.fluids.actors.FluidDrainingBehaviour;
+import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.mixin.accessors.create.IFluidDrainingBehaviourAccessor;

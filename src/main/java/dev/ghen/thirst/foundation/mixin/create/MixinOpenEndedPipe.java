@@ -1,6 +1,6 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.content.contraptions.fluids.OpenEndedPipe;
+import com.simibubi.create.content.fluids.OpenEndedPipe;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.fluid.FluidHelper;
@@ -63,11 +63,11 @@ public class MixinOpenEndedPipe
 
                         if (waterlog)
                         {
-                            pipe.getWorld().setBlock(pipe.getOutputPos(), (BlockState)state.setValue(BlockStateProperties.WATERLOGGED, false), 3);
+                            pipe.getWorld().setBlock(pipe.getOutputPos(), state.setValue(BlockStateProperties.WATERLOGGED, false), 3);
                             pipe.getWorld().scheduleTick(pipe.getOutputPos(), Fluids.WATER, 1);
                             cir.setReturnValue(stack);
                         } else {
-                            pipe.getWorld().setBlock(pipe.getOutputPos(), (BlockState)fluidState.createLegacyBlock().setValue(LiquidBlock.LEVEL, 14), 3);
+                            pipe.getWorld().setBlock(pipe.getOutputPos(), fluidState.createLegacyBlock().setValue(LiquidBlock.LEVEL, 14), 3);
                             cir.setReturnValue(stack);
                         }
                     }
