@@ -1,15 +1,12 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
-import com.simibubi.create.content.processing.basin.BasinGenerator;
+import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import com.simibubi.create.foundation.utility.Pair;
 import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.foundation.mixin.accessors.create.IEmptyingByBasinAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -27,10 +24,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(BasinGenerator.class)
+@Mixin(GenericItemEmptying.class)
 public class MixinEmptyingByBasin
 {
-    @Shadow private static RecipeWrapper wrapper;
+    //@Shadow
+    private static RecipeWrapper wrapper;
 
     @Inject(method = "emptyItem", at = @At("HEAD"), cancellable = true, remap = false)
     private static void emptyItem(Level world, ItemStack stack, boolean simulate, CallbackInfoReturnable<Pair<FluidStack, ItemStack>> cir)
@@ -52,7 +50,7 @@ public class MixinEmptyingByBasin
                 stack.shrink(1);
             }
 
-            resultingItem = results.isEmpty() ? ItemStack.EMPTY : (ItemStack)results.get(0);
+            resultingItem = results.isEmpty() ? ItemStack.EMPTY : results.get(0);
             resultingFluid = emptyingRecipe.getResultingFluid();
 
             if(!resultingFluid.isEmpty())
@@ -70,7 +68,7 @@ public class MixinEmptyingByBasin
         split.setCount(1);
         LazyOptional<IFluidHandlerItem> capability =
                 split.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
-        IFluidHandlerItem tank = (IFluidHandlerItem)capability.orElse(null);
+        IFluidHandlerItem tank = capability.orElse(null);
 
         if (tank == null) {
             if(!resultingFluid.isEmpty())
