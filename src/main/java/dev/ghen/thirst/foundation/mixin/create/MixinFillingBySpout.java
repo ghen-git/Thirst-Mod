@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,24 +25,25 @@ import java.util.List;
 @Mixin(FillingBySpout.class)
 public class MixinFillingBySpout
 {
-    //@Shadow
-    private static RecipeWrapper wrapper;
+    @Final
+    @Shadow
+    private static RecipeWrapper WRAPPER;
 
     @Inject(method = "fillItem", at = @At("HEAD"), cancellable = true, remap = false)
     private static void fillItem(Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<ItemStack> cir)
     {
         FluidStack toFill = availableFluid.copy();
         toFill.setAmount(requiredAmount);
-        wrapper.setItem(0, stack);
+        WRAPPER.setItem(0, stack);
 
         if(availableFluid.hasTag() && availableFluid.getTag().contains("Purity"))
         {
             int purity = availableFluid.getTag().getInt("Purity");
 
-            FillingRecipe fillingRecipe = SequencedAssemblyRecipe.getRecipe(world, wrapper, AllRecipeTypes.FILLING.getType(), FillingRecipe.class).filter((fr) ->
+            FillingRecipe fillingRecipe = SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class).filter((fr) ->
                     fr.getRequiredFluid().test(toFill)).orElseGet(() ->
             {
-                Iterator<Recipe<RecipeWrapper>> var2 = world.getRecipeManager().getRecipesFor(AllRecipeTypes.FILLING.getType(), wrapper, world).iterator();
+                Iterator<Recipe<RecipeWrapper>> var2 = world.getRecipeManager().getRecipesFor(AllRecipeTypes.FILLING.getType(), WRAPPER, world).iterator();
 
                 FillingRecipe fr;
                 FluidIngredient requiredFluid;

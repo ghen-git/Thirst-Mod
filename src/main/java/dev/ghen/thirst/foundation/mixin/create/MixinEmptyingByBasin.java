@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,8 +28,9 @@ import java.util.Optional;
 @Mixin(GenericItemEmptying.class)
 public class MixinEmptyingByBasin
 {
-    //@Shadow
-    private static RecipeWrapper wrapper;
+    @Final
+    @Shadow
+    private static RecipeWrapper WRAPPER;
 
     @Inject(method = "emptyItem", at = @At("HEAD"), cancellable = true, remap = false)
     private static void emptyItem(Level world, ItemStack stack, boolean simulate, CallbackInfoReturnable<Pair<FluidStack, ItemStack>> cir)
@@ -39,8 +41,8 @@ public class MixinEmptyingByBasin
         if (!WaterPurity.hasPurity(stack))
             return;
 
-        wrapper.setItem(0, stack);
-        Optional<Recipe<RecipeWrapper>> recipe = AllRecipeTypes.EMPTYING.find(wrapper, world);
+        WRAPPER.setItem(0, stack);
+        Optional<Recipe<RecipeWrapper>> recipe = AllRecipeTypes.EMPTYING.find(WRAPPER, world);
 
         if (recipe.isPresent())
         {
