@@ -3,8 +3,8 @@
 	"parent": "block/block",
 	"render_type": "cutout",
 	"textures": {
-		"0": "create:block/sand_filter",
-		"particle": "create:block/sand_filter"
+		"0": "thirst:block/sand_filter",
+		"particle": "thirst:block/sand_filter"
 	},
 	"elements": [
 		{

@@ -14,7 +14,6 @@ import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,14 +23,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,8 +47,8 @@ import umpaz.farmersrespite.common.registry.FRBlocks;
 import umpaz.farmersrespite.common.registry.FRItems;
 
 import java.lang.reflect.Method;
-import java.text.Format;
 import java.util.*;
+
 
 @Mod.EventBusSubscriber
 public class WaterPurity
@@ -153,15 +150,21 @@ public class WaterPurity
     {
         if(event.getEntity() instanceof ServerPlayer)
         {
+            if(!hasPurity(event.getItemStack())) return;
+
             if(isWaterFilledContainer(event.getItemStack()))
             {
-                Player player = (Player) event.getEntity();
+                //Due to Crash happened after click cauldron with water bowl
+                if(Objects.requireNonNull(event.getItemStack().serializeNBT().get("id")).getAsString().equals("thirst:terracotta_water_bowl")) return;
+                Player player = event.getEntity();
                 Level level = player.getLevel();
                 BlockPos pos = event.getHitVec().getBlockPos();
                 BlockState blockState = level.getBlockState(pos);
 
                 if(isFillableBlock(blockState))
                 {
+
+
                     int purity = getPurity(event.getItemStack());
                     int blockPurity = !blockState.hasProperty(BLOCK_PURITY) ? MAX_PURITY :
                             (blockState.getValue(BLOCK_PURITY) - 1 < 0 ? MAX_PURITY : blockState.getValue(BLOCK_PURITY) - 1);
@@ -197,12 +200,12 @@ public class WaterPurity
     @SubscribeEvent
     static void harvestRunningWater(PlayerInteractEvent.RightClickItem event)
     {
-        if(event.getEntity() instanceof Player)
+        if(event.getEntity() != null)
         {
             ItemStack item = event.getItemStack();
             if(canHarvestRunningWater(item))
             {
-                Player player = (Player) event.getEntity();
+                Player player = event.getEntity();
                 Level level = player.getLevel();
                 BlockPos blockPos = MathHelper.getPlayerPOVHitResult(player.getLevel(), player, ClipContext.Fluid.ANY).getBlockPos();
 
@@ -457,75 +460,58 @@ public class WaterPurity
         Random random = new Random();
         float chance = random.nextFloat();
 
-        switch(purity)
-        {
-            case 0:
-            {
-                if(chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue())
-                {
+        switch (purity) {
+            case 0 -> {
+                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue()) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if(chance <=  CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue())
-                {
+                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue()) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
 
-                break;
             }
-            case 1:
-            {
-                if(chance < CommonConfig.SLIGHTLY_DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
-                {
+            case 1 -> {
+                if (chance < CommonConfig.SLIGHTLY_DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if(chance <=  CommonConfig.SLIGHTLY_DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f)
-                {
+                if (chance <= CommonConfig.SLIGHTLY_DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
 
-                break;
             }
-            case 2:
-            {
-                if(chance < CommonConfig.ACCEPTABLE_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
-                {
+            case 2 -> {
+                if (chance < CommonConfig.ACCEPTABLE_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if(chance <=  CommonConfig.ACCEPTABLE_POISON_PERCENTAGE.get().intValue() / 100.0f)
-                {
+                if (chance <= CommonConfig.ACCEPTABLE_POISON_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
 
-                break;
             }
-            case 3:
-            {
-                if(chance < CommonConfig.PURIFIED_NAUSEA_PERCENTAGE.get().intValue() / 100.0f)
-                {
+            case 3 -> {
+                if (chance < CommonConfig.PURIFIED_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if(chance <=  CommonConfig.PURIFIED_POISON_PERCENTAGE.get().intValue() / 100.0f)
-                {
+                if (chance <= CommonConfig.PURIFIED_POISON_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
 
-                break;
             }
         }
 
@@ -552,7 +538,7 @@ public class WaterPurity
             {
                 ((BucketPickup)level.getBlockState(blockpos).getBlock()).pickupBlock(level, blockpos, level.getBlockState(blockpos));
                 ItemStack result = new ItemStack(Items.WATER_BUCKET);
-                level.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, blockpos);
+                level.gameEvent(null, GameEvent.FLUID_PICKUP, blockpos);
                 addPurity(result, blockpos, level);
 
                 item.shrink(1);
@@ -581,7 +567,7 @@ public class WaterPurity
             if(level.getFluidState(blockpos).is(FluidTags.WATER))
             {
                 ItemStack result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                level.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, blockpos);
+                level.gameEvent(null, GameEvent.FLUID_PICKUP, blockpos);
                 addPurity(result, blockpos, level);
 
                 item.shrink(1);

@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -56,7 +57,7 @@ public class SandFilterTileEntity  extends SmartBlockEntity implements IHaveGogg
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
         if (cap == ForgeCapabilities.FLUID_HANDLER && side != null && side.getAxis() == Direction.Axis.Y)
         {
             if(side == Direction.DOWN)
