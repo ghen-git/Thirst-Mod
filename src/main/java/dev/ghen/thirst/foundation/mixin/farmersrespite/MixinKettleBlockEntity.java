@@ -25,14 +25,14 @@ public abstract class MixinKettleBlockEntity
     private static void brewingTickWithPurity(Level level, BlockPos pos, BlockState state, KettleBlockEntity kettle, CallbackInfo ci)
     {
         boolean isHeated = kettle.isHeated(level, pos);
-        boolean didInventoryChange = false;
+        boolean didInventoryChange;
         KettleBlockEntityAccessor kettleAcc = (KettleBlockEntityAccessor) kettle;
 
         if (isHeated && kettleAcc.invokeHasInput()) {
             Optional<KettleRecipe> recipe = kettleAcc.invokeGetMatchingRecipe(new RecipeWrapper(kettle.getInventory()));
-            if (recipe.isPresent() && kettleAcc.invokeCanBrew((KettleRecipe)recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem()))
+            if (recipe.isPresent() && kettleAcc.invokeCanBrew(recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem()))
             {
-                didInventoryChange = kettleAcc.invokeProcessBrewing((KettleRecipe)recipe.get(), kettle);
+                didInventoryChange = kettleAcc.invokeProcessBrewing(recipe.get(), kettle);
                 if(didInventoryChange)
                 {
                     int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
