@@ -64,7 +64,7 @@ public class MixinFanProcessing {
 
         if (type == FanProcessing.Type.BLASTING) {
             if(Objects.requireNonNull(stack.serializeNBT().get("id")).getAsString().equals("minecraft:potion")){
-                WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + CommonConfig.SAND_FILTER_FILTRATION_AMOUNT.get().intValue(), WaterPurity.MAX_PURITY));
+                WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + 1, WaterPurity.MAX_PURITY));
                 cir.setReturnValue(Collections.singletonList(stack));
                 return;
             }
@@ -77,7 +77,7 @@ public class MixinFanProcessing {
                 smeltingRecipe = world.getRecipeManager()
                         .getRecipeFor(RecipeType.BLASTING, RECIPE_WRAPPER, world);
                 if(smokingRecipe.isEmpty() && WaterPurity.hasPurity(stack)){
-                    WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + CommonConfig.SAND_FILTER_FILTRATION_AMOUNT.get().intValue(), WaterPurity.MAX_PURITY));
+                    WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + 1, WaterPurity.MAX_PURITY));
                     cir.setReturnValue(Collections.singletonList(stack));
                 }
             }
