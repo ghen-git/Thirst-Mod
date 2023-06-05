@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(GenericItemEmptying.class)
+@Mixin(value = GenericItemEmptying.class,remap = false)
 public class MixinEmptyingByBasin
 {
     @Final

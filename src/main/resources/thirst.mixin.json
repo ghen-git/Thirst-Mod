@@ -18,6 +18,7 @@
     "accessors.farmersrespite.KettleBlockEntityAccessor",
     "brewinandchewin.MixinKegBlockEntity",
     "create.MixinEmptyingByBasin",
+    "create.MixinFanProcessing",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
     "create.MixinOpenEndedPipe",

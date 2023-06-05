@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin(FillingBySpout.class)
+@Mixin(value = FillingBySpout.class,remap = false)
 public class MixinFillingBySpout
 {
     @Final

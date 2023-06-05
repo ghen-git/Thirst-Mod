@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(OpenEndedPipe.class)
+@Mixin(value = OpenEndedPipe.class,remap = false)
 public class MixinOpenEndedPipe
 {
 
