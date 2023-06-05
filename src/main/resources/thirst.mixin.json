@@ -21,6 +21,7 @@
     "create.MixinFanProcessing",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
+    "create.MixinGenericItemFilling",
     "create.MixinOpenEndedPipe",
     "farmersrespite.MixinKettleBlock",
     "farmersrespite.MixinKettleBlockEntity"

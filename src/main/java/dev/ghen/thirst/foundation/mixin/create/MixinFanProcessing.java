@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.fan.SplashingRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmokingRecipe;
@@ -63,7 +64,7 @@ public class MixinFanProcessing {
                 .getRecipeFor(RecipeType.SMOKING, RECIPE_WRAPPER, world);
 
         if (type == FanProcessing.Type.BLASTING) {
-            if(Objects.requireNonNull(stack.serializeNBT().get("id")).getAsString().equals("minecraft:potion")){
+            if(stack.getItem() == Items.POTION){
                 WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + 1, WaterPurity.MAX_PURITY));
                 cir.setReturnValue(Collections.singletonList(stack));
                 return;
