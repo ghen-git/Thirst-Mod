@@ -5,12 +5,8 @@ import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +21,7 @@ public abstract class MixinAbstractFurnaceBlockEntity
     @Shadow
     protected abstract boolean canBurn(@Nullable Recipe<?> p_155006_, NonNullList<ItemStack> p_155007_, int p_155008_);
 
-    @Inject(method = "canBurn", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canBurn", at = @At("HEAD"))
     private void blockPotions(Recipe<?> p_155006_, NonNullList<ItemStack> item, int p_155008_, CallbackInfoReturnable<Boolean> cir)
     {
         if(WaterPurity.isWaterFilledContainer(item.get(0)))
@@ -49,7 +45,7 @@ public abstract class MixinAbstractFurnaceBlockEntity
             {
                 ItemStack itemstack1 = WaterPurity.getFilledContainer(itemstack, true);
                 int purity = WaterPurity.getPurity(itemstack);
-                WaterPurity.addPurity(itemstack1, Math.min(purity +  + CommonConfig.FURNACE_PURIFICATION_LEVELS.get().intValue(), 3));
+                WaterPurity.addPurity(itemstack1, Math.min(purity + CommonConfig.FURNACE_PURIFICATION_LEVELS.get().intValue(), 3));
 
                 if (itemstack2.isEmpty())
                 {

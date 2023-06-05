@@ -3,14 +3,13 @@ package dev.ghen.thirst.foundation.jei;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,7 +25,7 @@ public class MixinKegBlockEntity
     @Inject(method = "fermentingTick", at = @At("HEAD"), remap = false, cancellable = true)
     private static void brewingTickWithPurity(Level level, BlockPos pos, BlockState state, KegBlockEntity keg, CallbackInfo ci)
     {
-        boolean didInventoryChange = false;
+        boolean didInventoryChange;
         KegBlockEntityAccessor kegAcc = (KegBlockEntityAccessor) keg;
         keg.updateTemperature();
 

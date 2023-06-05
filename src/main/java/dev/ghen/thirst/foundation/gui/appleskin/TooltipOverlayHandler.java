@@ -4,8 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -18,18 +18,12 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import squeek.appleskin.ModConfig;
-import squeek.appleskin.ModInfo;
-import squeek.appleskin.api.event.FoodValuesEvent;
-import squeek.appleskin.api.event.TooltipOverlayEvent;
 import squeek.appleskin.api.food.FoodValues;
-import squeek.appleskin.helpers.FoodHelper;
 import squeek.appleskin.helpers.KeyHelper;
 
 @OnlyIn(Dist.CLIENT)
@@ -119,13 +113,13 @@ public class TooltipOverlayHandler {
             this.itemStack = itemStack;
             this.biggestHunger = ThirstHelper.getThirst(itemStack);
             this.biggestSaturationIncrement = ThirstHelper.getQuenched(itemStack);
-            this.hungerBars = (int)Math.ceil((double)((float)Math.abs(this.biggestHunger) / 2.0F));
+            this.hungerBars = (int)Math.ceil((float)Math.abs(this.biggestHunger) / 2.0F);
             if (this.hungerBars > 10) {
                 this.hungerBarsText = "x" + (this.biggestHunger < 0 ? -1 : 1) * this.hungerBars;
                 this.hungerBars = 1;
             }
 
-            this.saturationBars = (int)Math.ceil((double)(Math.abs(this.biggestSaturationIncrement) / 2.0F));
+            this.saturationBars = (int)Math.ceil(Math.abs(this.biggestSaturationIncrement) / 2.0F);
             if (this.saturationBars > 10 || this.saturationBars == 0) {
                 this.saturationBarsText = "x" + (this.biggestSaturationIncrement < 0.0F ? -1 : 1) * this.saturationBars;
                 this.saturationBars = 1;
