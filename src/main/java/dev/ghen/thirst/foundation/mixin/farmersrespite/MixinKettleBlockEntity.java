@@ -36,7 +36,7 @@ public abstract class MixinKettleBlockEntity
                 if(didInventoryChange)
                 {
                     int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
-                    WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2), purity);
+                    kettle.getInventory().setStackInSlot(2, WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2), purity));
                 }
             } else
                 return;

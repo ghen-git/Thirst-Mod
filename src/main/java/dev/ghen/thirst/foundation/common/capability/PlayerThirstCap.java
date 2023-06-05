@@ -8,12 +8,15 @@ import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import org.slf4j.Logger;
+import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirstCap implements IThirstCap
 {
@@ -76,7 +79,10 @@ public class PlayerThirstCap implements IThirstCap
     {
 
         Difficulty difficulty = player.level.getDifficulty();
-        updateExhaustion(player);
+        if (!player.isInvulnerable()) return;
+        if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
+                updateExhaustion(player);
+        }
 
         if (exhaustion > 4)
         {
