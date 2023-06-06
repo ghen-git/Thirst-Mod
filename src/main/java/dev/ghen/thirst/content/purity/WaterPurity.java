@@ -1,14 +1,15 @@
 package dev.ghen.thirst.content.purity;
 
 import com.mojang.logging.LogUtils;
-import dev.ghen.thirst.foundation.config.CommonConfig;
-import dev.ghen.thirst.foundation.util.TickHelper;
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
-import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -24,12 +25,17 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -45,9 +51,12 @@ import org.slf4j.Logger;
 import umpaz.brewinandchewin.common.registry.BCItems;
 import umpaz.farmersrespite.common.registry.FRBlocks;
 import umpaz.farmersrespite.common.registry.FRItems;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 @Mod.EventBusSubscriber
@@ -55,9 +64,10 @@ public class WaterPurity
 {
     private static List<ContainerWithPurity> waterContainers = new ArrayList<>();
     private static List<Block> fillablesWithPurity = new ArrayList<>();
-    private static final Logger LOGGER = LogUtils.getLogger();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
+
+    public static Logger logger= LogUtils.getLogger();
 
     /**
      * Specifies the purity of a block filled with water. Has to be incremented by one
@@ -76,6 +86,10 @@ public class WaterPurity
         registerDispenserBehaviours();
         registerContainers();
         registerFillables();
+
+        if(ModList.get().isLoaded("farmersdelight")){
+            registerFarmersDelightContainers();
+        }
 
         if(ModList.get().isLoaded("farmersrespite"))
         {
@@ -96,6 +110,14 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.BUCKET),
                 new ItemStack(Items.WATER_BUCKET), false).canHarvestRunningWater(false));
     }
+
+    private static void registerFarmersDelightContainers()
+    {
+        waterContainers.add(new ContainerWithPurity(new ItemStack(ModItems.MELON_JUICE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(ModItems.APPLE_CIDER.get())));
+    }
+
+
 
     private static void registerFarmersRespiteContainers()
     {
@@ -155,7 +177,7 @@ public class WaterPurity
             if(isWaterFilledContainer(event.getItemStack()))
             {
                 //Due to Crash happened after click cauldron with water bowl
-                if(Objects.requireNonNull(event.getItemStack().serializeNBT().get("id")).getAsString().equals("thirst:terracotta_water_bowl")) return;
+                if(event.getItemStack().is(ItemInit.TERRACOTTA_WATER_BOWL.get()) ) return;
                 Player player = event.getEntity();
                 Level level = player.getLevel();
                 BlockPos pos = event.getHitVec().getBlockPos();
