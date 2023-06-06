@@ -23,9 +23,9 @@ public abstract class MixinKettleScreen
 
         int waterLevel = state.getValue(KettleBlock.WATER_LEVEL);
         int purity = WaterPurity.getBlockPurity(state);
-        String purityString = purity == 0 ? "dirty" :
-                purity == 1 ? "slightly dirty" :
-                        purity == 2 ? "acceptable" : "purified";
+        String purityString = purity == 0 ? Component.translatable("thirst.purity.dirty").getString() :
+                purity == 1 ? Component.translatable("thirst.purity.slightly_dirty").getString():
+                        purity == 2 ? Component.translatable("thirst.purity.acceptable").getString() : Component.translatable("thirst.purity.purified").getString();
 
         Object[] args;
         if(purity == -1 || waterLevel == 0)
