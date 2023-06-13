@@ -1,6 +1,6 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.content.contraptions.fluids.OpenEndedPipe;
+import com.simibubi.create.content.fluids.OpenEndedPipe;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.fluid.FluidHelper;

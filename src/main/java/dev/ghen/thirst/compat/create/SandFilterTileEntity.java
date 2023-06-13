@@ -1,13 +1,10 @@
 package dev.ghen.thirst.compat.create;
 
-import com.simibubi.create.api.behaviour.BlockSpoutingBehaviour;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.belt.BeltProcessingBehaviour;
-import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import dev.ghen.thirst.content.purity.WaterPurity;
@@ -16,7 +13,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 //import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,7 +25,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.*;
 
-public class SandFilterTileEntity  extends SmartTileEntity implements IHaveGoggleInformation
+public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggleInformation
 {
     public static final int TANK_SIZE = 1000;
     SmartFluidTankBehaviour dirtyTank;
@@ -46,7 +42,7 @@ public class SandFilterTileEntity  extends SmartTileEntity implements IHaveGoggl
     }
 
     @Override
-    public void addBehaviours(List<TileEntityBehaviour> behaviours) {
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         dirtyTank = SmartFluidTankBehaviour.single(this, TANK_SIZE);
         behaviours.add(dirtyTank);
         purifiedTank = SmartFluidTankBehaviour.single(this, TANK_SIZE);

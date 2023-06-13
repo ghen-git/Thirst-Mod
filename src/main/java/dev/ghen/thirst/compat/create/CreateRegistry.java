@@ -1,19 +1,13 @@
 package dev.ghen.thirst.compat.create;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllTileEntities;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.contraptions.components.AssemblyOperatorBlockItem;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutBlock;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
+import com.simibubi.create.content.processing.AssemblyOperatorBlockItem ;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import dev.ghen.thirst.content.registry.ItemInit;
 import net.minecraft.client.renderer.RenderType;
 
-import static com.simibubi.create.AllTags.pickaxeOnly;
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 public class CreateRegistry
@@ -34,7 +28,7 @@ public class CreateRegistry
                 .register();
 
         SAND_FILTER_TE = Create.REGISTRATE
-                .tileEntity("sand_filter", SandFilterTileEntity::new)
+                .blockEntity("sand_filter", SandFilterTileEntity::new)
                 .validBlocks(SAND_FILTER_BLOCK)
                 .register();
     }

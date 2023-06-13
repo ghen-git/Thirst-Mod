@@ -1,12 +1,10 @@
 package dev.ghen.thirst.compat.create;
 
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.AllTileEntities;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
-import com.simibubi.create.content.contraptions.wrench.IWrenchable;
+import com.simibubi.create.content.equipment.wrench.IWrenchable ;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
-import com.simibubi.create.foundation.block.ITE;
-import com.simibubi.create.foundation.tileEntity.ComparatorUtil;
+import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.blockEntity.ComparatorUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +17,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SandFilterBlock extends Block implements IWrenchable, ITE<SandFilterTileEntity> {
+public class SandFilterBlock extends Block implements IWrenchable, IBE<SandFilterTileEntity> {
 
     public SandFilterBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
@@ -53,12 +51,12 @@ public class SandFilterBlock extends Block implements IWrenchable, ITE<SandFilte
     }
 
     @Override
-    public Class<SandFilterTileEntity> getTileEntityClass() {
+    public Class<SandFilterTileEntity> getBlockEntityClass() {
         return SandFilterTileEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends SandFilterTileEntity> getTileEntityType() {
+    public BlockEntityType<? extends SandFilterTileEntity> getBlockEntityType() {
         return CreateRegistry.SAND_FILTER_TE.get();
     }
 
