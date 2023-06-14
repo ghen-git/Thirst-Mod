@@ -143,7 +143,7 @@ public class PlayerThirstCap implements IThirstCap
 
     void updateExhaustion(Player player)
     {
-        if (!player.isPassenger() && !player.position().equals(lastPos))
+        if (!player.isPassenger() && !player.position().equals(lastPos)&&!player.isFallFlying())
         {
             if(player.isSwimming())
             {
@@ -155,6 +155,7 @@ public class PlayerThirstCap implements IThirstCap
             else if (player.isOnGround() && player.isSprinting())
             {
                 double dist = (Math.abs(player.position().x - lastPos.x) + Math.abs(player.position().z - lastPos.z)) / 2;
+                if (dist>20) return;
                 addExhaustion(player, (float) dist * exhaustionMultiplier);
             }
         }

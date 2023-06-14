@@ -27,10 +27,10 @@ public abstract class MixinAbstractFurnaceBlockEntity
         if(WaterPurity.isWaterFilledContainer(item.get(0)))
         {
             if(WaterPurity.getPurity(item.get(0)) == WaterPurity.MAX_PURITY)
-                cir.cancel();
+                cir.setReturnValue(false);
         }
         else if(item.get(0).is(Items.POTION))
-            cir.cancel();
+            cir.setReturnValue(false);
     }
 
     @Inject(method = "burn", at = @At("HEAD"), cancellable = true)
