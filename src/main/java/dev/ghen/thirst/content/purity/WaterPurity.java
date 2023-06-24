@@ -1,6 +1,5 @@
 package dev.ghen.thirst.content.purity;
 
-import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.config.CommonConfig;
@@ -9,7 +8,6 @@ import dev.ghen.thirst.foundation.util.ReflectionUtil;
 import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
@@ -47,7 +45,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.slf4j.Logger;
 import umpaz.brewinandchewin.common.registry.BCItems;
 import umpaz.farmersrespite.common.registry.FRBlocks;
 import umpaz.farmersrespite.common.registry.FRItems;
@@ -56,6 +53,7 @@ import vectorwing.farmersdelight.common.registry.ModItems;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -66,8 +64,6 @@ public class WaterPurity
     private static List<Block> fillablesWithPurity = new ArrayList<>();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
-
-    public static Logger logger= LogUtils.getLogger();
 
     /**
      * Specifies the purity of a block filled with water. Has to be incremented by one
@@ -96,8 +92,10 @@ public class WaterPurity
             registerFarmersRespiteContainers();
             fillablesWithPurity.add(FRBlocks.KETTLE.get());
         }
-        if(ModList.get().isLoaded("brewinandchewin"))
+
+        if(ModList.get().isLoaded("brewinandchewin")) {
             registerBrewinAndChewinContainers();
+        }
     }
 
     private static void registerContainers()
@@ -117,8 +115,6 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(ModItems.APPLE_CIDER.get())));
     }
 
-
-
     private static void registerFarmersRespiteContainers()
     {
         waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.GREEN_TEA.get())));
@@ -126,6 +122,9 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.BLACK_TEA.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.ROSE_HIP_TEA.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.DANDELION_TEA.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.COFFEE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.GAMBLERS_TEA.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(FRItems.PURULENT_TEA.get())));
     }
 
     private static void registerBrewinAndChewinContainers()
@@ -148,6 +147,10 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.KOMBUCHA.get())));
     }
 
+    private static void CustomRegister(){
+
+    }
+
     private static void registerFillables()
     {
         fillablesWithPurity.add(Blocks.CAULDRON);
@@ -167,15 +170,17 @@ public class WaterPurity
      * after the player adds water to it. If the water purity in the block is greater
      * than that of the water in the item, the second one prevails.
      */
+
     @SubscribeEvent
     static void fillablesHandler(PlayerInteractEvent.RightClickBlock event)
     {
         if(event.getEntity() instanceof ServerPlayer)
         {
-            if(!hasPurity(event.getItemStack())) return;
 
             if(isWaterFilledContainer(event.getItemStack()))
             {
+                if(!hasPurity(event.getItemStack())) return;
+
                 //Due to Crash happened after click cauldron with water bowl
                 if(event.getItemStack().is(ItemInit.TERRACOTTA_WATER_BOWL.get()) ) return;
                 Player player = event.getEntity();
@@ -185,8 +190,6 @@ public class WaterPurity
 
                 if(isFillableBlock(blockState))
                 {
-
-
                     int purity = getPurity(event.getItemStack());
                     int blockPurity = !blockState.hasProperty(BLOCK_PURITY) ? MAX_PURITY :
                             (blockState.getValue(BLOCK_PURITY) - 1 < 0 ? MAX_PURITY : blockState.getValue(BLOCK_PURITY) - 1);
@@ -198,6 +201,7 @@ public class WaterPurity
                     });
                 }
             }
+
         }
     }
 
@@ -341,7 +345,7 @@ public class WaterPurity
         if(!item.getOrCreateTag().contains("Purity"))
             item.getOrCreateTag().putInt("Purity", -1);
 
-        return item.getTag().getInt("Purity");
+        return Objects.requireNonNull(item.getTag()).getInt("Purity");
     }
 
     /**
@@ -360,6 +364,7 @@ public class WaterPurity
      */
     public static String getPurityText(int purity)
     {
+        if(purity==-1) return null;
         String purityText = purity == 0 ? "dirty" :
                 purity == 1 ? "slightly_dirty" :
                         purity == 2 ? "acceptable" : "purified";
@@ -467,10 +472,13 @@ public class WaterPurity
      */
     public static boolean givePurityEffects(Player player, ItemStack item)
     {
-        if(hasPurity(item))
+        if(!isWaterFilledContainer(item)) return true;
+        if(!hasPurity(item)) return true;
+        if(getPurity(item)!=-1)
             return givePurityEffects(player, ThirstHelper.getPurity(item));
         else
-            return true;
+            //this made item without purity considered as dirty
+            return givePurityEffects(player, 0);
     }
 
     /**

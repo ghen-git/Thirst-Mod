@@ -52,7 +52,9 @@ public class MixinFanProcessing {
                 RECIPE_WRAPPER.setItem(0, stack);
                 if(smokingRecipe.isEmpty() && WaterPurity.hasPurity(stack)){
                     WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + 1, WaterPurity.MAX_PURITY));
-                    cir.setReturnValue(new ArrayList<>(List.of(stack)));
+                    List<ItemStack> mutableList = new ArrayList<>();
+                    mutableList.add(stack);
+                    cir.setReturnValue(mutableList);
                 }
             }
 

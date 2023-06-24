@@ -1,6 +1,5 @@
 package dev.ghen.thirst;
 
-import com.simibubi.create.Create;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import dev.ghen.thirst.compat.create.CreateRegistry;
