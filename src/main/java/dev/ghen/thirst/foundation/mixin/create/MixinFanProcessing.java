@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +40,9 @@ public class MixinFanProcessing {
         if (type == FanProcessing.Type.BLASTING) {
             if(stack.getItem() == Items.POTION){
                 WaterPurity.addPurity(stack, Math.min(WaterPurity.getPurity(stack) + 1, WaterPurity.MAX_PURITY));
-                cir.setReturnValue(Collections.singletonList(stack));
+                List<ItemStack> mutableList = new ArrayList<>();
+                mutableList.add(stack);
+                cir.setReturnValue(mutableList);
                 return;
             }
 
