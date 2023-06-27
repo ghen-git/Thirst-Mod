@@ -13,16 +13,18 @@
     "MixinLayeredCauldronBlock",
     "accessors.CampfireBlockEntityAccessor",
     "accessors.brewinandchewin.KegBlockEntityAccessor",
-    "accessors.create.IEmptyingByBasinAccessor",
     "accessors.create.IFluidDrainingBehaviourAccessor",
     "accessors.farmersdelight.SyncedBlockEntityAccessor",
     "accessors.farmersrespite.KettleBlockEntityAccessor",
     "brewinandchewin.MixinKegBlockEntity",
     "create.MixinEmptyingByBasin",
+    "create.MixinFanProcessing",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
+    "create.MixinGenericItemFilling",
     "create.MixinOpenEndedPipe",
-    "farmersrespite.MixinKettleBlock"
+    "farmersrespite.MixinKettleBlock",
+    "farmersrespite.MixinKettleBlockEntity"
   ],
   "client": [
     "farmersrespite.MixinKettleScreen"

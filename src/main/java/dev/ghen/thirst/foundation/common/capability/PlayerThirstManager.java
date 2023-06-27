@@ -1,10 +1,9 @@
 package dev.ghen.thirst.foundation.common.capability;
 
-import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.DrinkByHandClient;
-import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +26,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +33,6 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 public class PlayerThirstManager
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     @SubscribeEvent
     public static void attachCapabilityToEntityHandler(AttachCapabilitiesEvent<Entity> event)
@@ -152,9 +149,7 @@ public class PlayerThirstManager
             oldPlayer.reviveCaps();
 
             event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy);
-            });
+                    oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy));
 
             oldPlayer.invalidateCaps();
         }

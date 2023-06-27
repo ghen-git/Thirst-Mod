@@ -1,6 +1,6 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.content.contraptions.fluids.actors.FluidDrainingBehaviour;
+import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.mixin.accessors.create.IFluidDrainingBehaviourAccessor;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(FluidDrainingBehaviour.class)
+@Mixin(value = FluidDrainingBehaviour.class,remap = false)
 public abstract class MixinFluidDrainingBehaviour
 {
     @Shadow protected abstract boolean isSearching();

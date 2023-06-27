@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -56,8 +55,8 @@ public class MixinBootstrap
                 player.awardStat(Stats.USE_CAULDRON);
                 player.awardStat(Stats.ITEM_USED.get(item));
                 LayeredCauldronBlock.lowerFillLevel(blockState, level, pos);
-                level.playSound((Player)null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                level.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, pos);
+                level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.gameEvent(null, GameEvent.FLUID_PICKUP, pos);
             }
 
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -80,8 +79,8 @@ public class MixinBootstrap
                 p_175639_.awardStat(Stats.USE_CAULDRON);
                 p_175639_.awardStat(Stats.ITEM_USED.get(item));
                 p_175637_.setBlockAndUpdate(p_175638_, Blocks.CAULDRON.defaultBlockState());
-                p_175637_.playSound((Player)null, p_175638_, p_175644_, SoundSource.BLOCKS, 1.0F, 1.0F);
-                p_175637_.gameEvent((Entity)null, GameEvent.FLUID_PICKUP, p_175638_);
+                p_175637_.playSound(null, p_175638_, p_175644_, SoundSource.BLOCKS, 1.0F, 1.0F);
+                p_175637_.gameEvent(null, GameEvent.FLUID_PICKUP, p_175638_);
             }
 
             return InteractionResult.sidedSuccess(p_175637_.isClientSide);

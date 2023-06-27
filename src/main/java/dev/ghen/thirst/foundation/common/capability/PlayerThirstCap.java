@@ -12,8 +12,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import org.slf4j.Logger;
+import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirstCap implements IThirstCap
 {
@@ -76,11 +78,14 @@ public class PlayerThirstCap implements IThirstCap
     {
 
         Difficulty difficulty = player.level.getDifficulty();
-        updateExhaustion(player);
+        if (player.isInvulnerable()) return;
+        if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
+                updateExhaustion(player);
+        }
 
         if (exhaustion > 4)
         {
-            LOGGER.info(quenched + "");
+            LOGGER.info(String.valueOf(quenched));
             exhaustion -= 4;
             if (quenched > 0)
             {
@@ -138,7 +143,7 @@ public class PlayerThirstCap implements IThirstCap
 
     void updateExhaustion(Player player)
     {
-        if (!player.isPassenger() && !player.position().equals(lastPos))
+        if (!player.isPassenger() && !player.position().equals(lastPos)&&!player.isFallFlying())
         {
             if(player.isSwimming())
             {
@@ -150,6 +155,7 @@ public class PlayerThirstCap implements IThirstCap
             else if (player.isOnGround() && player.isSprinting())
             {
                 double dist = (Math.abs(player.position().x - lastPos.x) + Math.abs(player.position().z - lastPos.z)) / 2;
+                if (dist>20) return;
                 addExhaustion(player, (float) dist * exhaustionMultiplier);
             }
         }

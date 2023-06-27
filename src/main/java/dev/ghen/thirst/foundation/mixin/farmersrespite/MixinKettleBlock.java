@@ -24,20 +24,20 @@ public class MixinKettleBlock
         p_153549_.add(WaterPurity.BLOCK_PURITY);
     }
 
-    @Redirect(method = "emptyContainer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V"))
-    private static void use(Player instance, InteractionHand interactionHand, ItemStack itemStack)
-    {
-        if(itemStack.is(Items.BUCKET))
-        {
-            instance.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
-        }
-        else
-        {
-            ItemStack heldStack = instance.getItemInHand(interactionHand);
-            if(heldStack.getCount() > 1)
-                heldStack.shrink(1);
-            else
-                instance.setItemInHand(interactionHand, new ItemStack(Items.GLASS_BOTTLE));
-        }
-    }
+    // @Redirect(method = "emptyContainer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V"))
+    // private static void use(Player instance, InteractionHand interactionHand, ItemStack itemStack)
+    // {
+    //     if(itemStack.is(Items.BUCKET))
+    //     {
+    //         instance.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
+    //     }
+    //     else
+    //     {
+    //         ItemStack heldStack = instance.getItemInHand(interactionHand);
+    //         if(heldStack.getCount() > 1)
+    //             heldStack.shrink(1);
+    //         else
+    //             instance.setItemInHand(interactionHand, new ItemStack(Items.GLASS_BOTTLE));
+    //     }
+    // }
 }

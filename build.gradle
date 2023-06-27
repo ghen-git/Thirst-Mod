@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = "1.0.2"
+version = "1.0.7"
 group = 'dev.ghen.thirst'
 
 java {
@@ -123,9 +123,9 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.1'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.4'
 
-    implementation fg.deobf("com.simibubi.create:create-1.19.2:0.5.0.i-23:slim") { transitive = false }
+    implementation fg.deobf("com.simibubi.create:create-1.19.2:0.5.1.a-29:slim") { transitive = false }
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.8.a-14")
     implementation fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5")
 

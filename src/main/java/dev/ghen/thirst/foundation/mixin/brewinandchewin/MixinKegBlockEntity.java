@@ -25,7 +25,7 @@ public class MixinKegBlockEntity
     @Inject(method = "fermentingTick", at = @At("HEAD"), remap = false, cancellable = true)
     private static void brewingTickWithPurity(Level level, BlockPos pos, BlockState state, KegBlockEntity keg, CallbackInfo ci)
     {
-        boolean didInventoryChange = false;
+        boolean didInventoryChange;
         KegBlockEntityAccessor kegAcc = (KegBlockEntityAccessor) keg;
         keg.updateTemperature();
 
@@ -35,14 +35,15 @@ public class MixinKegBlockEntity
                     WaterPurity.isWaterFilledContainer(recipe.get().getResultItem()))
             {
                 didInventoryChange = kegAcc.invokeProcessFermenting(recipe.get(), keg);
+                int purity = WaterPurity.getPurity(keg.getInventory().getStackInSlot(4));
                 if(didInventoryChange)
                 {
-                    int purity = WaterPurity.getPurity(keg.getInventory().getStackInSlot(4));
+
 
                     purity = purity < CommonConfig.FERMENTATION_MOLDING_THRESHOLD.get().intValue() ?
                             Math.max(purity - CommonConfig.FERMENTATION_MOLDING_HARSHNESS.get().intValue(), WaterPurity.MIN_PURITY) : purity;
 
-                    WaterPurity.addPurity(keg.getInventory().getStackInSlot(5), purity);
+                    keg.getInventory().setStackInSlot(5, WaterPurity.addPurity(keg.getInventory().getStackInSlot(5), purity));
                 }
             } else
                 return;

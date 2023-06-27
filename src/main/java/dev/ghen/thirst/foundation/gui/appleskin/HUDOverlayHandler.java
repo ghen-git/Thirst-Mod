@@ -3,38 +3,25 @@ package dev.ghen.thirst.foundation.gui.appleskin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
-import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
-import squeek.appleskin.ModConfig;
-import squeek.appleskin.ModInfo;
-import squeek.appleskin.api.event.FoodValuesEvent;
-import squeek.appleskin.api.event.HUDOverlayEvent;
-import squeek.appleskin.api.food.FoodValues;
-import squeek.appleskin.helpers.FoodHelper;
-import squeek.appleskin.helpers.HungerHelper;
 import squeek.appleskin.util.IntPoint;
 
 import java.util.Random;
@@ -359,10 +346,10 @@ public class HUDOverlayHandler {
         THIRST_LEVEL_ELEMENT = Thirst.asResource("thirst_level");
     }
 
-    static enum RenderOverlayType {
+    enum RenderOverlayType {
         THIRST;
 
-        private RenderOverlayType() {
+        RenderOverlayType() {
         }
     }
 }

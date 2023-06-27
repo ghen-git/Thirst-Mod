@@ -1,6 +1,7 @@
 package dev.ghen.thirst;
 
-import com.simibubi.create.Create;
+import com.tterrag.registrate.Registrate;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
@@ -31,9 +32,11 @@ public class Thirst
 {
     public static final String ID = "thirst";
     public static final String NAME = "Thirst";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.7";
 
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final NonNullSupplier<Registrate> REGISTRATE=NonNullSupplier.lazy(() ->Registrate.create(Thirst.ID));
 
     public Thirst()
     {
