@@ -13,5 +13,10 @@
   "thirst.purity.slightly_dirty": "Slightly Dirty",
   "thirst.purity.acceptable": "Acceptable",
   "thirst.purity.purified": "Purified",
-  "block.create.sand_filter": "Sand Filter"
+  "block.thirst.sand_filter": "Sand Filter",
+
+  "thirst.ponder.sand_filter.header": "Purifying the water with sand filter",
+  "thirst.ponder.sand_filter.text_1": "Connect the input and output above and below the filter",
+  "thirst.ponder.sand_filter.text_2": "The filter will purify the water input from above it",
+  "thirst.ponder.sand_filter.text_3": "The purified water will be output from below the filter"
 }

@@ -5,10 +5,7 @@ import java.lang.reflect.Method;
 
 public class ReflectionUtil
 {
-    /**
-     * HAHA fuck you, reflections.
-     * */
-    public static Object fuckYouReflections(Method method, Object obj, Object... args)
+    public static Object MethodReflection(Method method, Object obj, Object... args)
     {
         try
         {

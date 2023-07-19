@@ -36,6 +36,7 @@ public class ItemSettingsConfig
                                         Arrays.asList("farmersrespite:black_tea", 10, 14),
                                         Arrays.asList("farmersrespite:rose_hip_tea", 12, 22),
                                         Arrays.asList("farmersrespite:dandelion_tea", 12, 22),
+                                        Arrays.asList("farmersrespite:coffee",6,11),
                                         Arrays.asList("create:builders_tea", 12, 22),
                                         Arrays.asList("farmersdelight:apple_cider", 8, 13),
                                         Arrays.asList("farmersdelight:melon_juice", 8, 13),
@@ -43,7 +44,7 @@ public class ItemSettingsConfig
                                         Arrays.asList("brewinandchewin:vodka", 10, 14),
                                         Arrays.asList("brewinandchewin:rice_wine", 10, 14),
                                         Arrays.asList("brewinandchewin:mead", 10, 14),
-                                        Arrays.asList("brewinandchewin:egg_nog", 10, 14),
+                                        Arrays.asList("brewinandchewin:egg_grog", 10, 14),
                                         Arrays.asList("brewinandchewin:glittering_grenadine", 10, 14),
                                         Arrays.asList("brewinandchewin:bloody_mary", 12, 22),
                                         Arrays.asList("brewinandchewin:salty_folly", 12, 22),
@@ -53,7 +54,29 @@ public class ItemSettingsConfig
                                         Arrays.asList("brewinandchewin:dread_nog", 12, 22),
                                         Arrays.asList("brewinandchewin:kombucha", 14, 22),
                                         Arrays.asList("brewinandchewin:red_rum", 14, 22),
-                                        Arrays.asList("brewinandchewin:steel_toe_stout", 14, 22)
+                                        Arrays.asList("brewinandchewin:steel_toe_stout", 14, 22),
+                                        Arrays.asList("collectorsreap:pink_limeade",8,10),
+                                        Arrays.asList("collectorsreap:berry_limeade",8,13),
+                                        Arrays.asList("collectorsreap:limeade",8,13),
+                                        Arrays.asList("collectorsreap:pink_limeade",8,13),
+                                        Arrays.asList("collectorsreap:pomegranate_black_tea",10,14),
+                                        Arrays.asList("collectorsreap:lime_green_tea",10,14),
+
+                                        Arrays.asList("toughasnails:dirty_water_bottle", 6, 8),
+                                        Arrays.asList("toughasnails:purified_water_bottle", 8, 10),
+                                        Arrays.asList("toughasnails:dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:melon_juice", 8, 13),
+                                        Arrays.asList("toughasnails:apple_juice", 8, 13),
+                                        Arrays.asList("toughasnails:cactus_juice", 8, 13),
+                                        Arrays.asList("toughasnails:carrot_juice", 8, 13),
+                                        Arrays.asList("toughasnails:glow_berry_juice", 8, 13),
+                                        Arrays.asList("toughasnails:chorus_fruit_juice", 8, 13),
+                                        Arrays.asList("toughasnails:suspicious_water_cup", 8, 13),
+                                        Arrays.asList("toughasnails:pumpkin_juice", 8, 13),
+                                        Arrays.asList("toughasnails:sweet_berry_juice", 8, 13)
+
                                 ),
                         it -> it instanceof List && ((List<?>) it).get(0) instanceof String && ((List<?>) it).get(1) instanceof Number);
 
@@ -76,6 +99,7 @@ public class ItemSettingsConfig
                                         Arrays.asList("minecraft:beetroot", 1, 2),
                                         Arrays.asList("minecraft:sweet_berries", 1, 2),
                                         Arrays.asList("minecraft:glow_berries", 1, 2),
+                                        Arrays.asList("minecraft:golden_carrot", 1, 2),
                                         Arrays.asList("farmersdelight:pumpkin_slice", 2, 1),
                                         Arrays.asList("farmersdelight:cabbage_leaf", 1, 2),
                                         Arrays.asList("farmersdelight:melon_popsicle", 7, 9),
@@ -88,7 +112,11 @@ public class ItemSettingsConfig
                                         Arrays.asList("farmersdelight:fish_stew", 4, 5),
                                         Arrays.asList("farmersdelight:pumpkin_soup", 4, 5),
                                         Arrays.asList("farmersdelight:baked_cod_stew", 4, 5),
-                                        Arrays.asList("farmersdelight:noodle_soup", 4, 5)
+                                        Arrays.asList("farmersdelight:noodle_soup", 4, 5),
+                                        Arrays.asList("collectorsreap:lime_slice",1,2),
+                                        Arrays.asList("collectorsreap:lime",2,3),
+                                        Arrays.asList("collectorsreap:portobello_rice_soup",6,8),
+                                        Arrays.asList("collectorsreap:lime_popsicle",7,9)
                                 ),
                         it -> it instanceof List && ((List<?>) it).get(0) instanceof String && ((List<?>) it).get(1) instanceof Number);
 

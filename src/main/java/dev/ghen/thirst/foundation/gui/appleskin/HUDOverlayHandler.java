@@ -2,39 +2,26 @@ package dev.ghen.thirst.foundation.gui.appleskin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
-import dev.ghen.thirst.foundation.common.capability.IThirstCap;
-import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
-import squeek.appleskin.ModConfig;
-import squeek.appleskin.ModInfo;
-import squeek.appleskin.api.event.FoodValuesEvent;
-import squeek.appleskin.api.event.HUDOverlayEvent;
-import squeek.appleskin.api.food.FoodValues;
-import squeek.appleskin.helpers.FoodHelper;
-import squeek.appleskin.helpers.HungerHelper;
 import squeek.appleskin.util.IntPoint;
 
 import java.util.Random;
@@ -46,7 +33,6 @@ public class HUDOverlayHandler {
     private static float flashAlpha = 0.0F;
     private static byte alphaDir = 1;
     protected static int foodIconsOffset;
-    public static final Vector<squeek.appleskin.util.IntPoint> healthBarOffsets = new Vector();
     public static final Vector<squeek.appleskin.util.IntPoint> foodBarOffsets = new Vector();
     private static final Random random = new Random();
     private static final ResourceLocation modIcons;
@@ -81,7 +67,7 @@ public class HUDOverlayHandler {
             gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
             if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
-                renderThirstOverlay(gui, event.getPoseStack(), event.getPartialTick(), event.getWindow().getScreenWidth(), event.getWindow().getScreenHeight());
+                renderThirstOverlay(event.getPoseStack(), event.getPartialTick(), event.getWindow().getScreenWidth(), event.getWindow().getScreenHeight());
             }
         }
 
@@ -102,10 +88,10 @@ public class HUDOverlayHandler {
         int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
         float exhaustion = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null).getExhaustion();
 
-        drawExhaustionOverlay(exhaustion, mc, mStack, right, top, 1f);
+        drawExhaustionOverlay(exhaustion, mc, mStack, right, top);
     }
 
-    public static void renderThirstOverlay(ForgeGui gui, PoseStack mStack, float partialTicks, int screenWidth, int screenHeight)
+    public static void renderThirstOverlay(PoseStack mStack, float partialTicks, int screenWidth, int screenHeight)
     {
         if (!shouldRenderAnyOverlays())
             return;
@@ -114,7 +100,6 @@ public class HUDOverlayHandler {
         Player player = mc.player;
         assert player != null;
         IThirstCap thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
-        PoseStack poseStack = mStack;
 
         int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
         int right = mc.getWindow().getGuiScaledWidth() / 2 + 91; // right of food bar
@@ -157,7 +142,7 @@ public class HUDOverlayHandler {
 
         // restored hunger/saturation overlay while holding food
         if(thirstData.getThirst() < 20)
-            drawHungerOverlay(drinkThirst, thirstData.getThirst(), mc, mStack, right, top, flashAlpha);
+            drawHungerOverlay(drinkThirst, thirstData.getThirst(), mStack, right, top, flashAlpha);
         // Redraw saturation overlay for gained
         if(!(ThirstHelper.isFood(heldItem) && player.getFoodData().getFoodLevel() >= 20))
             drawSaturationOverlay(thirstValues.quenchedModifier, thirstData.getQuenched(), mc, mStack, right, top, flashAlpha);
@@ -202,17 +187,17 @@ public class HUDOverlayHandler {
             else if (effectiveSaturationOfBar > .5)
                 u = 2 * iconSize;
             else if (effectiveSaturationOfBar > .25)
-                u = 1 * iconSize;
+                u = iconSize;
 
             mc.gui.blit(poseStack, x, y, u, v, iconSize, iconSize);
         }
 
         // rebind default icons
         RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
-        disableAlpha(alpha);
+        disableAlpha();
     }
 
-    public static void drawHungerOverlay(int hungerRestored, int foodLevel, Minecraft mc, PoseStack poseStack, int right, int top, float alpha)
+    public static void drawHungerOverlay(int hungerRestored, int foodLevel, PoseStack poseStack, int right, int top, float alpha)
     {
         if (hungerRestored <= 0)
             return;
@@ -241,21 +226,20 @@ public class HUDOverlayHandler {
             // location to normal food by default
             int v = 3 * iconSize;
             int u = iconStartOffset + 4 * iconSize;
-            int ub = iconStartOffset + 1 * iconSize;
 
             // relocation to half food
             if (i * 2 + 1 == modifiedFood)
-                u += 1 * iconSize;
+                u += iconSize;
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
 
-            mc.gui.blit(poseStack, x, y, u, v, iconSize, iconSize, 25, 9);
+            GuiComponent.blit(poseStack, x, y, u, v, iconSize, iconSize, 25, 9);
         }
 
-        disableAlpha(alpha);
+        disableAlpha();
     }
 
-    public static void drawExhaustionOverlay(float exhaustion, Minecraft mc, PoseStack poseStack, int right, int top, float alpha)
+    public static void drawExhaustionOverlay(float exhaustion, Minecraft mc, PoseStack poseStack, int right, int top)
     {
         RenderSystem.setShaderTexture(0, modIcons);
 
@@ -267,7 +251,7 @@ public class HUDOverlayHandler {
 
         enableAlpha(.75f);
         mc.gui.blit(poseStack, right - width, top, 81 - width, 18, width, height);
-        disableAlpha(.75f);
+        disableAlpha();
 
         // rebind default icons
         RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
@@ -280,7 +264,7 @@ public class HUDOverlayHandler {
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    public static void disableAlpha(float alpha)
+    public static void disableAlpha()
     {
         RenderSystem.disableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -359,10 +343,10 @@ public class HUDOverlayHandler {
         THIRST_LEVEL_ELEMENT = Thirst.asResource("thirst_level");
     }
 
-    static enum RenderOverlayType {
+    enum RenderOverlayType {
         THIRST;
 
-        private RenderOverlayType() {
+        RenderOverlayType() {
         }
     }
 }

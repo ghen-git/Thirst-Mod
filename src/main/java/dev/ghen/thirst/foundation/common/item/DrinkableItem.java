@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class DrinkableItem extends Item
 {
@@ -39,7 +40,7 @@ public class DrinkableItem extends Item
         return this;
     }
 
-    public ItemStack finishUsingItem(ItemStack item, Level level, LivingEntity entity)
+    public @NotNull ItemStack finishUsingItem(@NotNull ItemStack item, @NotNull Level level, @NotNull LivingEntity entity)
     {
         Player player = entity instanceof Player ? (Player)entity : null;
 
@@ -74,15 +75,15 @@ public class DrinkableItem extends Item
         return item;
     }
 
-    public int getUseDuration(ItemStack p_43001_) {
+    public int getUseDuration(@NotNull ItemStack p_43001_) {
         return drinkDuration;
     }
 
-    public UseAnim getUseAnimation(ItemStack p_42997_) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack p_42997_) {
         return UseAnim.DRINK;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level p_42993_, Player p_42994_, InteractionHand p_42995_)
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level p_42993_, @NotNull Player p_42994_, @NotNull InteractionHand p_42995_)
     {
         return ItemUtils.startUsingInstantly(p_42993_, p_42994_, p_42995_);
     }

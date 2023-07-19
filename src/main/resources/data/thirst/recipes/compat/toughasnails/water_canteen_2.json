@@ -1,0 +1,12 @@
+{
+  "type": "toughasnails:water_purifying",
+  "ingredient": {
+    "item": "toughasnails:dirty_water_canteen",
+    "nbt": "{Purity:0}"
+  },
+  "result": {
+    "item": "toughasnails:water_canteen",
+    "nbt": "{Purity:2}"
+  },
+  "purifytime": 400
+}
