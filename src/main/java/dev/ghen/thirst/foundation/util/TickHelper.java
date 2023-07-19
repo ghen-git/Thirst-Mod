@@ -7,10 +7,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class TickHelper
@@ -32,7 +29,12 @@ public class TickHelper
 
     public static void nextTick(Level level, Runnable task)
     {
-        addTask(level.getServer().getTickCount() + 1, task);
+        addTask(Objects.requireNonNull(level.getServer()).getTickCount() + 1, task);
+    }
+
+    public static void TickLater(Level level, int tickNumber,Runnable task)
+    {
+        addTask(Objects.requireNonNull(level.getServer()).getTickCount() + tickNumber, task);
     }
 
     @SubscribeEvent

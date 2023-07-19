@@ -1,10 +1,10 @@
 package dev.ghen.thirst.foundation.common.capability;
 
-import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
-import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
@@ -12,12 +12,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
-import org.slf4j.Logger;
+import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirstCap implements IThirstCap
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     int thirst = 20;
     int quenched = 5;
@@ -74,13 +74,15 @@ public class PlayerThirstCap implements IThirstCap
     */
     public void tick(Player player)
     {
+        if (player.isCreative()||player.isSpectator()) return;
 
         Difficulty difficulty = player.level.getDifficulty();
-        updateExhaustion(player);
+        if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
+                updateExhaustion(player);
+        }
 
         if (exhaustion > 4)
         {
-            LOGGER.info(quenched + "");
             exhaustion -= 4;
             if (quenched > 0)
             {
@@ -138,7 +140,7 @@ public class PlayerThirstCap implements IThirstCap
 
     void updateExhaustion(Player player)
     {
-        if (!player.isPassenger() && !player.position().equals(lastPos))
+        if (!player.isPassenger() && !player.position().equals(lastPos)&&!player.isFallFlying())
         {
             if(player.isSwimming())
             {
@@ -150,7 +152,15 @@ public class PlayerThirstCap implements IThirstCap
             else if (player.isOnGround() && player.isSprinting())
             {
                 double dist = (Math.abs(player.position().x - lastPos.x) + Math.abs(player.position().z - lastPos.z)) / 2;
-                addExhaustion(player, (float) dist * exhaustionMultiplier);
+                if(dist>20) return;
+                if(player.isSprinting()){
+                    addExhaustion(player, (float) dist * exhaustionMultiplier);
+                }
+                else {
+                    if(CommonConfig.WALKING_CONSUME_WATER.get())
+                        addExhaustion(player, (float) dist * exhaustionMultiplier / 5);
+                }
+
             }
         }
         lastPos = player.position();
@@ -172,7 +182,7 @@ public class PlayerThirstCap implements IThirstCap
 
     public void addExhaustion(Player player, float amount)
     {
-        if (!player.isInvulnerable())
+        if (!player.isCreative()&&!player.isSpectator())
         {
             exhaustion += (amount * ThirstHelper.getExhaustionBiomeModifier(player));
             updateThirstData(player);

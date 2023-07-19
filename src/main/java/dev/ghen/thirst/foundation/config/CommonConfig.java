@@ -18,6 +18,7 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> WALKING_CONSUME_WATER;
 
     public static final ForgeConfigSpec.ConfigValue<Number> MOUNTAINS_Y;
     public static final ForgeConfigSpec.ConfigValue<Number> CAVES_Y;
@@ -32,9 +33,6 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Number> ACCEPTABLE_NAUSEA_PERCENTAGE;
     public static final ForgeConfigSpec.ConfigValue<Number> PURIFIED_POISON_PERCENTAGE;
     public static final ForgeConfigSpec.ConfigValue<Number> PURIFIED_NAUSEA_PERCENTAGE;
-
-    public static final ForgeConfigSpec.ConfigValue<Number> CAMPFIRE_PURIFICATION_LEVELS;
-    public static final ForgeConfigSpec.ConfigValue<Number> FURNACE_PURIFICATION_LEVELS;
     public static final ForgeConfigSpec.ConfigValue<Number> KETTLE_PURIFICATION_LEVELS;
 
     public static final ForgeConfigSpec.ConfigValue<Number> FERMENTATION_MOLDING_THRESHOLD;
@@ -50,6 +48,7 @@ public class CommonConfig
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
+        WALKING_CONSUME_WATER=BUILDER.comment("Whether walking should consume water").define("walkingConsumeWater",false);
         BUILDER.pop();
 
         BUILDER.push("World");
@@ -71,9 +70,7 @@ public class CommonConfig
         BUILDER.pop();
 
         BUILDER.push("Purification levels");
-        CAMPFIRE_PURIFICATION_LEVELS = BUILDER.comment("How many levels of purification are added after purifying on a campfire").define("campfirePurificationLevels", 1);
-        FURNACE_PURIFICATION_LEVELS = BUILDER.comment("How many levels of purification are added after purifying in a furnace").define("furnacePurificationLevels", 2);
-        KETTLE_PURIFICATION_LEVELS = BUILDER.comment("How many levels of purification are added after boiling in a kettle").define("furnacePurificationLevels", 2);
+        KETTLE_PURIFICATION_LEVELS = BUILDER.comment("How many levels of purification are added after boiling in a kettle").define("kettlePurificationLevels", 2);
         BUILDER.pop();
 
         BUILDER.push("Fermentation levels");

@@ -1,16 +1,14 @@
 package dev.ghen.thirst.foundation.tab;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.content.registry.ThirstItem;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import org.jetbrains.annotations.NotNull;
 
 public class ThirstTab extends CreativeModeTab
 {
@@ -22,13 +20,13 @@ public class ThirstTab extends CreativeModeTab
     }
 
     @Override
-    public ItemStack makeIcon()
+    public @NotNull ItemStack makeIcon()
     {
-        return new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
+        return new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get());
     }
 
     @Override
-    public void fillItemList(NonNullList<ItemStack> list)
+    public void fillItemList(@NotNull NonNullList<ItemStack> list)
     {
         super.fillItemList(list);
 

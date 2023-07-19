@@ -1,10 +1,9 @@
 package dev.ghen.thirst.foundation.common.capability;
 
-import com.mojang.logging.LogUtils;
 import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.DrinkByHandClient;
-import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +26,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +33,6 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 public class PlayerThirstManager
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     @SubscribeEvent
     public static void attachCapabilityToEntityHandler(AttachCapabilitiesEvent<Entity> event)
@@ -107,35 +104,29 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void onPlayerJump(LivingEvent.LivingJumpEvent  event)
     {
-        if(event.getEntity() instanceof ServerPlayer)
+        if(event.getEntity() instanceof ServerPlayer serverPlayer)
         {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                Player player = (Player) event.getEntity();
-                cap.addExhaustion(player, 0.05f + (player.isSprinting() ? 0.175f : 0f));
-            });
+            serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+                    cap.addExhaustion(serverPlayer, 0.05f + (serverPlayer.isSprinting() ? 0.175f : 0f)));
         }
     }
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer)
+        if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer serverPlayer)
         {
-            event.player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(event.player));
+            serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(serverPlayer));
         }
     }
 
     @SubscribeEvent
     public static void onPlayerBreak(LivingDestroyBlockEvent event)
     {
-        if(event.getEntity() instanceof ServerPlayer)
+        if(event.getEntity() instanceof ServerPlayer serverPlayer)
         {
             event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                Player player = (Player) event.getEntity();
-                cap.addExhaustion(player, 0.005f);
-            });
+                    cap.addExhaustion(serverPlayer, 0.005f));
         }
     }
 
@@ -146,15 +137,13 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void endFix(PlayerEvent.Clone event)
     {
-        if (!event.isWasDeath() && !event.getPlayer().level.isClientSide)
+        if (!event.isWasDeath() && !event.getEntity().level.isClientSide)
         {
             Player oldPlayer = event.getOriginal();
             oldPlayer.reviveCaps();
 
-            event.getPlayer().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy);
-            });
+            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+                    oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy));
 
             oldPlayer.invalidateCaps();
         }

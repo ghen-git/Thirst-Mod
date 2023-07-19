@@ -40,8 +40,6 @@ public class ThirstBarRenderer
 
     public static void render(ForgeIngameGui gui, int screenWidth, int screenHeight, PoseStack poseStack)
     {
-        //wtf is a poseStack?
-
         minecraft.getProfiler().push("thirst");
         if (PLAYER_THIRST == null || minecraft.player.tickCount % 40 == 0)
         {
@@ -64,14 +62,13 @@ public class ThirstBarRenderer
         {
             int idx = i * 2 + 1;
             int x = left - i * 8 - 9;
-            int y = top;
 
-            gui.blit(poseStack, x, y, 0, 0, 9, 9, 25, 9);
+            GuiComponent.blit(poseStack, x, top, 0, 0, 9, 9, 25, 9);
 
             if (idx < level)
-                gui.blit(poseStack, x, y, 16, 0, 9, 9, 25, 9);
+                GuiComponent.blit(poseStack, x, top, 16, 0, 9, 9, 25, 9);
             else if (idx == level)
-                gui.blit(poseStack, x, y, 8, 0, 9, 9, 25, 9);
+                GuiComponent.blit(poseStack, x, top, 8, 0, 9, 9, 25, 9);
         }
 
         RenderSystem.disableBlend();
