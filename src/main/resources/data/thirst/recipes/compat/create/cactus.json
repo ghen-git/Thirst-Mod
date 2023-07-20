@@ -1,0 +1,18 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:cactus"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "fluid": "minecraft:water",
+      "nbt": "{Purity:2}"
+    },
+    {
+        "item": "minecraft:green_dye"
+    }
+  ]
+}

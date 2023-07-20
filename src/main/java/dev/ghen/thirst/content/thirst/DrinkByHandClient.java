@@ -1,7 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
-import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
+import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

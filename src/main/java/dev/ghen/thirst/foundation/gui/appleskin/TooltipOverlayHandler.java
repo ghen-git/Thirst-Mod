@@ -3,9 +3,6 @@ package dev.ghen.thirst.foundation.gui.appleskin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
-import dev.ghen.thirst.api.ThirstHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -22,20 +19,20 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 import squeek.appleskin.ModConfig;
 import squeek.appleskin.helpers.KeyHelper;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 
 @OnlyIn(Dist.CLIENT)
-public class TooltipOverlayHandler
-{
+public class TooltipOverlayHandler {
     /**
      * This is some of the most esoteric garbage code you'll ever see. Read at your own risk
      * also this is adapted from AppleSkin
      * */
-    private static ResourceLocation modIcons = new ResourceLocation(Thirst.ID, "textures/gui/appleskin_icons.png");
-    public static final int TOOLTIP_REAL_HEIGHT_OFFSET_BOTTOM = 3;
-    public static final int TOOLTIP_REAL_HEIGHT_OFFSET_TOP = -3;
-    public static final int TOOLTIP_REAL_WIDTH_OFFSET_RIGHT = 3;
+    private static final ResourceLocation modIcons = new ResourceLocation(Thirst.ID, "textures/gui/appleskin_icons.png");
 
     public static void init()
     {
@@ -104,7 +101,7 @@ public class TooltipOverlayHandler
         }
 
         @Override
-        public int getWidth(Font font)
+        public int getWidth(@NotNull Font font)
         {
             int hungerBarsWidth = foodTooltip.hungerBars * 9;
             if (foodTooltip.hungerBarsText != null)
@@ -118,11 +115,11 @@ public class TooltipOverlayHandler
         }
 
         @Override
-        public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer_, int zIndex)
+        public void renderImage(@NotNull Font font, int x, int y, @NotNull PoseStack poseStack, @NotNull ItemRenderer itemRenderer_, int zIndex)
         {
             ItemStack itemStack = foodTooltip.itemStack;
             Minecraft mc = Minecraft.getInstance();
-            if (!shouldShowTooltip(itemStack, mc.player))
+            if (shouldShowTooltip(itemStack, mc.player))
                 return;
 
             Screen gui = mc.screen;
@@ -144,7 +141,6 @@ public class TooltipOverlayHandler
             offsetX += (foodTooltip.hungerBars - 1) * 9;
 
             RenderSystem.setShaderTexture(0, ThirstBarRenderer.THIRST_ICONS);
-            TextureOffsets offsets = normalBarTextureOffsets;
             for (int i = 0; i < foodTooltip.hungerBars * 2; i += 2)
             {
                 if (thirst == i + 1)
@@ -220,7 +216,7 @@ public class TooltipOverlayHandler
 
         private ItemStack itemStack;
 
-        FoodTooltip(ItemStack itemStack, ThirstValues thirstValues, Player player)
+        FoodTooltip(ItemStack itemStack, ThirstValues thirstValues)
         {
             this.itemStack = itemStack;
             this.thirstValues = thirstValues;
@@ -254,12 +250,12 @@ public class TooltipOverlayHandler
 
         ItemStack hoveredStack = event.getItemStack();
         Minecraft mc = Minecraft.getInstance();
-        if (!shouldShowTooltip(hoveredStack, mc.player))
+        if (shouldShowTooltip(hoveredStack, mc.player))
             return;
 
         ThirstValues thirstValues = new ThirstValues(ThirstHelper.getThirst(hoveredStack), ThirstHelper.getQuenched(hoveredStack));
 
-        FoodTooltip foodTooltip = new FoodTooltip(hoveredStack, thirstValues, mc.player);
+        FoodTooltip foodTooltip = new FoodTooltip(hoveredStack, thirstValues);
         if (foodTooltip.shouldRenderHungerBars())
             event.getTooltipElements().add(Either.right(foodTooltip));
     }
@@ -267,12 +263,12 @@ public class TooltipOverlayHandler
     private static boolean shouldShowTooltip(ItemStack hoveredStack, Player player)
     {
         if (hoveredStack.isEmpty())
-            return false;
+            return true;
 
         boolean shouldShowTooltip = (ModConfig.SHOW_FOOD_VALUES_IN_TOOLTIP.get() && KeyHelper.isShiftKeyDown()) || ModConfig.ALWAYS_SHOW_FOOD_VALUES_TOOLTIP.get();
         if (!shouldShowTooltip)
-            return false;
+            return true;
 
-        return ThirstHelper.itemRestoresThirst(hoveredStack);
+        return !ThirstHelper.itemRestoresThirst(hoveredStack);
     }
 }

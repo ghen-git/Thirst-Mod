@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = "1.2.1"
+version = "1.2.4"
 group = 'dev.ghen.thirst'
 
 java {
@@ -115,17 +115,22 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.60'
 
-    implementation fg.deobf("com.simibubi.create:create-1.18.2:0.5.0.g-225:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.18.2:0.6.8-97")
+    jarJar("com.tterrag.registrate:Registrate:MC1.18.2-1.1.3") {
+        jarJar.ranged(it, '[MC1.18.2-1.1.3,)')
+    }
+
+    implementation fg.deobf("com.simibubi.create:create-1.18.2:0.5.1.a-279:slim") { transitive = false }
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.18.2:0.6.8.a-99")
     implementation fg.deobf("com.tterrag.registrate:Registrate:MC1.18.2-1.1.3")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf("curse.maven:jei-238222:3969092")
     implementation fg.deobf("curse.maven:appleskin-248787:3927564")
     implementation fg.deobf("curse.maven:cold-sweat-506194:3988033")
     implementation fg.deobf("curse.maven:farmers-delight-398521:3834150")
     implementation fg.deobf("curse.maven:farmers-respite-551453:3859156")
     implementation fg.deobf("curse.maven:brewin-and-chewin-637808:3854764")
+    implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599771")
+    implementation fg.deobf("curse.maven:tough-as-nails-246391:3804267")
 }
 
 mixin {

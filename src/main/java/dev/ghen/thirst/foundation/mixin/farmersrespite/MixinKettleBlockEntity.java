@@ -1,11 +1,9 @@
 package dev.ghen.thirst.foundation.mixin.farmersrespite;
 
-import com.farmersrespite.common.block.entity.KettleBlockEntity;
-import com.farmersrespite.common.crafting.KettleRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
-import dev.ghen.thirst.foundation.mixin.accessors.farmersrespite.KettleBlockEntityAccessor;
 import dev.ghen.thirst.foundation.mixin.accessors.farmersdelight.SyncedBlockEntityAccessor;
+import dev.ghen.thirst.foundation.mixin.accessors.farmersrespite.KettleBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -15,56 +13,46 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.farmersrespite.common.block.entity.KettleBlockEntity;
+import com.farmersrespite.common.crafting.KettleRecipe;
 
 import java.util.Optional;
 
-import static com.farmersrespite.common.block.entity.KettleBlockEntity.animationTick;
-
 @Mixin(KettleBlockEntity.class)
-public abstract class MixinKettleBlockEntity
-{
-    @Inject(method = "brewingTick", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void brewingTickWithPurity(Level level, BlockPos pos, BlockState state, KettleBlockEntity kettle, CallbackInfo ci)
-    {
-        boolean isHeated = kettle.isHeated(level, pos);
-        boolean didInventoryChange = false;
-        KettleBlockEntityAccessor kettleAcc = (KettleBlockEntityAccessor) kettle;
+public abstract class MixinKettleBlockEntity {
 
+    @Inject(method = "brewingTick", at = @At("HEAD"), remap = false, cancellable = true)
+    private static void brewingTickWithPurity(Level level, BlockPos pos, BlockState state, KettleBlockEntity kettle, CallbackInfo ci) {
+        boolean isHeated = kettle.isHeated(level, pos);
+        boolean didInventoryChange;
+        KettleBlockEntityAccessor kettleAcc = (KettleBlockEntityAccessor)kettle;
         if (isHeated && kettleAcc.invokeHasInput()) {
             Optional<KettleRecipe> recipe = kettleAcc.invokeGetMatchingRecipe(new RecipeWrapper(kettle.getInventory()));
-            if (recipe.isPresent() && kettleAcc.invokeCanBrew((KettleRecipe)recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem()))
-            {
-                didInventoryChange = kettleAcc.invokeProcessBrewing((KettleRecipe)recipe.get());
-                if(didInventoryChange)
-                {
+            if (recipe.isPresent() && kettleAcc.invokeCanBrew(recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem())) {
+                didInventoryChange = kettleAcc.invokeProcessBrewing(recipe.get());
+                if(didInventoryChange) {
                     int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
-                    WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2), purity);
+                    kettle.getInventory().setStackInSlot(2, WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2).copy(), purity));
                 }
-            } else
-                return;
-        } else
-            return;
 
-        ItemStack mealStack = kettle.getMeal();
-        if (!mealStack.isEmpty())
-        {
-            animationTick(level, pos, state, kettle);
-            if (!kettleAcc.invokeDoesMealHaveContainer(mealStack))
-            {
-                kettleAcc.invokeMoveMealToOutput();
-                didInventoryChange = true;
-            } else if (!kettle.getInventory().getStackInSlot(3).isEmpty())
-            {
-                kettleAcc.invokeUseStoredContainersOnMeal();
-                didInventoryChange = true;
+
+            ItemStack mealStack = kettle.getMeal();
+            if (!mealStack.isEmpty()) {
+                if (!kettleAcc.invokeDoesMealHaveContainer(mealStack)) {
+                    kettleAcc.invokeMoveMealToOutput();
+                    didInventoryChange = true;
+                } else if (!kettle.getInventory().getStackInSlot(3).isEmpty()) {
+                    kettleAcc.invokeUseStoredContainersOnMeal();
+                    didInventoryChange = true;
+                }
+             }
+
+        if (didInventoryChange) {
+            ((SyncedBlockEntityAccessor)kettle).invokeInventoryChanged();
+        }
+
+            ci.cancel();
             }
         }
-
-        if (didInventoryChange)
-        {
-            ((SyncedBlockEntityAccessor) kettle).invokeInventoryChanged();
-        }
-
-        ci.cancel();
     }
 }

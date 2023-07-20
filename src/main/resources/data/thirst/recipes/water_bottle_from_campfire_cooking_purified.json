@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient":[
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:'minecraft:water',Purity:2}"
+    }
+  ],
+  "result": {
+    "item":"minecraft:potion",
+    "nbt": {
+      "Potion": "minecraft:water",
+      "Purity": 3
+    }
+  },
+  "experience": 0.35,
+  "cookingtime": 300
+}
