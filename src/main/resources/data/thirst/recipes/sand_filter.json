@@ -1,19 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "C",
-    "S"
+    "A",
+    "B",
+    "C"
   ],
   "key": {
-    "C": {
-      "item": "create:copper_casing"
-    },
-    "S": {
+    "A": {
       "item": "minecraft:sand"
+    },
+    "B": {
+      "item": "create:nozzle"
+    },
+    "C": {
+      "item": "create:fluid_tank"
     }
   },
   "result": {
-    "item": "create:sand_filter",
+    "item": "thirst:sand_filter",
     "count": 1
   }
 }

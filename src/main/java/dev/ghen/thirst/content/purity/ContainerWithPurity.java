@@ -1,18 +1,15 @@
 package dev.ghen.thirst.content.purity;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import vectorwing.farmersdelight.FarmersDelight;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ContainerWithPurity
 {
     private ItemStack filledItem;
     private ItemStack emptyItem;
-    private boolean isDrinkable;
-    private boolean isStatic;
+    private final boolean isDrinkable;
+    private final boolean isStatic;
     private Predicate<ItemStack> equalsFilled;
     private Predicate<ItemStack> equalsEmpty;
     private boolean canHarvestRunningWater;
