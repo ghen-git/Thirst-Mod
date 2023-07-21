@@ -1,22 +1,15 @@
 package dev.ghen.thirst.foundation.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -26,6 +19,8 @@ public class ThirstBarRenderer
 {
     public static IThirstCap PLAYER_THIRST = null;
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
+
+    public static final ResourceLocation MC_ICONS = new ResourceLocation("textures/gui/icons.png");
     static Minecraft minecraft = Minecraft.getInstance();
     protected final static RandomSource random = RandomSource.create();
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
@@ -42,7 +37,7 @@ public class ThirstBarRenderer
     {
         event.registerAbove(VanillaGuiOverlay.FOOD_LEVEL.id(), "thirst_level", THIRST_OVERLAY);
     }
-    public static void render(ForgeGui gui, int width, int height, PoseStack poseStack)
+    public static void render(ForgeGui gui, int width, int height, GuiGraphics guiGraphics)
     {
         minecraft.getProfiler().push("thirst");
         if (PLAYER_THIRST == null || minecraft.player.tickCount % 40 == 0)
@@ -71,15 +66,15 @@ public class ThirstBarRenderer
                 y = top + (random.nextInt(3) - 1);
             }
 
-            GuiComponent.blit(poseStack, x, y, 0, 0, 9, 9, 25, 9);
+            guiGraphics.blit(THIRST_ICONS, x, y, 0, 0, 9, 9, 25, 9);
 
             if (idx < level)
-                GuiComponent.blit(poseStack, x, y, 16, 0, 9, 9, 25, 9);
+                guiGraphics.blit(THIRST_ICONS, x, y, 16, 0, 9, 9, 25, 9);
             else if (idx == level)
-                GuiComponent.blit(poseStack, x, y, 8, 0, 9, 9, 25, 9);
+                guiGraphics.blit(THIRST_ICONS, x, y, 8, 0, 9, 9, 25, 9);
         }
         RenderSystem.disableBlend();
-        RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+        RenderSystem.setShaderTexture(0, MC_ICONS);
 
         minecraft.getProfiler().pop();
     }

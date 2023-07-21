@@ -41,7 +41,7 @@ public class DrinkByHandMessage
             context.enqueueWork(() ->
             {
                 Player player = context.getSender();
-                Level level = player.getLevel();
+                Level level = player.level();
 
                 player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
                 {
