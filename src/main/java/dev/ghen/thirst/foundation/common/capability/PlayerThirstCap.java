@@ -15,7 +15,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
-//import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirstCap implements IThirstCap
 {
@@ -169,7 +168,7 @@ public class PlayerThirstCap implements IThirstCap
          * If the player is in a hot biome, they will lose thirst even standing still.
          */
         if(player.level().dimensionType().ultraWarm()||player.level().getBiome(player.getOnPos()).value().getBaseTemperature()>=1.9){
-            addExhaustion(player, 0.004F);
+            addExhaustion(player, (float)CommonConfig.STAND_STILL_CONSUME_WATER.get());
         }
         lastPos = player.position();
     }
