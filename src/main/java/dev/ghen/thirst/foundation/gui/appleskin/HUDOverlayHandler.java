@@ -51,7 +51,7 @@ public class HUDOverlayHandler {
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
             if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
-                renderExhaustion(gui, event.getGuiGraphics(), event.getPartialTick(), event.getWindow().getScreenWidth(), event.getWindow().getScreenHeight());
+                renderExhaustion(gui, event.getGuiGraphics());
             }
         }
 
@@ -66,13 +66,13 @@ public class HUDOverlayHandler {
             gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
             if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
-                renderThirstOverlay(event.getGuiGraphics(), event.getPartialTick(), event.getWindow().getScreenWidth(), event.getWindow().getScreenHeight());
+                renderThirstOverlay(event.getGuiGraphics());
             }
         }
 
     }
 
-    public static void renderExhaustion(ForgeGui gui, GuiGraphics mStack, float partialTicks, int screenWidth, int screenHeight)
+    public static void renderExhaustion(ForgeGui gui, GuiGraphics mStack)
     {
         foodIconsOffset = gui.rightHeight;
 
@@ -90,7 +90,7 @@ public class HUDOverlayHandler {
         drawExhaustionOverlay(exhaustion, mStack, right, top);
     }
 
-    public static void renderThirstOverlay(GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight)
+    public static void renderThirstOverlay(GuiGraphics guiGraphics)
     {
         if (!shouldRenderAnyOverlays())
             return;
@@ -168,7 +168,7 @@ public class HUDOverlayHandler {
 
         for (int i = startSaturationBar; i < endSaturationBar; ++i)
         {
-            // gets the offset that needs to be render of icon
+            // gets the offset that needs to be rendered of icon
             IntPoint offset = foodBarOffsets.get(i);
             if (offset == null)
                 continue;
@@ -214,7 +214,7 @@ public class HUDOverlayHandler {
 
         for (int i = startFoodBars; i < endFoodBars; ++i)
         {
-            // gets the offset that needs to be render of icon
+            // gets the offset that needs to be rendered of icon
             IntPoint offset = foodBarOffsets.get(i);
             if (offset == null)
                 continue;

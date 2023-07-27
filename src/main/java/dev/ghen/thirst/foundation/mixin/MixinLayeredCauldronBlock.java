@@ -51,10 +51,11 @@ public abstract class MixinLayeredCauldronBlock extends AbstractCauldronBlock
         if(!level.isClientSide) {
             Fluid fluid = blockState.getFluidState().getType();
             if (fluid == Fluids.WATER || fluid == Fluids.EMPTY) {
-                if (WaterPurity.isWaterFilledContainer(itemstack) && WaterPurity.hasPurity(itemstack) && !blockState.getFluidState().isEmpty()) {
+
+                if (WaterPurity.isWaterFilledContainer(itemstack) && WaterPurity.hasPurity(itemstack)) {
                     int purity = WaterPurity.getPurity(itemstack);
                     int blockPurity = !blockState.hasProperty(WaterPurity.BLOCK_PURITY) ? WaterPurity.MAX_PURITY : (blockState.getValue(WaterPurity.BLOCK_PURITY) - 1 < 0 ? WaterPurity.MAX_PURITY : blockState.getValue(WaterPurity.BLOCK_PURITY) - 1);
-                    blockState.setValue(WaterPurity.BLOCK_PURITY, Math.min(purity, blockPurity) + 1);
+                    blockState=blockState.setValue(WaterPurity.BLOCK_PURITY, Math.min(purity, blockPurity) + 1);
                 }
                 if (WaterPurity.isEmptyWaterContainer(itemstack) && !blockState.is(Blocks.CAULDRON)) {
                     int blockPurity = !blockState.hasProperty(WaterPurity.BLOCK_PURITY) ? WaterPurity.MAX_PURITY : (blockState.getValue(WaterPurity.BLOCK_PURITY) - 1 < 0 ? WaterPurity.MAX_PURITY : blockState.getValue(WaterPurity.BLOCK_PURITY) - 1);
@@ -67,6 +68,7 @@ public abstract class MixinLayeredCauldronBlock extends AbstractCauldronBlock
                     }
                     WaterPurity.addPurity(Filled, blockPurity);
                     Iterator<ItemStack> iterator = player.getInventory().items.iterator();
+
                     TickHelper.nextTick(level, () -> {
                         while (iterator.hasNext()) {
                             ItemStack item = iterator.next();
@@ -84,6 +86,7 @@ public abstract class MixinLayeredCauldronBlock extends AbstractCauldronBlock
                             }
                         }
                     });
+
                 }
             }
         }

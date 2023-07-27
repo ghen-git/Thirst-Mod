@@ -130,7 +130,7 @@ public class PlayerThirstCap implements IThirstCap
             {
                 if (player.getHealth() > 10.0F || difficulty == Difficulty.HARD || player.getHealth() > 0 && difficulty == Difficulty.NORMAL)
                 {
-                    player.hurt(ModDamageSource.DEHYDRATE, 1.0F);
+                    player.hurt(ModDamageSource.getDamageSource(player.level(),ModDamageSource.DIE_OF_THIRST_KEY), 1.0F);
                 }
 
                 damageTimer = 0;
