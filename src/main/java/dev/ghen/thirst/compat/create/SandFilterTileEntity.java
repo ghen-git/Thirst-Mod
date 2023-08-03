@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class SandFilterTileEntity  extends SmartBlockEntity implements IHaveGoggleInformation
+public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggleInformation
 {
     public static final int TANK_SIZE = 1000;
     SmartFluidTankBehaviour dirtyTank;

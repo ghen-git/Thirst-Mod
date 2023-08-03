@@ -1,10 +1,11 @@
 package dev.ghen.thirst.content.purity;
 
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.content.registry.ThirstItem;
+import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
+import dev.ghen.thirst.foundation.util.TickHelper;
 import net.brdle.collectorsreap.common.item.CRItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
@@ -16,6 +17,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -30,6 +32,7 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -47,20 +50,19 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
 import umpaz.brewinandchewin.common.registry.BCItems;
+import umpaz.farmersrespite.common.registry.FRBlocks;
 import umpaz.farmersrespite.common.registry.FRItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
     private static final List<ContainerWithPurity> waterContainers = new ArrayList<>();
+    private static List<Block> fillablesWithPurity = new ArrayList();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
 
@@ -83,6 +85,7 @@ public class WaterPurity
     {
         registerDispenserBehaviours();
         registerContainers();
+        registerFillables();
 
         if(ModList.get().isLoaded("farmersdelight")){
             registerFarmersDelightContainers();
@@ -92,6 +95,7 @@ public class WaterPurity
         if(ModList.get().isLoaded("farmersrespite"))
         {
             registerFarmersRespiteContainers();
+            fillablesWithPurity.add(FRBlocks.KETTLE.get());
         }
 
         if(ModList.get().isLoaded("brewinandchewin")) {
@@ -112,10 +116,16 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.GLASS_BOTTLE),
                 PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)).setEqualsFilled(itemStack ->
                 itemStack.is(Items.POTION) && PotionUtils.getPotion(itemStack) == Potions.WATER));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(ThirstItem.TERRACOTTA_BOWL.get()),
-                new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(ItemInit.TERRACOTTA_BOWL.get()),
+                new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.BUCKET),
                 new ItemStack(Items.WATER_BUCKET), false).canHarvestRunningWater(false));
+    }
+
+    private static void registerFillables()
+    {
+        fillablesWithPurity.add(Blocks.CAULDRON);
+        fillablesWithPurity.add(Blocks.WATER_CAULDRON);
     }
 
     private static void registerFarmersDelightContainers()
@@ -177,6 +187,37 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(TANItems.SWEET_BERRY_JUICE.get())));
     }
 
+    @SubscribeEvent
+    static void fillablesHandler(PlayerInteractEvent.RightClickBlock event)
+    {
+        if (event.getEntity() instanceof ServerPlayer && isWaterFilledContainer(event.getItemStack()))
+        {
+            Player player = event.getEntity();
+            Level level = player.getLevel();
+            BlockPos pos = event.getHitVec().getBlockPos();
+            BlockState blockState = level.getBlockState(pos);
+
+            if (isFillableBlock(blockState))
+            {
+                int purity = getPurity(event.getItemStack());
+
+                int blockPurity = !blockState.hasProperty(BLOCK_PURITY) ?
+                        3 : (blockState.getValue(BLOCK_PURITY) - 1 < 0 ?
+                            3 : blockState.getValue(BLOCK_PURITY) - 1);
+
+                TickHelper.nextTick(level, () -> {
+                    BlockState blockState1 = level.getBlockState(pos);
+                    level.setBlock(
+                            pos,
+                            blockState1.setValue(BLOCK_PURITY, Math.min(purity, blockPurity) + 1),
+                            0
+                    );
+                });
+            }
+        }
+
+    }
+
     private static void CustomRegister(){
 
     }
@@ -228,10 +269,10 @@ public class WaterPurity
                         sound = SoundEvents.BOTTLE_FILL;
                         filledItem = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
                     }
-                    else if(item.getItem() == ThirstItem.TERRACOTTA_BOWL.get())
+                    else if(item.getItem() == ItemInit.TERRACOTTA_BOWL.get())
                     {
                         sound = SoundEvents.BUCKET_FILL;
-                        filledItem = new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get());
+                        filledItem = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
                     }
                     else
                         return;
@@ -292,6 +333,38 @@ public class WaterPurity
                 return true;
 
         return false;
+    }
+
+    static boolean isFillableBlock(Block block)
+    {
+        Iterator var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = (Block)var1.next();
+        } while(fillable != block);
+
+        return true;
+    }
+
+    static boolean isFillableBlock(BlockState blockState)
+    {
+        Iterator var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = (Block)var1.next();
+        } while(!blockState.is(fillable));
+
+        return true;
     }
 
     static boolean canHarvestRunningWater(ItemStack item)

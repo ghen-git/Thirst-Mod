@@ -102,31 +102,11 @@ public class PlayerThirstManager
     }
 
     @SubscribeEvent
-    public static void onPlayerJump(LivingEvent.LivingJumpEvent  event)
-    {
-        if(event.getEntity() instanceof ServerPlayer serverPlayer)
-        {
-            serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    cap.addExhaustion(serverPlayer, 0.05f + (serverPlayer.isSprinting() ? 0.175f : 0f)));
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer serverPlayer)
         {
             serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(serverPlayer));
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerBreak(LivingDestroyBlockEvent event)
-    {
-        if(event.getEntity() instanceof ServerPlayer serverPlayer)
-        {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    cap.addExhaustion(serverPlayer, 0.005f));
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.mixin;
 
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +25,6 @@ public abstract class MixinItemStack
     public void changeWaterBottleStackSize(CallbackInfoReturnable<Integer> cir)
     {
         if(getItem() == Items.POTION && PotionUtils.getPotion(getTag()) == Potions.WATER )
-            cir.setReturnValue(16);
+            cir.setReturnValue(CommonConfig.WATER_BOTTLE_STACKSIZE.get());
     }
 }

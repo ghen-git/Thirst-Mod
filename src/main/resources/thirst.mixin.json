@@ -4,8 +4,10 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
+    "MixinBootstrap",
     "MixinBottleItem",
     "MixinBucketItem",
+    "MixinCampfireBlockEntity",
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "accessors.brewinandchewin.KegBlockEntityAccessor",
@@ -13,6 +15,7 @@
     "accessors.farmersdelight.SyncedBlockEntityAccessor",
     "accessors.farmersrespite.KettleBlockEntityAccessor",
     "brewinandchewin.MixinKegBlockEntity",
+    "create.MixinBasinRecipe",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
     "create.MixinGenericItemEmptying",

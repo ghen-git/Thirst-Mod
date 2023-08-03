@@ -125,12 +125,8 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.4'
 
-    jarJar("com.tterrag.registrate:Registrate:MC1.19-1.1.5") {
-        jarJar.ranged(it, '[MC1.19-1.1.5,)')
-    }
-
-    implementation fg.deobf("com.simibubi.create:create-1.18.2:0.5.1.a-279:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.18.2:0.6.8.a-99")
+    implementation fg.deobf("com.simibubi.create:create-1.19.2:0.5.1.c-36:slim") { transitive = false }
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.19.2:0.6.9-18")
     implementation fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -142,6 +138,10 @@ dependencies {
     implementation fg.deobf("curse.maven:collectors-reap-807101:4485855")
     implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599830")
     implementation fg.deobf("curse.maven:tough-as-nails-246391:3871450")
+
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 }
 
 mixin {

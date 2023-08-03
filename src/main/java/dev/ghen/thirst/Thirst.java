@@ -5,7 +5,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
-import dev.ghen.thirst.content.registry.ThirstItem;
+import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
@@ -31,7 +31,6 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 public class Thirst
 {
     public static final String ID = "thirst";
-    public static final NonNullSupplier<Registrate> REGISTRATE=NonNullSupplier.lazy(() ->Registrate.create(Thirst.ID));
 
     public Thirst()
     {
@@ -43,7 +42,7 @@ public class Thirst
         modBus.addListener(this::registerCapabilities);
         modBus.addListener(ThirstBarRenderer::registerThirstOverlay);
 
-        ThirstItem.register();
+        ItemInit.ITEMS.register(modBus);
 
         if(ModList.get().isLoaded("create"))
         {
