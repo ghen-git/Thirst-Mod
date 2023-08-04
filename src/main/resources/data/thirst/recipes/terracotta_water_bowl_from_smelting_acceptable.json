@@ -4,12 +4,12 @@
     {
       "type": "forge:nbt",
       "item": "thirst:terracotta_water_bowl",
-      "nbt": "{Purity: 0}"
+      "nbt": "{Purity:0}"
     },
     {
       "type": "forge:nbt",
       "item": "thirst:terracotta_water_bowl",
-      "nbt": "{Purity: -1}"
+      "nbt": "{Purity:-1}"
     }
   ],
   "result": {
