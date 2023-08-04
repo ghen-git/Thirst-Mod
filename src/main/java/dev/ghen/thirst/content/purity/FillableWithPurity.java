@@ -12,7 +12,7 @@ public class FillableWithPurity {
 
     public int getPurity(BlockState blockState) {
         return !blockState.hasProperty(WaterPurity.BLOCK_PURITY) ?
-                3 : (Integer)blockState.getValue(WaterPurity.BLOCK_PURITY);
+                3 : blockState.getValue(WaterPurity.BLOCK_PURITY);
     }
 
     public Block getBlock() {
