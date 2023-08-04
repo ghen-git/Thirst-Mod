@@ -22,6 +22,7 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
     public static final ForgeConfigSpec.ConfigValue<Boolean> WALKING_CONSUME_WATER;
+    public static final ForgeConfigSpec.ConfigValue<Float> STAND_STILL_CONSUME_WATER;
 
     public static final ForgeConfigSpec.ConfigValue<Number> MOUNTAINS_Y;
     public static final ForgeConfigSpec.ConfigValue<Number> CAVES_Y;
@@ -54,6 +55,7 @@ public class CommonConfig
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
         WALKING_CONSUME_WATER=BUILDER.comment("Whether walking should consume water").define("walkingConsumeWater", false);
+        STAND_STILL_CONSUME_WATER=BUILDER.comment("how much fast is hydration depletion when player standing still in hot biome, set it to 0 to disable").define("standStillConsumeWater",0.004F);
         BUILDER.pop();
 
         BUILDER.push("World");
