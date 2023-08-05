@@ -7,6 +7,7 @@ import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.loot.ModLootModifiers;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
@@ -43,6 +44,7 @@ public class Thirst
         modBus.addListener(ThirstBarRenderer::registerThirstOverlay);
 
         ItemInit.ITEMS.register(modBus);
+        ModLootModifiers.LOOT_MODIFIERS.register(modBus);
 
         if(ModList.get().isLoaded("create"))
         {

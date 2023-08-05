@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "entries": [
+    "thirst:add_loot_shipwreck_supply",
+    "thirst:add_loot_shipwreck_supply_fr",
+    "thirst:add_loot_shipwreck_supply_bc",
+    "thirst:add_loot_abandoned_mineshaft",
+    "thirst:add_loot_abandoned_mineshaft_fr",
+    "thirst:add_loot_abandoned_mineshaft_bc",
+    "thirst:add_loot_simple_dungeon",
+    "thirst:add_loot_simple_dungeon_fr",
+    "thirst:add_loot_simple_dungeon_bc",
+    "thirst:add_loot_nether_bridge",
+    "thirst:add_loot_nether_bridge_fr",
+    "thirst:add_loot_nether_bridge_bc",
+    "thirst:add_loot_bastion_other",
+    "thirst:add_loot_bastion_other_fr",
+    "thirst:add_loot_bastion_other_bc"
+  ]
+}
