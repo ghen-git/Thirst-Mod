@@ -11,6 +11,7 @@
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "accessors.create.IFluidDrainingBehaviourAccessor",
+    "create.MixinBasinRecipe",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
     "create.MixinGenericItemEmptying",
