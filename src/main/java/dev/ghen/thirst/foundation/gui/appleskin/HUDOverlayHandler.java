@@ -144,7 +144,7 @@ public class HUDOverlayHandler {
         if(thirstData.getThirst() < 20)
             drawHungerOverlay(drinkThirst, thirstData.getThirst(), mStack, right, top, flashAlpha);
         // Redraw saturation overlay for gained
-        if(!(ThirstHelper.isFood(heldItem) && player.getFoodData().getFoodLevel() >= 20))
+        if(!ThirstHelper.isFood(heldItem) || player.getFoodData().getFoodLevel() < 20)
             drawSaturationOverlay(thirstValues.quenchedModifier, thirstData.getQuenched(), mc, mStack, right, top, flashAlpha);
     }
 
@@ -229,7 +229,7 @@ public class HUDOverlayHandler {
 
             // relocation to half food
             if (i * 2 + 1 == modifiedFood)
-                u += iconSize;
+                u -= iconSize -1;
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, alpha);
 

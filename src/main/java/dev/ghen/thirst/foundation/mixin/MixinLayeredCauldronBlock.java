@@ -1,6 +1,7 @@
 package dev.ghen.thirst.foundation.mixin;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
+
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;

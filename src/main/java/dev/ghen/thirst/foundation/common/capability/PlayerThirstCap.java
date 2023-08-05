@@ -7,6 +7,7 @@ import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
@@ -64,7 +65,7 @@ public class PlayerThirstCap implements IThirstCap
     public void drink(Player player, int thirst, int quenched)
     {
         this.thirst = Math.min(this.thirst + thirst, 20);
-        this.quenched = Math.min(this.quenched + quenched, 20);
+        this.quenched = Math.min(this.quenched + quenched, this.thirst);
     }
 
     /**
@@ -75,7 +76,8 @@ public class PlayerThirstCap implements IThirstCap
         Difficulty difficulty = player.level.getDifficulty();
         if (player.isInvulnerable()) return;
 
-       
+        if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
+            return;
         if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
                 updateExhaustion(player);
         }
@@ -105,7 +107,8 @@ public class PlayerThirstCap implements IThirstCap
             ++damageTimer;
             if (damageTimer >= 40)
             {
-                if (player.getHealth() > 10.0F || difficulty == Difficulty.HARD || player.getHealth() > 0 && difficulty == Difficulty.NORMAL)
+                if (player.getHealth() > 10.0F || difficulty == Difficulty.HARD ||
+                        player.getHealth() > 0 && difficulty == Difficulty.NORMAL)
                 {
                     player.hurt(ModDamageSource.DEHYDRATE, 1.0F);
                 }
@@ -140,11 +143,11 @@ public class PlayerThirstCap implements IThirstCap
 
     public void addExhaustion(Player player, float amount)
     {
-        if (!player.isCreative()&&!player.isSpectator())
-        {
-            exhaustion += (amount * ThirstHelper.getExhaustionBiomeModifier(player));
-            updateThirstData(player);
-        }
+        exhaustion += (amount *
+                ThirstHelper.getExhaustionBiomeModifier(player) *
+                ThirstHelper.getExhaustionFireProtModifier(player));
+
+        updateThirstData(player);
     }
 
     public CompoundTag serializeNBT()
