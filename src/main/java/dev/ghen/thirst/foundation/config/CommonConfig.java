@@ -14,7 +14,10 @@ public class CommonConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_BY_HAND;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_KEYWORD_CONFIG;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
@@ -45,11 +48,13 @@ public class CommonConfig
     static
     {
         BUILDER.push("General");
-        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", true);
+        WATER_BOTTLE_STACKSIZE = BUILDER.comment("Stack size for water bottles").define("waterBottleStacksize", 64);
+        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
+        ENABLE_KEYWORD_CONFIG = BUILDER.comment("If the keyword config should be taken into consideration").define("enableKeywordConfig", false);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
-        WALKING_CONSUME_WATER=BUILDER.comment("Whether walking should consume water").define("walkingConsumeWater",false);
+        WALKING_CONSUME_WATER=BUILDER.comment("Whether walking should consume water").define("walkingConsumeWater", false);
         STAND_STILL_CONSUME_WATER=BUILDER.comment("how much fast is hydration depletion when player standing still in hot biome, set it to 0 to disable").define("standStillConsumeWater",0.004F);
         BUILDER.pop();
 

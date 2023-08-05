@@ -4,8 +4,10 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
+    "MixinBootstrap",
     "MixinBottleItem",
     "MixinBucketItem",
+    "MixinCampfireBlockEntity",
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "accessors.create.IFluidDrainingBehaviourAccessor",

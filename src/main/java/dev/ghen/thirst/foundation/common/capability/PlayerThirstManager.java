@@ -1,8 +1,6 @@
 package dev.ghen.thirst.foundation.common.capability;
 
-import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.DrinkByHandClient;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
@@ -18,14 +16,14 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.content.purity.WaterPurity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,31 +100,11 @@ public class PlayerThirstManager
     }
 
     @SubscribeEvent
-    public static void onPlayerJump(LivingEvent.LivingJumpEvent  event)
-    {
-        if(event.getEntity() instanceof ServerPlayer serverPlayer)
-        {
-            serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    cap.addExhaustion(serverPlayer, 0.05f + (serverPlayer.isSprinting() ? 0.175f : 0f)));
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer serverPlayer)
         {
             serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(serverPlayer));
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerBreak(LivingDestroyBlockEvent event)
-    {
-        if(event.getEntity() instanceof ServerPlayer serverPlayer)
-        {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    cap.addExhaustion(serverPlayer, 0.005f));
         }
     }
 

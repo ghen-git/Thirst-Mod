@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.tab;
 
+import dev.ghen.thirst.content.registry.ItemInit;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -13,7 +14,6 @@ import net.minecraftforge.registries.RegistryObject;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.content.registry.ThirstItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +27,7 @@ public class ThirstTab
     public static final RegistryObject<CreativeModeTab> THIRST_TAB = TAB_REGISTER.register("thirst",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.thirst"))
-                    .icon(ThirstItem.TERRACOTTA_WATER_BOWL.get()::getDefaultInstance)
+                    .icon(ItemInit.TERRACOTTA_WATER_BOWL.get()::getDefaultInstance)
                     .displayItems((displayParameters, output) -> output.acceptAll(DisplayItems()))
                     .build());
 
@@ -45,9 +45,9 @@ public class ThirstTab
         list.add(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), 1));
         list.add(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), 2));
         list.add(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), 3));
-        list.add(ThirstItem.CLAY_BOWL.asStack());
-        list.add(ThirstItem.TERRACOTTA_BOWL.asStack());
-        list.add(ThirstItem.TERRACOTTA_WATER_BOWL.asStack());
+        list.add(ItemInit.CLAY_BOWL.get().getDefaultInstance());
+        list.add(ItemInit.TERRACOTTA_BOWL.get().getDefaultInstance());
+        list.add(ItemInit.TERRACOTTA_WATER_BOWL.get().getDefaultInstance());
         if(Thirst.CreateLoaded){
             list.add(CreateRegistry.SAND_FILTER_BLOCK.asStack());
         }

@@ -1,14 +1,18 @@
 package dev.ghen.thirst.content.purity;
 
+import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,6 +27,7 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -41,22 +46,19 @@ import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.content.registry.ThirstItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
     private static final List<ContainerWithPurity> waterContainers = new ArrayList<>();
+    private static final List<Block> fillablesWithPurity = new ArrayList<>();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
 
@@ -79,6 +81,7 @@ public class WaterPurity
     {
         registerDispenserBehaviours();
         registerContainers();
+        registerFillables();
 
         if(ModList.get().isLoaded("farmersdelight")){
             registerFarmersDelightContainers();
@@ -88,6 +91,7 @@ public class WaterPurity
         if(ModList.get().isLoaded("farmersrespite"))
         {
             registerFarmersRespiteContainers();
+//            fillablesWithPurity.add(FRBlocks.KETTLE.get());
         }
 
         if(ModList.get().isLoaded("brewinandchewin")) {
@@ -108,10 +112,16 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.GLASS_BOTTLE),
                 PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)).setEqualsFilled(itemStack ->
                 itemStack.is(Items.POTION) && PotionUtils.getPotion(itemStack) == Potions.WATER));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(ThirstItem.TERRACOTTA_BOWL.get()),
-                new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(ItemInit.TERRACOTTA_BOWL.get()),
+                new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.BUCKET),
                 new ItemStack(Items.WATER_BUCKET), false).canHarvestRunningWater(false));
+    }
+
+    private static void registerFillables()
+    {
+        fillablesWithPurity.add(Blocks.CAULDRON);
+        fillablesWithPurity.add(Blocks.WATER_CAULDRON);
     }
 
     private static void registerFarmersDelightContainers()
@@ -173,7 +183,34 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(TANItems.SWEET_BERRY_JUICE.get())));
     }
 
-    private static void CustomRegister(){
+    @SubscribeEvent
+    static void fillablesHandler(PlayerInteractEvent.RightClickBlock event)
+    {
+        if (event.getEntity() instanceof ServerPlayer && isWaterFilledContainer(event.getItemStack()))
+        {
+            Player player = event.getEntity();
+            Level level = player.level();
+            BlockPos pos = event.getHitVec().getBlockPos();
+            BlockState blockState = level.getBlockState(pos);
+
+            if (isFillableBlock(blockState))
+            {
+                int purity = getPurity(event.getItemStack());
+
+                int blockPurity = !blockState.hasProperty(BLOCK_PURITY) ?
+                        3 : (blockState.getValue(BLOCK_PURITY) - 1 < 0 ?
+                            3 : blockState.getValue(BLOCK_PURITY) - 1);
+
+                TickHelper.nextTick(level, () -> {
+                    BlockState blockState1 = level.getBlockState(pos);
+                    level.setBlock(
+                            pos,
+                            blockState1.setValue(BLOCK_PURITY, Math.min(purity, blockPurity) + 1),
+                            0
+                    );
+                });
+            }
+        }
 
     }
     /**
@@ -224,10 +261,10 @@ public class WaterPurity
                         sound = SoundEvents.BOTTLE_FILL;
                         filledItem = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
                     }
-                    else if(item.getItem() == ThirstItem.TERRACOTTA_BOWL.get())
+                    else if(item.getItem() == ItemInit.TERRACOTTA_BOWL.get())
                     {
                         sound = SoundEvents.BUCKET_FILL;
-                        filledItem = new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get());
+                        filledItem = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
                     }
                     else
                         return;
@@ -290,6 +327,38 @@ public class WaterPurity
         return false;
     }
 
+    static boolean isFillableBlock(Block block)
+    {
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = var1.next();
+        } while(fillable != block);
+
+        return true;
+    }
+
+    static boolean isFillableBlock(BlockState blockState)
+    {
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = var1.next();
+        } while(!blockState.is(fillable));
+
+        return true;
+    }
+
     static boolean canHarvestRunningWater(ItemStack item)
     {
         for (ContainerWithPurity waterContainer : waterContainers)
@@ -321,7 +390,7 @@ public class WaterPurity
         if (FarmersDelightLoaded) {
                 if (item.is(ModItems.MELON_JUICE.get()) || item.is(ModItems.APPLE_CIDER.get())){
                     if(Objects.requireNonNull(item.getTag().get("Purity")).getAsString().equals("-1"))
-                        item.getTag().putInt("Purity", 3);
+                         item.getTag().putInt("Purity", 3);
                 }
         }
         if(TANLoaded){
@@ -480,13 +549,13 @@ public class WaterPurity
 
         switch (purity) {
             case 0 -> {
-                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue()) {
+                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue()) {
+                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
@@ -538,13 +607,13 @@ public class WaterPurity
 
     static void registerDispenserBehaviours()
     {
-        //fuck you mappings (the default is getDispenseMethod)
+        //mappings (the default is getDispenseMethod)
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
-        DefaultDispenseItemBehavior bucketDefaultBehaviour = (DefaultDispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
+        DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
         OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE.asItem()));
 
-        //fuck you mappings (part 2) (the default is execute)
+        //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
 
         DispenserBlock.registerBehavior(Items.BUCKET, (BlockSource block, ItemStack item) ->
@@ -571,7 +640,7 @@ public class WaterPurity
             if(level.getFluidState(blockpos).is(FluidTags.WATER))
             {
                 ItemStack result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                return getStack(block, item, level, blockpos, result);
+                return getStack(block, item, level, blockpos, addPurity(result,getBlockPurity(level.getBlockState(blockpos))));
             }
             else
                 return (ItemStack) ReflectionUtil.fuckYouReflections(execute, bottleDefaultBehaviour, block, item);

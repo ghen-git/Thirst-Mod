@@ -1,22 +1,20 @@
 package dev.ghen.thirst;
 
-import com.tterrag.registrate.Registrate;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
-import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.content.registry.ThirstItem;
+import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
-import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
-import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
-import dev.ghen.thirst.foundation.tab.ThirstTab;
-import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.config.KeyWordConfig;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
+import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
+import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
+import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.tab.ThirstTab;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -32,7 +30,6 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 public class Thirst
 {
     public static final String ID = "thirst";
-    public static final NonNullSupplier<Registrate> REGISTRATE=NonNullSupplier.lazy(() ->Registrate.create(Thirst.ID));
 
     public static boolean CreateLoaded;
 
@@ -46,7 +43,7 @@ public class Thirst
         modBus.addListener(this::registerCapabilities);
         modBus.addListener(ThirstBarRenderer::registerThirstOverlay);
 
-        ThirstItem.register();
+        ItemInit.ITEMS.register(modBus);
 
         if(ModList.get().isLoaded("create"))
         {

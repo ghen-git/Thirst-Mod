@@ -24,13 +24,16 @@ public class SandFilterBlock extends Block implements IWrenchable, IBE<SandFilte
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState p_220053_1_, @NotNull BlockGetter p_220053_2_, @NotNull BlockPos p_220053_3_,
-                                        @NotNull CollisionContext p_220053_4_) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState p_220053_1_, @NotNull BlockGetter p_220053_2_,
+                                        @NotNull BlockPos p_220053_3_, @NotNull CollisionContext p_220053_4_)
+    {
         return AllShapes.SPOUT;
     }
 
     @Override
-    public void setPlacedBy(@NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, LivingEntity pPlacer, @NotNull ItemStack pStack) {
+    public void setPlacedBy(@NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState,
+                            LivingEntity pPlacer, @NotNull ItemStack pStack)
+    {
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
         AdvancementBehaviour.setPlacedBy(pLevel, pPos, pPlacer);
     }
@@ -41,7 +44,8 @@ public class SandFilterBlock extends Block implements IWrenchable, IBE<SandFilte
     }
 
     @Override
-    public BlockEntityType<? extends SandFilterTileEntity> getBlockEntityType() {
+    public BlockEntityType<? extends SandFilterTileEntity> getBlockEntityType()
+    {
         return CreateRegistry.SAND_FILTER_TE.get();
     }
 

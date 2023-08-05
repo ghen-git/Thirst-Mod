@@ -15,8 +15,8 @@
   "thirst.purity.purified": "Purified",
   "block.thirst.sand_filter": "Sand Filter",
 
-  "thirst.ponder.sand_filter.header": "Purifying the water with sand filter",
-  "thirst.ponder.sand_filter.text_1": "Connect the input and output above and below the filter",
-  "thirst.ponder.sand_filter.text_2": "The filter will purify the water input from above it",
-  "thirst.ponder.sand_filter.text_3": "The purified water will be output from below the filter"
+  "thirst.ponder.sand_filter.header": "Purifying Water with a Sand Filter",
+  "thirst.ponder.sand_filter.text_1": "A Sand Filter purifies by one step water pumped through it",
+  "thirst.ponder.sand_filter.text_2": "Dirty Water needs to be pumped in from the top...",
+  "thirst.ponder.sand_filter.text_3": "and Purified Water can be pumped out from the bottom"
 }

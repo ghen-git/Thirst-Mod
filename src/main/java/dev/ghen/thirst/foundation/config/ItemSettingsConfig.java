@@ -99,7 +99,6 @@ public class ItemSettingsConfig
                                         Arrays.asList("minecraft:beetroot", 1, 2),
                                         Arrays.asList("minecraft:sweet_berries", 1, 2),
                                         Arrays.asList("minecraft:glow_berries", 1, 2),
-                                        Arrays.asList("minecraft:glistering_melon_slice",4,5),
                                         Arrays.asList("minecraft:golden_carrot", 1, 2),
                                         Arrays.asList("farmersdelight:pumpkin_slice", 2, 1),
                                         Arrays.asList("farmersdelight:cabbage_leaf", 1, 2),
