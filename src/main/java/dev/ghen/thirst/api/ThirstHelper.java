@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -105,6 +106,13 @@ public class ThirstHelper
     public static void shouldUseColdSweatCaps(boolean should)
     {
         useColdSweatCaps = should;
+    }
+    public static float getExhaustionFireProtModifier(Player player)
+    {
+        final float perLevelMultiplier = 0.625f;
+        int totalLevels = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), player.damageSources().onFire()) / 2;
+
+        return 1.0f - (totalLevels * perLevelMultiplier);
     }
 
     /**

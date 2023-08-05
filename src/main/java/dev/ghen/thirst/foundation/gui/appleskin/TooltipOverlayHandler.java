@@ -190,6 +190,7 @@ public class TooltipOverlayHandler {
             // Render from right to left so that the icons 'face' the right way
             offsetX += (foodTooltip.hungerBars - 1) * 9;
 
+            RenderSystem.setShaderTexture(0, ThirstBarRenderer.THIRST_ICONS);
             for (int i = 0; i < foodTooltip.hungerBars * 2; i += 2)
             {
                 if (thirst == i + 1)
