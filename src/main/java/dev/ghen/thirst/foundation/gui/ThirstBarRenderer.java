@@ -2,6 +2,9 @@ package dev.ghen.thirst.foundation.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -11,9 +14,6 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.common.capability.IThirstCap;
-import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 
 public class ThirstBarRenderer
 {

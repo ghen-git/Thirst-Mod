@@ -1,7 +1,7 @@
 package dev.ghen.thirst.foundation.tab;
 
-import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.content.registry.ItemInit;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;

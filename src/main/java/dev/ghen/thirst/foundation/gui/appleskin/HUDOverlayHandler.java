@@ -2,11 +2,11 @@ package dev.ghen.thirst.foundation.gui.appleskin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirstCap;
-import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
-import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;

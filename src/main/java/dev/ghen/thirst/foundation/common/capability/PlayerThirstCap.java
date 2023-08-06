@@ -2,7 +2,6 @@ package dev.ghen.thirst.foundation.common.capability;
 
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
-import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -10,8 +9,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodData;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;

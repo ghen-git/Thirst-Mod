@@ -1,7 +1,7 @@
 package dev.ghen.thirst.foundation.mixin;
 
-import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;

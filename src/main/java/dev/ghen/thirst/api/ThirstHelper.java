@@ -1,7 +1,5 @@
 package dev.ghen.thirst.api;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.item.BlockItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.config.KeyWordConfig;
@@ -9,11 +7,12 @@ import dev.ghen.thirst.foundation.util.ConfigHelper;
 import dev.ghen.thirst.foundation.util.LoadedValue;
 import dev.momostudios.coldsweat.api.util.Temperature;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 

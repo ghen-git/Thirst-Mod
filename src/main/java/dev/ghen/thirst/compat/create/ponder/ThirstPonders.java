@@ -3,9 +3,9 @@ package dev.ghen.thirst.compat.create.ponder;
 import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
 import com.simibubi.create.foundation.ponder.PonderTag;
 import com.simibubi.create.infrastructure.ponder.AllPonderTags;
-import dev.ghen.thirst.compat.create.ponder.scene.SandFilterScene;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.compat.create.CreateRegistry;
+import dev.ghen.thirst.compat.create.ponder.scene.SandFilterScene;
 
 
 public class ThirstPonders {

@@ -1,6 +1,8 @@
 package dev.ghen.thirst.foundation.common.capability;
 
+import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.DrinkByHandClient;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
@@ -16,16 +18,12 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.content.purity.WaterPurity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
