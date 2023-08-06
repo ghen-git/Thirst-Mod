@@ -1,8 +1,8 @@
 package dev.ghen.thirst.foundation.network.message;
 
-import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundEvents;
@@ -41,7 +41,7 @@ public class DrinkByHandMessage
             context.enqueueWork(() ->
             {
                 Player player = context.getSender();
-                Level level = player.getLevel();
+                Level level = player.level();
 
                 player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
                 {

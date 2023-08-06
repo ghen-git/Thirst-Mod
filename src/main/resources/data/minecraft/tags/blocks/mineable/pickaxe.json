@@ -1,5 +1,8 @@
 {
   "values": [
-    "create:sand_filter"
+    {
+      "id": "thirst:sand_filter",
+      "required": false
+    }
   ]
 }

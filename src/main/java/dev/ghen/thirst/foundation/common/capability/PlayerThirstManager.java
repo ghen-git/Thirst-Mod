@@ -1,10 +1,7 @@
 package dev.ghen.thirst.foundation.common.capability;
 
-import com.mojang.logging.LogUtils;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.content.thirst.DrinkByHandClient;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.content.thirst.DrinkByHandClient;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,15 +16,14 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Logger;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.content.purity.WaterPurity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +31,6 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber
 public class PlayerThirstManager
 {
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     @SubscribeEvent
     public static void attachCapabilityToEntityHandler(AttachCapabilitiesEvent<Entity> event)
@@ -79,14 +74,14 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void drinkByHand(PlayerInteractEvent.RightClickBlock event)
     {
-        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
+        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level().isClientSide)
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
     }
 
     @SubscribeEvent
     public static void drinkByHand(PlayerInteractEvent.RightClickEmpty event)
     {
-        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level.isClientSide)
+        if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level().isClientSide)
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
     }
 
@@ -105,37 +100,11 @@ public class PlayerThirstManager
     }
 
     @SubscribeEvent
-    public static void onPlayerJump(LivingEvent.LivingJumpEvent  event)
-    {
-        if(event.getEntity() instanceof ServerPlayer)
-        {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                Player player = (Player) event.getEntity();
-                cap.addExhaustion(player, 0.05f + (player.isSprinting() ? 0.175f : 0f));
-            });
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer)
+        if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer serverPlayer)
         {
-            event.player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(event.player));
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerBreak(LivingDestroyBlockEvent event)
-    {
-        if(event.getEntity() instanceof ServerPlayer)
-        {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                Player player = (Player) event.getEntity();
-                cap.addExhaustion(player, 0.005f);
-            });
+            serverPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap -> cap.tick(serverPlayer));
         }
     }
 
@@ -146,15 +115,13 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void endFix(PlayerEvent.Clone event)
     {
-        if (!event.isWasDeath() && !event.getEntity().level.isClientSide)
+        if (!event.isWasDeath() && !event.getEntity().level().isClientSide)
         {
             Player oldPlayer = event.getOriginal();
             oldPlayer.reviveCaps();
 
             event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy);
-            });
+                    oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy));
 
             oldPlayer.invalidateCaps();
         }

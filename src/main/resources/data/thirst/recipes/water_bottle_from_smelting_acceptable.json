@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": [
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:'minecraft:water',Purity:-1}"
+    },
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{Potion:'minecraft:water',Purity:0}"
+    }
+  ],
+  "result": {
+    "item":"minecraft:potion",
+    "nbt": {
+      "Potion": "minecraft:water",
+      "Purity": 2
+    }
+  },
+  "experience": 0.35,
+  "cookingtime": 200
+}

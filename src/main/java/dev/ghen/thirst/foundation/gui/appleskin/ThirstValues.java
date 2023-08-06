@@ -24,9 +24,7 @@ public class ThirstValues
     public boolean equals(Object o)
     {
         if (this == o) return true;
-        if (!(o instanceof ThirstValues)) return false;
-
-        ThirstValues that = (ThirstValues) o;
+        if (!(o instanceof ThirstValues that)) return false;
 
         return thirst == that.thirst && Float.compare(that.quenchedModifier, quenchedModifier) == 0;
     }

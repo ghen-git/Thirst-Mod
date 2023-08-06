@@ -1,0 +1,22 @@
+{
+  "death.attack.dehydrate": "%1$s 이(가) 탈수로 사망했습니다.",
+  "death.attack.dehydrate.player": "%1$s 이(가) %2$s 와 싸우다가 탈수로 사망했습니다.",
+  "item.thirst.wooden_water_bowl": "나무 물그릇",
+  "item.thirst.terracotta_water_bowl": "테라코타 물그릇",
+  "item.thirst.terracotta_bowl": "테라코타 그릇",
+  "item.thirst.clay_bowl": "점토 그릇",
+  "thirst.container.kettle.no_water": "물 없음",
+  "thirst.container.kettle.has_single_water": "%s 물 1잔 포함",
+  "thirst.container.kettle.has_many_water": "%2$s 물 %1$s 잔 포함",
+  "itemGroup.thirst": "갈증",
+  "thirst.purity.dirty": "더러움",
+  "thirst.purity.slightly_dirty": "약간 더러움",
+  "thirst.purity.acceptable": "허용",
+  "thirst.purity.purified": "정제된",
+  "block.thirst.sand_filter": "모래 필터",
+
+  "thirst.ponder.sand_filter.header": "Purifying Water with a Sand Filter",
+  "thirst.ponder.sand_filter.text_1": "A Sand Filter purifies by one step water pumped through it",
+  "thirst.ponder.sand_filter.text_2": "Dirty Water needs to be pumped in from the top...",
+  "thirst.ponder.sand_filter.text_3": "and Purified Water can be pumped out from the bottom"
+}
