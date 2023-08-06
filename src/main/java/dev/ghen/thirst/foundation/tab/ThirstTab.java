@@ -9,6 +9,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import dev.ghen.thirst.Thirst;
@@ -48,9 +49,11 @@ public class ThirstTab
         list.add(ItemInit.CLAY_BOWL.get().getDefaultInstance());
         list.add(ItemInit.TERRACOTTA_BOWL.get().getDefaultInstance());
         list.add(ItemInit.TERRACOTTA_WATER_BOWL.get().getDefaultInstance());
-        if(Thirst.CreateLoaded){
+
+        // for some fucking reason the game crashes if you don't do it here
+        if(ModList.get().isLoaded("create"))
             list.add(CreateRegistry.SAND_FILTER_BLOCK.asStack());
-        }
+
         return list;
     }
 }

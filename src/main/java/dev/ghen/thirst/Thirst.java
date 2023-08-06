@@ -31,8 +31,6 @@ public class Thirst
 {
     public static final String ID = "thirst";
 
-    public static boolean CreateLoaded;
-
     public Thirst()
     {
 
@@ -48,7 +46,6 @@ public class Thirst
         if(ModList.get().isLoaded("create"))
         {
             CreateRegistry.register();
-            CreateLoaded = true;
         }
         if(ModList.get().isLoaded("appleskin") && FMLEnvironment.dist.isClient())
         {

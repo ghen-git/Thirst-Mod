@@ -44,7 +44,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
-import vectorwing.farmersdelight.common.registry.ModItems;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
@@ -73,9 +72,8 @@ public class WaterPurity
      * returns the already-modified purity
      * */
     public static final IntegerProperty BLOCK_PURITY = IntegerProperty.create("purity", 0, 4);
-    public static boolean FarmersDelightLoaded = false;
 
-    public static boolean TANLoaded=false;
+    public static boolean tanLoaded = false;
 
     public static void init()
     {
@@ -83,27 +81,26 @@ public class WaterPurity
         registerContainers();
         registerFillables();
 
-        if(ModList.get().isLoaded("farmersdelight")){
-            registerFarmersDelightContainers();
-            FarmersDelightLoaded=true;
-        }
-
         if(ModList.get().isLoaded("farmersrespite"))
         {
             registerFarmersRespiteContainers();
 //            fillablesWithPurity.add(FRBlocks.KETTLE.get());
         }
 
-        if(ModList.get().isLoaded("brewinandchewin")) {
+        if(ModList.get().isLoaded("brewinandchewin"))
+        {
             registerBrewinAndChewinContainers();
         }
 
-        if (ModList.get().isLoaded("collectorsreap")){
+        if (ModList.get().isLoaded("collectorsreap"))
+        {
             registerCollectorsReapContainers();
         }
-        if(ModList.get().isLoaded("toughasnails")){
+
+        if(ModList.get().isLoaded("toughasnails"))
+        {
             registerToughAsNailsContainers();
-            TANLoaded=true;
+            tanLoaded = true;
         }
     }
 
@@ -122,12 +119,6 @@ public class WaterPurity
     {
         fillablesWithPurity.add(Blocks.CAULDRON);
         fillablesWithPurity.add(Blocks.WATER_CAULDRON);
-    }
-
-    private static void registerFarmersDelightContainers()
-    {
-        waterContainers.add(new ContainerWithPurity(new ItemStack(ModItems.MELON_JUICE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(ModItems.APPLE_CIDER.get())));
     }
 
     private static void registerCollectorsReapContainers(){
@@ -373,9 +364,12 @@ public class WaterPurity
      */
     public static int getPurity(ItemStack item)
     {
-        if(!item.getOrCreateTag().contains("Purity")) {
+        if(!item.getOrCreateTag().contains("Purity"))
+        {
             item.getOrCreateTag().putInt("Purity", -1);
-            ModPurity(item);
+
+            if(tanLoaded && Objects.equals(item.getItem().getCreatorModId(item), "toughasnails"))
+                tanPurity(item);
         }
 
         return Objects.requireNonNull(item.getTag()).getInt("Purity");
@@ -385,22 +379,17 @@ public class WaterPurity
      * Sets the purity of special items in other mods
      */
 
-    public static void ModPurity(ItemStack item){
+    public static void tanPurity(ItemStack item)
+    {
         assert item.getTag() != null;
-        if (FarmersDelightLoaded) {
-                if (item.is(ModItems.MELON_JUICE.get()) || item.is(ModItems.APPLE_CIDER.get())){
-                    if(Objects.requireNonNull(item.getTag().get("Purity")).getAsString().equals("-1"))
-                         item.getTag().putInt("Purity", 3);
-                }
-        }
-        if(TANLoaded){
-            if(!Objects.equals(item.getItem().getCreatorModId(item), "toughasnails")) return;
-            item.getTag().putInt("Purity", 3);
-            if(item.is(TANItems.DIRTY_WATER_BOTTLE.get()) || item.is(TANItems.DIRTY_WATER_CANTEEN.get()))
-                item.getTag().putInt("Purity", 0);
-            if(item.is(TANItems.WATER_CANTEEN.get()))
-                item.getTag().putInt("Purity", 2);
-        }
+
+        item.getTag().putInt("Purity", 3);
+
+        if(item.is(TANItems.DIRTY_WATER_BOTTLE.get()) || item.is(TANItems.DIRTY_WATER_CANTEEN.get()))
+            item.getTag().putInt("Purity", 0);
+
+        if(item.is(TANItems.WATER_CANTEEN.get()))
+            item.getTag().putInt("Purity", 2);
     }
 
     /**
