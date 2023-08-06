@@ -62,7 +62,7 @@ import java.util.*;
 public class WaterPurity
 {
     private static final List<ContainerWithPurity> waterContainers = new ArrayList<>();
-    private static List<Block> fillablesWithPurity = new ArrayList();
+    private static final List<Block> fillablesWithPurity = new ArrayList<>();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
 
@@ -217,10 +217,6 @@ public class WaterPurity
         }
 
     }
-
-    private static void CustomRegister(){
-
-    }
     /**
      * Registers new custom water container
      */
@@ -337,7 +333,7 @@ public class WaterPurity
 
     static boolean isFillableBlock(Block block)
     {
-        Iterator var1 = fillablesWithPurity.iterator();
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
 
         Block fillable;
         do {
@@ -345,7 +341,7 @@ public class WaterPurity
                 return false;
             }
 
-            fillable = (Block)var1.next();
+            fillable = var1.next();
         } while(fillable != block);
 
         return true;
@@ -353,7 +349,7 @@ public class WaterPurity
 
     static boolean isFillableBlock(BlockState blockState)
     {
-        Iterator var1 = fillablesWithPurity.iterator();
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
 
         Block fillable;
         do {
@@ -361,7 +357,7 @@ public class WaterPurity
                 return false;
             }
 
-            fillable = (Block)var1.next();
+            fillable = var1.next();
         } while(!blockState.is(fillable));
 
         return true;
@@ -557,13 +553,13 @@ public class WaterPurity
 
         switch (purity) {
             case 0 -> {
-                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue()) {
+                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
                     player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
 
                 }
 
-                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue()) {
+                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
                     player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
                     shouldRegenerate = false;
                 }
