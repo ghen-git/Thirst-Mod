@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = "1.3.0"
+version = "1.3.1"
 group = 'dev.ghen.thirst'
 
 java {

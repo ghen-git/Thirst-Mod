@@ -554,52 +554,76 @@ public class WaterPurity
         switch (purity) {
             case 0 -> {
                 if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 1 -> {
                 if (chance < CommonConfig.SLIGHTLY_DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.SLIGHTLY_DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 2 -> {
                 if (chance < CommonConfig.ACCEPTABLE_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.ACCEPTABLE_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 3 -> {
                 if (chance < CommonConfig.PURIFIED_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.PURIFIED_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 

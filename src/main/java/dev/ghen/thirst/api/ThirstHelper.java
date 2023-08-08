@@ -111,10 +111,10 @@ public class ThirstHelper
     }
     public static float getExhaustionFireProtModifier(Player player)
     {
-        final float perLevelMultiplier = 0.625f;
+        final float perLevelMultiplier = 0.0625f;
         int totalLevels = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), DamageSource.ON_FIRE) / 2;
 
-        return 1.0f - (totalLevels * perLevelMultiplier);
+        return 1.0f - ((totalLevels * perLevelMultiplier) * 0.75f);
     }
 
     /**

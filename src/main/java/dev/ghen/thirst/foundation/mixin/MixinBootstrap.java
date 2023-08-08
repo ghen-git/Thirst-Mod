@@ -38,9 +38,10 @@ public class MixinBootstrap
             method = {"bootStrap"},
             at = {@At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/core/Registry;freezeBuiltins()V"
+                    target = "Lnet/minecraft/core/cauldron/CauldronInteraction;bootStrap()V",
+                    shift = At.Shift.AFTER
             )},
-            remap = false)
+            remap = true)
     private static void modifyCauldronInteractions(CallbackInfo ci) {
         CauldronInteraction.WATER.remove(Items.GLASS_BOTTLE);
         CauldronInteraction.WATER.put(Items.GLASS_BOTTLE, (blockState, level, pos, player, hand, itemStack) -> {
