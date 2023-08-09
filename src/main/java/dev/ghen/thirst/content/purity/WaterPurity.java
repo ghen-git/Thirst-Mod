@@ -78,7 +78,6 @@ public class WaterPurity
      * */
     public static final IntegerProperty BLOCK_PURITY = IntegerProperty.create("purity", 0, 4);
     public static boolean FarmersDelightLoaded = false;
-
     public static boolean TANLoaded=false;
 
     public static void init()
@@ -155,11 +154,9 @@ public class WaterPurity
     {
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.MEAD.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.EGG_GROG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SACCHARINE_RUM.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.DREAD_NOG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
