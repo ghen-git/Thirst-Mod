@@ -9,12 +9,19 @@ import dev.ghen.thirst.compat.create.ponder.scene.SandFilterScene;
 
 
 public class ThirstPonders {
-    public static final PonderTag PURIFICATION = new PonderTag(Thirst.asResource("purification")).item(CreateRegistry.SAND_FILTER_BLOCK.get().asItem(), true, false)
+    public static final PonderTag PURIFICATION = new PonderTag(Thirst.asResource("purification"))
+            .item(CreateRegistry.SAND_FILTER_BLOCK.get().asItem(), true, false)
             .defaultLang("Purification", "Components which purifying water");
 
     static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Thirst.ID);
 
     public static void register(){
-        HELPER.addStoryBoard(CreateRegistry.SAND_FILTER_BLOCK, "sand_filter", SandFilterScene::intro, AllPonderTags.FLUIDS, PURIFICATION);
+        HELPER.addStoryBoard(
+                CreateRegistry.SAND_FILTER_BLOCK,
+                "sand_filter",
+                SandFilterScene::filtering,
+                AllPonderTags.FLUIDS,
+                PURIFICATION
+        );
     }
 }

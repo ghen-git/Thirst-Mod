@@ -36,9 +36,9 @@ public class MixinFillingBySpout
         toFill.setAmount(requiredAmount);
         WRAPPER.setItem(0, stack);
 
-        if(availableFluid.hasTag() && availableFluid.getTag().contains("Purity"))
+        if(WaterPurity.hasPurity(availableFluid))
         {
-            int purity = availableFluid.getTag().getInt("Purity");
+            int purity = WaterPurity.getPurity(availableFluid);
 
             FillingRecipe fillingRecipe = SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class).filter((fr) ->
                     fr.getRequiredFluid().test(toFill)).orElseGet(() ->

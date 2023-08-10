@@ -1,18 +1,19 @@
 package dev.ghen.thirst.api;
 
-import dev.momostudios.coldsweat.api.temperature.Temperature;
-import dev.momostudios.coldsweat.api.util.TempHelper;
-import net.minecraft.world.item.BlockItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.config.KeyWordConfig;
 import dev.ghen.thirst.foundation.util.ConfigHelper;
 import dev.ghen.thirst.foundation.util.LoadedValue;
-
+import dev.momostudios.coldsweat.api.temperature.Temperature;
+import dev.momostudios.coldsweat.api.util.TempHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -26,8 +27,12 @@ public class ThirstHelper
 {
     private static boolean useColdSweatCaps = false;
     private static final float MODIFIER_HARSHNESS = 0.5f;
-    public static Map<Item, Number[]> VALID_DRINKS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.DRINKS.get())).get();
-    public static Map<Item, Number[]> VALID_FOODS = LoadedValue.of(() -> ConfigHelper.getItemsWithValues(ItemSettingsConfig.FOODS.get())).get();
+    public static Map<Item, Number[]> VALID_DRINKS = LoadedValue.of(() -> ConfigHelper
+            .getItemsWithValues(ItemSettingsConfig.DRINKS.get()))
+            .get();
+    public static Map<Item, Number[]> VALID_FOODS = LoadedValue.of(() -> ConfigHelper
+            .getItemsWithValues(ItemSettingsConfig.FOODS.get()))
+            .get();
 
     public static String keywordBlackList = KeyWordConfig.KEYWORD_BLACKLIST.get();
     public static String keywordDrink = KeyWordConfig.KEYWORD_DRINK.get();
@@ -37,7 +42,7 @@ public class ThirstHelper
     public static boolean itemRestoresThirst(ItemStack itemStack)
     {
         return isDrink(itemStack) ||
-                isFood(itemStack) || checkWaterContent(itemStack);
+                isFood(itemStack) || checkKeywords(itemStack);
     }
 
     public static boolean isDrink(ItemStack itemStack)
@@ -105,6 +110,13 @@ public class ThirstHelper
     {
         useColdSweatCaps = should;
     }
+    public static float getExhaustionFireProtModifier(Player player)
+    {
+        final float perLevelMultiplier = 0.0625f;
+        int totalLevels = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), DamageSource.ON_FIRE) / 2;
+
+        return 1.0f - ((totalLevels * perLevelMultiplier) * 0.75f);
+    }
 
     /**
      * Calculates the thirst depletion speed modifier based on the player's
@@ -155,36 +167,63 @@ public class ThirstHelper
     }
 
     /**
-     * Check whether the item contains moisture by regularly matching the item name.
-     * @param itemStack the item to check
-     * @return true if the item contains moisture, otherwise false
+     * Function from Thirst Was Remade, handles water items added from the
+     * keyword config file
+     * @param itemStack item to be checked
+     * @return if the item contains water
      */
 
-    private static boolean checkWaterContent(ItemStack itemStack) {
+    private static boolean checkKeywords(ItemStack itemStack)
+    {
+        if(!CommonConfig.ENABLE_KEYWORD_CONFIG.get())
+            return false;
+
         String pattern= keywordBlackList;
-        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(itemStack.getDescriptionId());
+        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+                .matcher(itemStack.getDescriptionId());
+
         if(matcher.find()|| itemStack.getItem() instanceof BlockItem)
             return false;
 
         pattern = keywordDrink;
-        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(itemStack.getDescriptionId());
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+                .matcher(itemStack.getDescriptionId());
+
         boolean hasWater=matcher.find();
         if(hasWater)
-            VALID_DRINKS.put(itemStack.getItem(), new Number[]{10, 14});
-        else {
-            pattern=keywordSoup;
-            matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(itemStack.getDescriptionId());
-            hasWater=matcher.find();
-            if(hasWater)
-                VALID_FOODS.put(itemStack.getItem(),new Number[]{4,5});
-            else {
-                pattern=keywordFruit;
-                matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(itemStack.getDescriptionId());
-                hasWater=matcher.find();
-                if(hasWater)
-                    VALID_DRINKS.put(itemStack.getItem(),new Number[]{2,3});
-            }
+        {
+            VALID_DRINKS.put(itemStack.getItem(), new Number[]{
+                    KeyWordConfig.getDrinkHydration(),
+                    KeyWordConfig.getDrinkQuenchness()
+            });
+            return true;
         }
+
+        pattern=keywordSoup;
+        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+                .matcher(itemStack.getDescriptionId());
+
+        hasWater=matcher.find();
+        if(hasWater)
+        {
+            VALID_FOODS.put(itemStack.getItem(), new Number[]{
+                    KeyWordConfig.getSoupHydration(),
+                    KeyWordConfig.getSoupQuenchness()
+            });
+            return true;
+        }
+
+        pattern=keywordFruit;
+        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+                .matcher(itemStack.getDescriptionId());
+
+        hasWater=matcher.find();
+        if(hasWater)
+            VALID_FOODS.put(itemStack.getItem(), new Number[]{
+                    KeyWordConfig.getFruitHydration(),
+                    KeyWordConfig.getFruitQuenchness()
+            });
+
         return hasWater;
     }
 }

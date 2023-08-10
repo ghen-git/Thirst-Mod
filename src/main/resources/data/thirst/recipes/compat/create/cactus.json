@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "type": "create:compacting",
   "ingredients": [
     {
@@ -9,7 +15,7 @@
     {
       "amount": 250,
       "fluid": "minecraft:water",
-      "nbt": "{Purity:2}"
+      "nbt": "{Purity:3}"
     },
     {
         "item": "minecraft:green_dye"

@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.farmersrespite.common.block.KettleBlock;
 
 @Mixin(KettleBlock.class)
-public class MixinKettleBlock {
+public abstract class MixinKettleBlock {
+
     @Inject(method = "createBlockStateDefinition", at = @At("HEAD"))
     protected void addPurityBlockState(StateDefinition.Builder<Block, BlockState> p_153549_, CallbackInfo ci) {
         p_153549_.add(WaterPurity.BLOCK_PURITY);

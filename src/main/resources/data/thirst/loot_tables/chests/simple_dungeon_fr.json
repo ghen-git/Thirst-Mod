@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "set_nbt",
+              "tag": "{Purity: 3}"
+            }
+          ],
+          "name": "farmersrespite:dandelion_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "set_nbt",
+              "tag": "{Purity: 3}"
+            }
+          ],
+          "name": "farmersrespite:yellow_tea",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 20
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

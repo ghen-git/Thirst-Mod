@@ -2,6 +2,7 @@ package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 import com.simibubi.create.foundation.fluid.FluidHelper;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
@@ -9,7 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import dev.ghen.thirst.content.purity.WaterPurity;
 
 @Mixin(value = FluidDrainingBehaviour.class,remap = false)
 public abstract class MixinFluidDrainingBehaviour

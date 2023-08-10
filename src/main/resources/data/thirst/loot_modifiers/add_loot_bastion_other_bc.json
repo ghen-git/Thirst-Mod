@@ -1,0 +1,11 @@
+{
+  "type": "thirst:add_loot_table",
+  "conditions":
+  [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_other"
+    }
+  ],
+  "lootTable": "thirst:chests/bastion_other_bc"
+}

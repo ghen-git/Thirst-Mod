@@ -1,7 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
-import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
+import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -26,7 +26,7 @@ public class DrinkByHandClient
         Level level = mc.level;
         BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
 
-        if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() || player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) &&
+        if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && player.getItemInHand(InteractionHand.OFF_HAND).isEmpty()) &&
                 level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
             level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
             ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));

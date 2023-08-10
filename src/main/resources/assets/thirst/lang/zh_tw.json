@@ -6,12 +6,17 @@
   "item.thirst.terracotta_bowl": "陶碗",
   "item.thirst.clay_bowl": "黏土碗",
   "thirst.container.kettle.no_water": "沒有水",
-  "thirst.container.kettle.has_single_water": "含有一杯%s水",
-  "thirst.container.kettle.has_many_water": "含有%1$s杯%2$s水",
+  "thirst.container.kettle.has_single_water": "含有一杯%s的水",
+  "thirst.container.kettle.has_many_water": "含有%1$s杯%2$s的水",
   "itemGroup.thirst": "Thirst",
-  "thirst.purity.dirty": "髒水",
-  "thirst.purity.slightly_dirty": "有點髒的水",
-  "thirst.purity.acceptable": "可以喝的水",
-  "thirst.purity.purified": "純淨水",
-  "block.create.sand_filter": "砂濾器"
+  "thirst.purity.dirty": "骯髒",
+  "thirst.purity.slightly_dirty": "有點髒",
+  "thirst.purity.acceptable": "可接受的",
+  "thirst.purity.purified": "純淨",
+  "block.thirst.sand_filter": "砂濾器",
+
+  "thirst.ponder.sand_filter.header": "用砂濾器淨化水",
+  "thirst.ponder.sand_filter.text_1": "砂濾器會淨化鄰近泵入的水",
+  "thirst.ponder.sand_filter.text_2": "髒水需要從上方泵入...",
+  "thirst.ponder.sand_filter.text_3": "淨化後的水會從底部泵出"
 }

@@ -2,6 +2,7 @@ package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.foundation.utility.Pair;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import dev.ghen.thirst.content.purity.WaterPurity;
 
 @Mixin(value = GenericItemEmptying.class,remap = false)
 public class MixinGenericItemEmptying

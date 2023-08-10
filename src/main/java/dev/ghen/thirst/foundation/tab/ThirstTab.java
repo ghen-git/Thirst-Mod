@@ -1,7 +1,7 @@
 package dev.ghen.thirst.foundation.tab;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.content.registry.ThirstItem;
+import dev.ghen.thirst.content.registry.ItemInit;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +22,7 @@ public class ThirstTab extends CreativeModeTab
     @Override
     public @NotNull ItemStack makeIcon()
     {
-        return new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get());
+        return new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
     }
 
     @Override

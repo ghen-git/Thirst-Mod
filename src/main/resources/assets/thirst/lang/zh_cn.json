@@ -16,7 +16,7 @@
   "block.thirst.sand_filter": "砂滤器",
 
   "thirst.ponder.sand_filter.header": "用砂滤器净化水",
-  "thirst.ponder.sand_filter.text_1": "连接砂滤器上方和下方的输入输出",
-  "thirst.ponder.sand_filter.text_2": "砂滤器会净化来自上方输入的水",
-  "thirst.ponder.sand_filter.text_3": "净化后的水会从下方输出"
+  "thirst.ponder.sand_filter.text_1": "砂滤器会净化邻近泵入的水",
+  "thirst.ponder.sand_filter.text_2": "脏水需要从上方泵入...",
+  "thirst.ponder.sand_filter.text_3": "净化后的水会从底部泵出"
 }
