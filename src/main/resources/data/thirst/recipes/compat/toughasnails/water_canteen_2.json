@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "toughasnails"
+    }
+  ],
   "type": "toughasnails:water_purifying",
   "ingredient": {
     "item": "toughasnails:dirty_water_canteen",

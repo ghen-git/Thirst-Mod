@@ -1,11 +1,15 @@
 package dev.ghen.thirst.content.purity;
 
+import com.farmersrespite.core.registry.FRBlocks;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Block;
 import toughasnails.api.item.TANItems;
-import dev.ghen.thirst.content.registry.ThirstItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
@@ -49,16 +53,14 @@ import com.farmersrespite.core.registry.FRItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
     private static final List<ContainerWithPurity> waterContainers = new ArrayList<>();
+    private static final List<Block> fillablesWithPurity = new ArrayList<>();
     public static final int MIN_PURITY = 0;
     public static final int MAX_PURITY = 3;
 
@@ -74,13 +76,13 @@ public class WaterPurity
      * */
     public static final IntegerProperty BLOCK_PURITY = IntegerProperty.create("purity", 0, 4);
     public static boolean FarmersDelightLoaded = false;
-
     public static boolean TANLoaded=false;
 
     public static void init()
     {
         registerDispenserBehaviours();
         registerContainers();
+        registerFillables();
 
         if(ModList.get().isLoaded("farmersdelight")){
             registerFarmersDelightContainers();
@@ -90,6 +92,7 @@ public class WaterPurity
         if(ModList.get().isLoaded("farmersrespite"))
         {
             registerFarmersRespiteContainers();
+            fillablesWithPurity.add(FRBlocks.KETTLE.get());
         }
 
         if(ModList.get().isLoaded("brewinandchewin")) {
@@ -107,10 +110,16 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.GLASS_BOTTLE),
                 PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)).setEqualsFilled(itemStack ->
                 itemStack.is(Items.POTION) && PotionUtils.getPotion(itemStack) == Potions.WATER));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(ThirstItem.TERRACOTTA_BOWL.get()),
-                new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(ItemInit.TERRACOTTA_BOWL.get()),
+                new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(Items.BUCKET),
                 new ItemStack(Items.WATER_BUCKET), false).canHarvestRunningWater(false));
+    }
+
+    private static void registerFillables()
+    {
+        fillablesWithPurity.add(Blocks.CAULDRON);
+        fillablesWithPurity.add(Blocks.WATER_CAULDRON);
     }
 
     private static void registerFarmersDelightContainers()
@@ -134,11 +143,9 @@ public class WaterPurity
     {
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.MEAD.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.EGG_GROG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SACCHARINE_RUM.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.DREAD_NOG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
@@ -166,7 +173,34 @@ public class WaterPurity
         waterContainers.add(new ContainerWithPurity(new ItemStack(TANItems.SWEET_BERRY_JUICE)));
     }
 
-    private static void CustomRegister(){
+    @SubscribeEvent
+    static void fillablesHandler(PlayerInteractEvent.RightClickBlock event)
+    {
+        if (event.getEntity() instanceof ServerPlayer && isWaterFilledContainer(event.getItemStack()))
+        {
+            Player player = event.getPlayer();
+            Level level = player.getLevel();
+            BlockPos pos = event.getHitVec().getBlockPos();
+            BlockState blockState = level.getBlockState(pos);
+
+            if (isFillableBlock(blockState))
+            {
+                int purity = getPurity(event.getItemStack());
+
+                int blockPurity = !blockState.hasProperty(BLOCK_PURITY) ?
+                        3 : (blockState.getValue(BLOCK_PURITY) - 1 < 0 ?
+                            3 : blockState.getValue(BLOCK_PURITY) - 1);
+
+                TickHelper.nextTick(level, () -> {
+                    BlockState blockState1 = level.getBlockState(pos);
+                    level.setBlock(
+                            pos,
+                            blockState1.setValue(BLOCK_PURITY, Math.min(purity, blockPurity) + 1),
+                            0
+                    );
+                });
+            }
+        }
 
     }
     /**
@@ -205,7 +239,7 @@ public class WaterPurity
             {
                 Player player = (Player) event.getEntity();
                 Level level = player.getLevel();
-                BlockPos blockPos = MathHelper.getPlayerPOVHitResult(player.getLevel(), player, ClipContext.Fluid.ANY).getBlockPos();
+                BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
 
                 if(level.getFluidState(blockPos).is(FluidTags.WATER))
                 {
@@ -217,10 +251,10 @@ public class WaterPurity
                         sound = SoundEvents.BOTTLE_FILL;
                         filledItem = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
                     }
-                    else if(item.getItem() == ThirstItem.TERRACOTTA_BOWL.get())
+                    else if(item.getItem() == ItemInit.TERRACOTTA_BOWL.get())
                     {
                         sound = SoundEvents.BUCKET_FILL;
-                        filledItem = new ItemStack(ThirstItem.TERRACOTTA_WATER_BOWL.get());
+                        filledItem = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
                     }
                     else
                         return;
@@ -279,6 +313,38 @@ public class WaterPurity
                 return true;
 
         return false;
+    }
+
+    static boolean isFillableBlock(Block block)
+    {
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = var1.next();
+        } while(fillable != block);
+
+        return true;
+    }
+
+    static boolean isFillableBlock(BlockState blockState)
+    {
+        Iterator<Block> var1 = fillablesWithPurity.iterator();
+
+        Block fillable;
+        do {
+            if (!var1.hasNext()) {
+                return false;
+            }
+
+            fillable = var1.next();
+        } while(!blockState.is(fillable));
+
+        return true;
     }
 
     static boolean canHarvestRunningWater(ItemStack item)
@@ -471,53 +537,77 @@ public class WaterPurity
 
         switch (purity) {
             case 0 -> {
-                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue()) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                if (chance < CommonConfig.DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
-                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue()) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                if (chance <= CommonConfig.DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 1 -> {
                 if (chance < CommonConfig.SLIGHTLY_DIRTY_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.SLIGHTLY_DIRTY_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 2 -> {
                 if (chance < CommonConfig.ACCEPTABLE_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.ACCEPTABLE_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 
             }
             case 3 -> {
                 if (chance < CommonConfig.PURIFIED_NAUSEA_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
-                    player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20 * 5, 0));
+                        player.addEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 30, 0));
+                    }
 
                 }
 
                 if (chance <= CommonConfig.PURIFIED_POISON_PERCENTAGE.get().intValue() / 100.0f) {
-                    player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    if(player instanceof ServerPlayer)
+                    {
+                        player.addEffect(new MobEffectInstance(MobEffects.POISON, 20 * 10, 0));
+                    }
                     shouldRegenerate = false;
                 }
 

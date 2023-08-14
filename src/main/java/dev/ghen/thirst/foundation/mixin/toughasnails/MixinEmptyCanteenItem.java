@@ -1,5 +1,7 @@
 package dev.ghen.thirst.foundation.mixin.toughasnails;
 
+import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,8 +25,6 @@ import toughasnails.api.block.TANBlocks;
 import toughasnails.api.item.TANItems;
 import toughasnails.block.RainCollectorBlock;
 import toughasnails.item.EmptyCanteenItem;
-import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.foundation.util.MathHelper;
 
 @Mixin(EmptyCanteenItem.class)
 public abstract class MixinEmptyCanteenItem {

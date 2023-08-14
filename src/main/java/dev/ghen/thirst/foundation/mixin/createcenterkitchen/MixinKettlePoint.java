@@ -25,7 +25,9 @@ public abstract class MixinKettlePoint extends ArmInteractionPoint {
     private void insertWater(BrewingGuide guide, IItemHandler inventory, ItemStack stack, boolean simulate, CallbackInfoReturnable<ItemStack> cir){
         BlockState state = this.level.getBlockState(pos);
         int purity = WaterPurity.getPurity(stack);
-        int blockPurity = !state.hasProperty(WaterPurity.BLOCK_PURITY) ? WaterPurity.MAX_PURITY : (state.getValue(WaterPurity.BLOCK_PURITY) - 1 < 0 ? WaterPurity.MAX_PURITY : state.getValue(WaterPurity.BLOCK_PURITY) - 1);
+        int blockPurity = !state.hasProperty(WaterPurity.BLOCK_PURITY) ?
+                WaterPurity.MAX_PURITY : (state.getValue(WaterPurity.BLOCK_PURITY) - 1 < 0 ?
+                WaterPurity.MAX_PURITY : state.getValue(WaterPurity.BLOCK_PURITY) - 1);
         level.setBlockAndUpdate(pos, state.setValue(WaterPurity.BLOCK_PURITY, Math.max(purity, blockPurity)+1));
     }
 }
