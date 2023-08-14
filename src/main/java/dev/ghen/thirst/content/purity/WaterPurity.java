@@ -637,7 +637,7 @@ public class WaterPurity
         //mappings (the default is getDispenseMethod)
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
-        DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET.asItem()));
+        DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
         OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
