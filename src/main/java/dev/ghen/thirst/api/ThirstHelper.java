@@ -61,6 +61,7 @@ public class ThirstHelper
      * Adds a hydration and "quenchness" value to an item via code, and treats it as food.
      * Can be overwritten by the player in the config.
      * */
+    @SuppressWarnings("unused")
     public static void addFood(Item item, int thirst, int quenched)
     {
         VALID_FOODS.put(item, new Number[]{thirst, quenched});
@@ -70,6 +71,7 @@ public class ThirstHelper
      * Adds a hydration and "quenchness" value to an item via code, and treats it as a drink.
      * Can be overwritten by the player in the config.
      * */
+    @SuppressWarnings("unused")
     public static void addDrink(Item item, int thirst, int quenched)
     {
         VALID_DRINKS.put(item, new Number[]{thirst, quenched});
