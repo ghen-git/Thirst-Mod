@@ -31,6 +31,11 @@ public abstract class MixinKettleBlockEntity {
             if (recipe.isPresent() && kettleAcc.invokeCanBrew(recipe.get()) && WaterPurity.isWaterFilledContainer(recipe.get().getResultItem())) {
                 didInventoryChange = kettleAcc.invokeProcessBrewing(recipe.get(), kettle);
                 if(didInventoryChange) {
+
+                    //Reset Block Purity for next input
+                    if(recipe.get().getNeedWater() && !kettle.isWater())
+                        kettle.getBlockState().setValue(WaterPurity.BLOCK_PURITY,0);
+
                     int purity = Math.min(WaterPurity.getBlockPurity(kettle.getBlockState()) + CommonConfig.KETTLE_PURIFICATION_LEVELS.get().intValue(), WaterPurity.MAX_PURITY);
                     kettle.getInventory().setStackInSlot(2, WaterPurity.addPurity(kettle.getInventory().getStackInSlot(2), purity));
                 }

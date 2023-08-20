@@ -303,7 +303,6 @@ public class WaterPurity
 
                 int purityColor = getPurityColor(purity);
 
-                assert purityText != null;
                 event.getToolTip()
                         .add(MutableComponent
                                 .create(new LiteralContents(purityText))
