@@ -40,15 +40,15 @@ public class MixinBootstrap
                     value = "INVOKE",
                     target = "Lnet/minecraft/core/cauldron/CauldronInteraction;bootStrap()V",
                     shift = At.Shift.AFTER
-            )},
-            remap = true)
+            )}
+    )
     private static void modifyCauldronInteractions(CallbackInfo ci) {
         CauldronInteraction.WATER.remove(Items.GLASS_BOTTLE);
         CauldronInteraction.WATER.put(Items.GLASS_BOTTLE, (blockState, level, pos, player, hand, itemStack) -> {
             if (!level.isClientSide()) {
                 Item item = itemStack.getItem();
                 ItemStack result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                WaterPurity.addPurity(result, pos, level);;
+                WaterPurity.addPurity(result, pos, level);
                 player.setItemInHand(hand, ItemUtils.createFilledResult(itemStack, player, result));
                 player.awardStat(Stats.USE_CAULDRON);
                 player.awardStat(Stats.ITEM_USED.get(item));
