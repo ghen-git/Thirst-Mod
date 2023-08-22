@@ -40,7 +40,7 @@ public class MixinBootstrap
                     value = "INVOKE",
                     target = "Lnet/minecraft/core/cauldron/CauldronInteraction;bootStrap()V",
                     shift = At.Shift.AFTER
-            )}
+            )}, remap = true
     )
     private static void modifyCauldronInteractions(CallbackInfo ci) {
         CauldronInteraction.WATER.remove(Items.GLASS_BOTTLE);
