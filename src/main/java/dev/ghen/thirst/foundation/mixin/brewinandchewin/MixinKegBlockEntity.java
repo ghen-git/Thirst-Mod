@@ -8,10 +8,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import umpaz.brewinandchewin.common.block.entity.KegBlockEntity;
 import umpaz.brewinandchewin.common.crafting.KegRecipe;
@@ -68,5 +70,23 @@ public class MixinKegBlockEntity
         }
 
         ci.cancel();
+    }
+
+    /**
+     * The origin use new ItemStack() so it will lose purity after fermentation.
+     **/
+
+    @Redirect(method = "processFermenting", at = @At(value = "INVOKE",target = "Lnet/minecraftforge/items/ItemStackHandler;setStackInSlot(ILnet/minecraft/world/item/ItemStack;)V",ordinal = 3), remap = false)
+    private void AddPurityToInputFluid(ItemStackHandler instance, int slot, ItemStack stack){
+        ItemStack fluid_input=instance.getStackInSlot(4);
+        fluid_input.shrink(1);
+        instance.setStackInSlot(4, fluid_input);
+    }
+
+    @Redirect(method = "processFermenting", at = @At(value = "INVOKE",target = "Lnet/minecraftforge/items/ItemStackHandler;setStackInSlot(ILnet/minecraft/world/item/ItemStack;)V",ordinal = 5), remap = false)
+    private void AddPurityToInputFluid_2(ItemStackHandler instance, int slot, ItemStack stack){
+        ItemStack fluid_input=instance.getStackInSlot(4);
+        fluid_input.shrink(1);
+        instance.setStackInSlot(4, fluid_input);
     }
 }

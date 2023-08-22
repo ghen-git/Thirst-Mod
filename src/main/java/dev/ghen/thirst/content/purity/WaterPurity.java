@@ -78,7 +78,6 @@ public class WaterPurity
      * */
     public static final IntegerProperty BLOCK_PURITY = IntegerProperty.create("purity", 0, 4);
     public static boolean FarmersDelightLoaded = false;
-
     public static boolean TANLoaded=false;
 
     public static void init()
@@ -155,11 +154,9 @@ public class WaterPurity
     {
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.MEAD.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.EGG_GROG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SACCHARINE_RUM.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.DREAD_NOG.get())));
         waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
@@ -220,6 +217,7 @@ public class WaterPurity
     /**
      * Registers new custom water container
      */
+    @SuppressWarnings("unused")
     public static void addContainer(ContainerWithPurity container)
     {
         waterContainers.add(container);
@@ -230,6 +228,7 @@ public class WaterPurity
      * The second parameter specifies if the container inputted is the empty or
      * filled version
      */
+    @SuppressWarnings("unused")
     public static ItemStack getFilledContainer(ItemStack container, boolean fromFilled)
     {
         for (ContainerWithPurity waterContainer : waterContainers)
@@ -304,7 +303,6 @@ public class WaterPurity
 
                 int purityColor = getPurityColor(purity);
 
-                assert purityText != null;
                 event.getToolTip()
                         .add(MutableComponent
                                 .create(new LiteralContents(purityText))
@@ -639,28 +637,26 @@ public class WaterPurity
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
         DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
-        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE.asItem()));
+        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
 
-        DispenserBlock.registerBehavior(Items.BUCKET, (BlockSource block, ItemStack item) ->
+        DispenserBlock.registerBehavior(Items.BUCKET, (block, item) ->
         {
             Level level = block.getLevel();
             BlockPos blockpos = block.getPos().relative(block.getBlockState().getValue(DispenserBlock.FACING));
-
-            if(level.getBlockState(blockpos).is(Blocks.WATER) && level.getBlockState(blockpos).getFluidState().isSource())
+            if(level.getFluidState(blockpos).is(FluidTags.WATER) && level.getBlockState(blockpos).getFluidState().isSource())
             {
-                ItemStack result =addPurity(new ItemStack(Items.WATER_BUCKET),getBlockPurity(level.getBlockState(blockpos)));
-                ((BucketPickup)level.getBlockState(blockpos).getBlock()).pickupBlock(level, blockpos, level.getBlockState(blockpos));
-                return getStack(block, item, level, blockpos,result);
+                ItemStack result = new ItemStack(Items.WATER_BUCKET);
+                return getStack(block, item, level, blockpos, result,true);
             }
             else
                 return (ItemStack) ReflectionUtil.MethodReflection(execute, bucketDefaultBehaviour, block, item);
 
         });
 
-        DispenserBlock.registerBehavior(Items.GLASS_BOTTLE, (BlockSource block, ItemStack item) ->
+        DispenserBlock.registerBehavior(Items.GLASS_BOTTLE, (block, item) ->
         {
             Level level = block.getLevel();
             BlockPos blockpos = block.getPos().relative(block.getBlockState().getValue(DispenserBlock.FACING));
@@ -668,7 +664,7 @@ public class WaterPurity
             if(level.getFluidState(blockpos).is(FluidTags.WATER))
             {
                 ItemStack result = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                return getStack(block, item, level, blockpos, addPurity(result,getBlockPurity(level.getBlockState(blockpos))));
+                return getStack(block, item, level, blockpos, result,false);
             }
             else
                 return (ItemStack) ReflectionUtil.MethodReflection(execute, bottleDefaultBehaviour, block, item);
@@ -676,9 +672,12 @@ public class WaterPurity
     }
 
     @NotNull
-    private static ItemStack getStack(BlockSource block, ItemStack item, Level level, BlockPos blockpos, ItemStack result) {
+    private static ItemStack getStack(BlockSource block, ItemStack item, Level level, BlockPos blockpos, ItemStack result,boolean pickupBlock) {
         level.gameEvent(null, GameEvent.FLUID_PICKUP, blockpos);
         addPurity(result, blockpos, level);
+
+        if(pickupBlock)
+            ((BucketPickup)level.getBlockState(blockpos).getBlock()).pickupBlock(level, blockpos, level.getBlockState(blockpos));
 
         item.shrink(1);
         if (item.isEmpty()) {

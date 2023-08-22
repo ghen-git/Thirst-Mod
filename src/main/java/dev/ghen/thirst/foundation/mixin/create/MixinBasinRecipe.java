@@ -6,8 +6,8 @@ import com.simibubi.create.foundation.fluid.FluidHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,7 +39,7 @@ public class MixinBasinRecipe {
 
     private static int getWaterPurity(BasinBlockEntity basin)
     {
-        IFluidHandler availableFluids = basin.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER)
             .orElse(null);
 
         if(availableFluids == null)
