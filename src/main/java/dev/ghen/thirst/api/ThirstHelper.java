@@ -176,6 +176,9 @@ public class ThirstHelper
         if(!CommonConfig.ENABLE_KEYWORD_CONFIG.get())
             return false;
 
+        if(!itemStack.isEdible())
+            return false;
+
         String pattern= keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
