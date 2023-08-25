@@ -6,5 +6,5 @@ import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class ModCapabilities
 {
-    public static final Capability<IThirstCap> PLAYER_THIRST = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<IThirst> PLAYER_THIRST = CapabilityManager.get(new CapabilityToken<>() {});
 }

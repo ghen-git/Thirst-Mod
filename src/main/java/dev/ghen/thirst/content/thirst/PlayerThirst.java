@@ -1,7 +1,9 @@
-package dev.ghen.thirst.foundation.common.capability;
+package dev.ghen.thirst.content.thirst;
 
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +16,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
-public class PlayerThirstCap implements IThirstCap
+public class PlayerThirst implements IThirst
 {
 
     int thirst = 20;
@@ -24,6 +26,7 @@ public class PlayerThirstCap implements IThirstCap
     int syncTimer = 0;
     float prevTickExhaustion = 0.0F;
     Vec3 lastPos = Vec3.ZERO;
+    boolean justHealed = false;
 
     public Vec3 getLastPos()
     {
@@ -133,7 +136,13 @@ public class PlayerThirstCap implements IThirstCap
     }
 
     @Override
-    public void copy(IThirstCap cap)
+    public void setJustHealed()
+    {
+        justHealed = true;
+    }
+
+    @Override
+    public void copy(IThirst cap)
     {
         thirst = cap.getThirst();
         quenched = cap.getQuenched();
@@ -142,9 +151,18 @@ public class PlayerThirstCap implements IThirstCap
 
     public void addExhaustion(Player player, float amount)
     {
-        exhaustion += (amount *
-                ThirstHelper.getExhaustionBiomeModifier(player) *
-                ThirstHelper.getExhaustionFireProtModifier(player));
+        if(!CommonConfig.HEALTH_REGEN_DEPLETES_HYDRATION.get() && justHealed)
+            amount = 0;
+
+        if(!CommonConfig.HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT.get() && justHealed)
+            exhaustion += amount;
+        else
+            exhaustion += (amount *
+                    ThirstHelper.getExhaustionBiomeModifier(player) *
+                    ThirstHelper.getExhaustionFireProtModifier(player));
+
+        if(justHealed)
+            justHealed = false;
 
         updateThirstData(player);
     }

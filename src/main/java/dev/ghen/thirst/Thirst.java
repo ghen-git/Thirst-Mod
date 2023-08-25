@@ -4,7 +4,7 @@ import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
 import dev.ghen.thirst.content.registry.ItemInit;
-import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
@@ -81,7 +81,7 @@ public class Thirst
 
     public void registerCapabilities(RegisterCapabilitiesEvent event)
     {
-        event.register(IThirstCap.class);
+        event.register(IThirst.class);
     }
 
     //this is from Create but it looked very cool

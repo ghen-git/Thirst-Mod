@@ -1,7 +1,8 @@
-package dev.ghen.thirst.foundation.common.capability;
+package dev.ghen.thirst.content.thirst;
 
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.content.thirst.DrinkByHandClient;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,9 +38,9 @@ public class PlayerThirstManager
     {
         if (event.getObject() instanceof Player)
         {
-            IThirstCap playerThirstCap = new PlayerThirstCap();
-            LazyOptional<IThirstCap> capOptional = LazyOptional.of(() -> playerThirstCap);
-            Capability<IThirstCap> capability = ModCapabilities.PLAYER_THIRST;
+            IThirst playerThirstCap = new PlayerThirst();
+            LazyOptional<IThirst> capOptional = LazyOptional.of(() -> playerThirstCap);
+            Capability<IThirst> capability = ModCapabilities.PLAYER_THIRST;
 
             ICapabilityProvider provider = new ICapabilitySerializable<CompoundTag>()
             {

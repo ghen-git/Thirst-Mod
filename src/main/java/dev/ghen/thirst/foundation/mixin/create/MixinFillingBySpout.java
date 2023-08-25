@@ -63,10 +63,11 @@ public class MixinFillingBySpout
                 List<ItemStack> results = fillingRecipe.rollResults();
                 availableFluid.shrink(requiredAmount);
                 stack.shrink(1);
-                cir.setReturnValue(results.isEmpty() ? ItemStack.EMPTY : WaterPurity.addPurity(results.get(0), purity));
+                cir.setReturnValue(results.isEmpty() ?
+                        ItemStack.EMPTY : WaterPurity.hasPurity(results.get(0))?
+                        WaterPurity.addPurity(results.get(0),purity):results.get(0));
             } else {
                 ItemStack output = GenericItemFilling.fillItem(world, requiredAmount, stack, availableFluid);
-                WaterPurity.addPurity(output, purity);
                 cir.setReturnValue(output);
             }
         }

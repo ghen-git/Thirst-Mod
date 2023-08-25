@@ -3,7 +3,7 @@ package dev.ghen.thirst.foundation.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +17,7 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 
 public class ThirstBarRenderer
 {
-    public static IThirstCap PLAYER_THIRST = null;
+    public static IThirst PLAYER_THIRST = null;
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
 
     public static final ResourceLocation MC_ICONS = new ResourceLocation("textures/gui/icons.png");
