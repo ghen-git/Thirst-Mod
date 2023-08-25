@@ -3,7 +3,7 @@ package dev.ghen.thirst.foundation.common.capability;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 
-public interface IThirstCap
+public interface IThirst
 {
     int getThirst();
     void setThirst(int value);
@@ -15,7 +15,8 @@ public interface IThirstCap
     void tick(Player player);
     void drink(Player player, int thirst, int quenched);
     void updateThirstData(Player player);
-    void copy(IThirstCap cap);
+    void copy(IThirst cap);
+    void setJustHealed();
 
     CompoundTag serializeNBT();
     void deserializeNBT(CompoundTag tag);

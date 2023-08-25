@@ -8,6 +8,7 @@
     "MixinBottleItem",
     "MixinBucketItem",
     "MixinCampfireBlockEntity",
+    "MixinFoodData",
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "accessors.brewinandchewin.KegBlockEntityAccessor",

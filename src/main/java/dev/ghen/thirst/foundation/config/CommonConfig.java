@@ -15,12 +15,15 @@ public class CommonConfig
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_BY_HAND;
+    public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_KEYWORD_CONFIG;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DEHYDRATION_HALTS_HEALTH_REGEN;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEPLETES_HYDRATION;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_BY_HAND;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
-    public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
 
     public static final ForgeConfigSpec.ConfigValue<Number> MOUNTAINS_Y;
     public static final ForgeConfigSpec.ConfigValue<Number> CAVES_Y;
@@ -46,12 +49,18 @@ public class CommonConfig
     static
     {
         BUILDER.push("General");
-        WATER_BOTTLE_STACKSIZE = BUILDER.comment("Stack size for water bottles").define("waterBottleStacksize", 64);
-        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
+        THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
         ENABLE_KEYWORD_CONFIG = BUILDER.comment("If the keyword config should be taken into consideration").define("enableKeywordConfig", false);
+        BUILDER.pop();
+
+        BUILDER.push("Drinking Mechanics");
+        WATER_BOTTLE_STACKSIZE = BUILDER.comment("Stack size for water bottles").define("waterBottleStacksize", 64);
+        DEHYDRATION_HALTS_HEALTH_REGEN = BUILDER.comment("Whether the player can't regenerate as fast when hydration isn't full (like hunger)").define("dehydrationHaltsHealthRegen", true);
+        HEALTH_REGEN_DEPLETES_HYDRATION = BUILDER.comment("Whether hydration depletes when the player's health is regenerating (like hunger)").define("healthRegenDepletesHydration", true);
+        HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT = BUILDER.comment("Whether dehydration from regenerating health (if enabled above) should take into account temperature and humidity").define("healthRegenDehydrationIsBiomeDependent", true);
+        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
-        THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
         BUILDER.pop();
 
         BUILDER.push("World");
