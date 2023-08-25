@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.foundation.common.capability.IThirstCap;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
@@ -99,7 +99,7 @@ public class HUDOverlayHandler {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         assert player != null;
-        IThirstCap thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
+        IThirst thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
 
         int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
         int right = mc.getWindow().getGuiScaledWidth() / 2 + 91; // right of food bar
@@ -305,7 +305,7 @@ public class HUDOverlayHandler {
 
         boolean shouldAnimatedFood = false;
 
-        IThirstCap thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
+        IThirst thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
 
         // in vanilla saturation level is zero will show hunger animation
         float quenched = thirstData.getQuenched();
