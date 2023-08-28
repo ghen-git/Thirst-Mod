@@ -1,5 +1,7 @@
 package dev.ghen.thirst.foundation.mixin.brewinandchewin;
 
+import com.brewinandchewin.common.block.entity.KegBlockEntity;
+import com.brewinandchewin.common.crafting.KegRecipe;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.mixin.accessors.brewinandchewin.KegBlockEntityAccessor;
@@ -8,15 +10,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.brewinandchewin.common.block.entity.KegBlockEntity;
-import com.brewinandchewin.common.crafting.KegRecipe;
 
 import java.util.Optional;
 
