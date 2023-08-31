@@ -206,6 +206,7 @@ public class WaterPurity
     /**
      * Registers new custom water container
      */
+    @SuppressWarnings("unused")
     public static void addContainer(ContainerWithPurity container)
     {
         waterContainers.add(container);
@@ -216,6 +217,7 @@ public class WaterPurity
      * The second parameter specifies if the container inputted is the empty or
      * filled version
      */
+    @SuppressWarnings("unused")
     public static ItemStack getFilledContainer(ItemStack container, boolean fromFilled)
     {
         for (ContainerWithPurity waterContainer : waterContainers)
