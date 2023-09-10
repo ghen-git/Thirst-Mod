@@ -26,6 +26,7 @@
     "farmersrespite.MixinKettleBlock",
     "farmersrespite.MixinKettleBlockEntity",
     "toughasnails.MixinEmptyCanteenItem",
+    "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
     "toughasnails.MixinThirstHelperImpl"
   ],

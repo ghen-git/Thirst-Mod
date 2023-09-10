@@ -13,5 +13,10 @@
   "thirst.purity.slightly_dirty": "やや汚れ",
   "thirst.purity.acceptable": "許容",
   "thirst.purity.purified": "精製された",
-  "block.create.sand_filter": "砂フィルター"
+  "block.thirst.sand_filter": "砂フィルター",
+
+  "thirst.ponder.sand_filter.header": "Purifying Water with a Sand Filter",
+  "thirst.ponder.sand_filter.text_1": "A Sand Filter purifies by one step water pumped through it",
+  "thirst.ponder.sand_filter.text_2": "Dirty Water needs to be pumped in from the top...",
+  "thirst.ponder.sand_filter.text_3": "and Purified Water can be pumped out from the bottom"
 }
