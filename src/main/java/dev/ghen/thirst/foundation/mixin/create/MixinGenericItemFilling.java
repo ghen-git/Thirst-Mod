@@ -15,8 +15,8 @@ public class MixinGenericItemFilling {
 
     @Inject(method = "fillItem",at= @At("RETURN"), cancellable = true)
     private static void fillItem(Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid, CallbackInfoReturnable<ItemStack> cir) {
-        if(WaterPurity.hasPurity(availableFluid) && WaterPurity.isEmptyWaterContainer(stack)){
-             ItemStack output=cir.getReturnValue();
+        ItemStack output=cir.getReturnValue();
+        if(WaterPurity.hasPurity(availableFluid) && WaterPurity.isWaterFilledContainer(output)){
              WaterPurity.addPurity(output, WaterPurity.getPurity(availableFluid));
              cir.setReturnValue(output);
         }
