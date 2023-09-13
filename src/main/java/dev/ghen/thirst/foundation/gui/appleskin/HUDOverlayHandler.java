@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
+import squeek.appleskin.ModConfig;
 import squeek.appleskin.util.IntPoint;
 
 import java.util.Random;
@@ -51,7 +52,7 @@ public class HUDOverlayHandler {
             Minecraft mc = Minecraft.getInstance();
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get()) {
                 renderExhaustion(gui, event.getPoseStack(), event.getPartialTick(), event.getWindow().getScreenWidth(), event.getWindow().getScreenHeight());
             }
         }
