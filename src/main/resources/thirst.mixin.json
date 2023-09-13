@@ -19,6 +19,7 @@
     "create.MixinGenericItemFilling",
     "create.MixinOpenEndedPipe",
     "toughasnails.MixinEmptyCanteenItem",
+    "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
     "toughasnails.MixinThirstHelperImpl",
     "toughasnails.MixinTooltipHandler"
