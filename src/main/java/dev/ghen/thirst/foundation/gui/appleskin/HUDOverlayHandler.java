@@ -29,6 +29,8 @@ import java.util.Vector;
 
 @OnlyIn(Dist.CLIENT)
 public class HUDOverlayHandler {
+    public static boolean StopConflictRendering = false;
+    public static void StopConflictRenderingIDEA(boolean yes){StopConflictRendering = yes;};
     private static float unclampedFlashAlpha = 0.0F;
     private static float flashAlpha = 0.0F;
     private static byte alphaDir = 1;
@@ -51,7 +53,7 @@ public class HUDOverlayHandler {
             Minecraft mc = Minecraft.getInstance();
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get()) {
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !StopConflictRendering) {
                 renderExhaustion(gui, event.getGuiGraphics());
             }
         }

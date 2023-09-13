@@ -53,7 +53,11 @@ public class Thirst
             TooltipOverlayHandler.init();
             modBus.addListener(this::onRegisterClientTooltipComponentFactories);
         }
-
+        // Add compatibility with module CSSB, modify rendering logic.
+        if(ModList.get().isLoaded("classicandsimplestatusbars") && FMLEnvironment.dist.isClient()){
+            ThirstBarRenderer.StopConflictRenderingIDEA(true);
+            HUDOverlayHandler.StopConflictRenderingIDEA(true);
+        }
         ThirstTab.register(modBus);
 
         //configs

@@ -17,6 +17,8 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 
 public class ThirstBarRenderer
 {
+    public static boolean StopConflictRendering = false;
+    public static void StopConflictRenderingIDEA(boolean yes){StopConflictRendering = yes;};
     public static IThirst PLAYER_THIRST = null;
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
 
@@ -26,7 +28,7 @@ public class ThirstBarRenderer
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
-        if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
+        if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements() && !StopConflictRendering)
         {
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);
