@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 public class KeyWordConfig {
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_KEYWORD_CONFIG;
 
     public static final ForgeConfigSpec.ConfigValue<Number> DEFAULT_DRINK_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> DEFAULT_DRINK_QUENCHNESS;
@@ -31,6 +32,7 @@ public class KeyWordConfig {
                 .comment("This config allows for faster implementation of new thirst quenching items. It works by defining",
                         "lists of regular expressions to select items by their id name. It divides the items into categories",
                         "that have preset values for hydration and quenching");
+        ENABLE_KEYWORD_CONFIG = BUILDER.comment("If the keyword config should be taken into consideration").define("enableKeywordConfig", false);
 
         BUILDER.push("Default Hydration values");
         DEFAULT_DRINK_HYDRATION = BUILDER.comment("Default hydration for drinks selected with keywords [0-20]")

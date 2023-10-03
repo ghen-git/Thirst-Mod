@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,8 +82,14 @@ public class ThirstHelper
     {
         Item item = itemStack.getItem();
 
-        if(VALID_DRINKS.containsKey(item))
+        if(VALID_DRINKS.containsKey(item)) {
+            if (!CommonConfig.ENABLE_DRINKS_NUTRITION.get()){
+                if (item.getFoodProperties() != null) {
+                    Objects.requireNonNull(item.getFoodProperties()).nutrition = 0;
+                }
+            }
             return VALID_DRINKS.get(item)[0].intValue();
+        }
         else
             return VALID_FOODS.get(item)[0].intValue();
     }
@@ -176,7 +183,7 @@ public class ThirstHelper
 
     private static boolean checkKeywords(ItemStack itemStack)
     {
-        if(!CommonConfig.ENABLE_KEYWORD_CONFIG.get())
+        if(!KeyWordConfig.ENABLE_KEYWORD_CONFIG.get())
             return false;
 
         if(!itemStack.isEdible())
