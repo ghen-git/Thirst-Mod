@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -119,7 +118,7 @@ public class TooltipOverlayHandler {
         {
             ItemStack itemStack = foodTooltip.itemStack;
             Minecraft mc = Minecraft.getInstance();
-            if (shouldShowTooltip(itemStack, mc.player))
+            if (shouldShowTooltip(itemStack))
                 return;
 
             Screen gui = mc.screen;
@@ -249,8 +248,7 @@ public class TooltipOverlayHandler {
             return;
 
         ItemStack hoveredStack = event.getItemStack();
-        Minecraft mc = Minecraft.getInstance();
-        if (shouldShowTooltip(hoveredStack, mc.player))
+        if (shouldShowTooltip(hoveredStack))
             return;
 
         ThirstValues thirstValues = new ThirstValues(ThirstHelper.getThirst(hoveredStack), ThirstHelper.getQuenched(hoveredStack));
@@ -260,7 +258,7 @@ public class TooltipOverlayHandler {
             event.getTooltipElements().add(Either.right(foodTooltip));
     }
 
-    private static boolean shouldShowTooltip(ItemStack hoveredStack, Player player)
+    private static boolean shouldShowTooltip(ItemStack hoveredStack)
     {
         if (hoveredStack.isEmpty())
             return true;
