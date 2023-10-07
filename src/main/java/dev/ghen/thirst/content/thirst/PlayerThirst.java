@@ -1,5 +1,6 @@
 package dev.ghen.thirst.content.thirst;
 
+import de.teamlapen.vampirism.api.VampirismAPI;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
-import org.lwjgl.system.CallbackI;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirst implements IThirst
@@ -26,8 +26,8 @@ public class PlayerThirst implements IThirst
     int damageTimer = 0;
     int syncTimer = 0;
     float prevTickExhaustion = 0.0F;
-    Vec3 lastPos = Vec3.ZERO;
     boolean justHealed = false;
+    Vec3 lastPos = Vec3.ZERO;
 
     public Vec3 getLastPos()
     {
@@ -81,6 +81,16 @@ public class PlayerThirst implements IThirst
 
         if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
             return;
+
+        if(ModList.get().isLoaded("tombstone") && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape)) {
+            return;
+        }
+
+        if(ModList.get().isLoaded("vampirism"))
+        {
+            if(VampirismAPI.getVampirePlayer(player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
+                return;
+        }
 
         if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
                 updateExhaustion(player);

@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.gui;
 
+import de.teamlapen.vampirism.api.VampirismAPI;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
@@ -15,12 +16,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.fml.ModList;
 
 @OnlyIn(Dist.CLIENT)
 public class ThirstBarRenderer
 {
     public static IThirst PLAYER_THIRST = null;
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
+    public static Boolean CancelRender = false;
     static Minecraft minecraft = Minecraft.getInstance();
 
     public static final IIngameOverlay THIRST_OVERLAY = OverlayRegistry.registerOverlayAbove(ForgeIngameGui.FOOD_LEVEL_ELEMENT, "Thirst Level", (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
@@ -28,6 +31,13 @@ public class ThirstBarRenderer
         boolean isMounted = minecraft.player.getVehicle() instanceof LivingEntity;
         if (!isMounted && !minecraft.options.hideGui && gui.shouldDrawSurvivalElements())
         {
+            if(ModList.get().isLoaded("vampirism"))
+            {
+                if(VampirismAPI.getVampirePlayer(minecraft.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false)){
+                    CancelRender=true;
+                    return;
+                }
+            }
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);
         }

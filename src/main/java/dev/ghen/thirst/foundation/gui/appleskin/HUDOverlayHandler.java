@@ -45,7 +45,7 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayBelow(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Exhaustion", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements())
+            if (ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender)
             {
                 renderExhaustion(gui, mStack);
             }
@@ -54,7 +54,7 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayAbove(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Overlay", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get())
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.CancelRender)
             {
                 renderThirstOverlay(mStack);
             }
