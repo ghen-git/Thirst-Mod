@@ -43,9 +43,9 @@ public class KeyWordConfig {
                 .define("defaultSoupHydration", 4);
         DEFAULT_SOUP_QUENCHNESS = BUILDER.comment("Default quenchness for soups selected with keywords [0-20]")
                 .define("defaultSoupQuenchness", 5);
-        DEFAULT_FRUIT_HYDRATION = BUILDER.comment("Default hydration for drinks selected with keywords [0-20]")
+        DEFAULT_FRUIT_HYDRATION = BUILDER.comment("Default hydration for fruits selected with keywords [0-20]")
                 .define("defaultFruitHydration", 2);
-        DEFAULT_FRUIT_QUENCHNESS = BUILDER.comment("Default quenchness for drinks selected with keywords [0-20]")
+        DEFAULT_FRUIT_QUENCHNESS = BUILDER.comment("Default quenchness for fruits selected with keywords [0-20]")
                 .define("defaultFruitQuenchness", 3);
 
         BUILDER.push("Blacklisted Keywords")
