@@ -23,17 +23,21 @@ public class ThirstBarRenderer
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
 
     public static final ResourceLocation MC_ICONS = new ResourceLocation("textures/gui/icons.png");
+    public static Boolean CancelRender = false;
     static Minecraft minecraft = Minecraft.getInstance();
     protected final static RandomSource random = RandomSource.create();
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
+        CancelRender=true;
         if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
         {
             if(ModList.get().isLoaded("vampirism"))
             {
-                if(VampirismAPI.getVampirePlayer(minecraft.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
+                if(VampirismAPI.getVampirePlayer(minecraft.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false)){
+                    CancelRender=true;
                     return;
+                }
             }
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);

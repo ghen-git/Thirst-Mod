@@ -1,7 +1,10 @@
 package dev.ghen.thirst.foundation.gui.appleskin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.teamlapen.vampirism.api.VampirismAPI;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.foundation.common.capability.IThirst;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,14 +20,9 @@ import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import org.lwjgl.opengl.GL11;
 import squeek.appleskin.ModConfig;
 import squeek.appleskin.util.IntPoint;
-import dev.ghen.thirst.Thirst;
-import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.foundation.common.capability.IThirst;
-import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 
 import java.util.Random;
 import java.util.Vector;
@@ -53,13 +51,8 @@ public class HUDOverlayHandler {
             Minecraft mc = Minecraft.getInstance();
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() ) {
 
-                if(ModList.get().isLoaded("vampirism"))
-                {
-                    if(VampirismAPI.getVampirePlayer(mc.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
-                        return;
-                }
+            if (ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
                 renderExhaustion(gui, event.getGuiGraphics());
             }
         }
@@ -68,18 +61,12 @@ public class HUDOverlayHandler {
 
     @SubscribeEvent
     public void onRenderGuiOverlayPost(RenderGuiOverlayEvent.Post event) {
-        Minecraft mc;
-        ForgeGui gui;
         if (event.getOverlay() == GuiOverlayManager.findOverlay(THIRST_LEVEL_ELEMENT)) {
-            mc = Minecraft.getInstance();
-            gui = (ForgeGui)mc.gui;
+            Minecraft mc = Minecraft.getInstance();
+            ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
-                if(ModList.get().isLoaded("vampirism"))
-                {
-                    if(VampirismAPI.getVampirePlayer(mc.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
-                        return;
-                }
+
+            if (ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
                 renderThirstOverlay(event.getGuiGraphics());
             }
         }
@@ -344,12 +331,5 @@ public class HUDOverlayHandler {
     static {
         modIcons = Thirst.asResource("textures/gui/appleskin_icons.png");
         THIRST_LEVEL_ELEMENT = Thirst.asResource("thirst_level");
-    }
-
-    enum RenderOverlayType {
-        THIRST;
-
-        RenderOverlayType() {
-        }
     }
 }
