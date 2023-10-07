@@ -1,6 +1,7 @@
 package dev.ghen.thirst.foundation.gui.appleskin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,7 @@ import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import org.lwjgl.opengl.GL11;
 import squeek.appleskin.ModConfig;
 import squeek.appleskin.util.IntPoint;
@@ -51,7 +53,13 @@ public class HUDOverlayHandler {
             Minecraft mc = Minecraft.getInstance();
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get()) {
+            if (ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() ) {
+
+                if(ModList.get().isLoaded("vampirism"))
+                {
+                    if(VampirismAPI.getVampirePlayer(mc.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
+                        return;
+                }
                 renderExhaustion(gui, event.getGuiGraphics());
             }
         }
@@ -66,7 +74,12 @@ public class HUDOverlayHandler {
             mc = Minecraft.getInstance();
             gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
+            if (ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements()) {
+                if(ModList.get().isLoaded("vampirism"))
+                {
+                    if(VampirismAPI.getVampirePlayer(mc.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
+                        return;
+                }
                 renderThirstOverlay(event.getGuiGraphics());
             }
         }
@@ -76,9 +89,6 @@ public class HUDOverlayHandler {
     public static void renderExhaustion(ForgeGui gui, GuiGraphics mStack)
     {
         foodIconsOffset = gui.rightHeight;
-
-        /*if (!ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get())
-            return;*/
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
@@ -106,15 +116,11 @@ public class HUDOverlayHandler {
 
         generateHungerBarOffsets(top, right, mc.gui.getGuiTicks(), player);
 
-        // cancel render overlay event when configuration disabled.
-        /*if (!ModConfig.SHOW_SATURATION_OVERLAY.get())
-            saturationRenderEvent.setCanceled(true);*/
-
         drawSaturationOverlay(0, thirstData.getQuenched(), guiGraphics , right, top, 1f);
 
         // try to get the item stack in the player hand
         ItemStack heldItem = player.getMainHandItem();
-        if (/*ModConfig.SHOW_FOOD_VALUES_OVERLAY_WHEN_OFFHAND.get() && */!ThirstHelper.itemRestoresThirst(heldItem))
+        if (ModConfig.SHOW_FOOD_VALUES_OVERLAY_WHEN_OFFHAND.get() && !ThirstHelper.itemRestoresThirst(heldItem))
             heldItem = player.getOffhandItem();
 
         boolean shouldRenderHeldItemValues = !heldItem.isEmpty() && ThirstHelper.itemRestoresThirst(heldItem);
@@ -126,9 +132,6 @@ public class HUDOverlayHandler {
 
         ThirstValues thirstValues = new ThirstValues(ThirstHelper.getThirst(heldItem), ThirstHelper.getQuenched(heldItem));
         //FoodValuesEvent foodValuesEvent = new FoodValuesEvent(player, heldItem, FoodHelper.getDefaultFoodValues(heldItem, player), modifiedFoodValues);
-
-        /*if (!ModConfig.SHOW_FOOD_VALUES_OVERLAY.get())
-            return;*/
 
         // notify everyone that we should render hunger hud overlay
         /*HUDOverlayEvent.HungerRestored renderRenderEvent = new HUDOverlayEvent.HungerRestored(stats.getFoodLevel(), heldItem, modifiedFoodValues, right, top, poseStack);

@@ -16,7 +16,7 @@ public class CommonConfig
 
 
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_KEYWORD_CONFIG;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DRINKS_NUTRITION;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DEHYDRATION_HALTS_HEALTH_REGEN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT;
@@ -50,7 +50,7 @@ public class CommonConfig
     {
         BUILDER.push("General");
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
-        ENABLE_KEYWORD_CONFIG = BUILDER.comment("If the keyword config should be taken into consideration").define("enableKeywordConfig", false);
+        ENABLE_DRINKS_NUTRITION=BUILDER.comment("Whether foods considered as drinks should have nutrition").define("enableDrinksNutrition",true);
         BUILDER.pop();
 
         BUILDER.push("Drinking Mechanics");

@@ -53,6 +53,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 
+@SuppressWarnings("SpellCheckingInspection")
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
@@ -143,10 +144,8 @@ public class WaterPurity
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.EGG_GROG.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.DREAD_NOG.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STEEL_TOE_STOUT.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.GLITTERING_GRENADINE.get())));
