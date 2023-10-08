@@ -18,6 +18,7 @@
     "create.MixinBasinRecipe",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
+    "create.MixinFluidTankBlockEntity",
     "create.MixinGenericItemEmptying",
     "create.MixinGenericItemFilling",
     "create.MixinOpenEndedPipe",
