@@ -25,6 +25,7 @@
     "createcenterkitchen.MixinKettlePoint",
     "farmersrespite.MixinKettleBlock",
     "farmersrespite.MixinKettleBlockEntity",
+    "jade.MixinFluidView",
     "toughasnails.MixinEmptyCanteenItem",
     "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
