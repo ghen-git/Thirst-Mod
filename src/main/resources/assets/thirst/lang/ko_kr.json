@@ -13,7 +13,7 @@
   "thirst.purity.slightly_dirty": "약간 더러움",
   "thirst.purity.acceptable": "허용",
   "thirst.purity.purified": "정제된",
-  "block.thirst.sand_filter": "Sand Filter",
+  "block.thirst.sand_filter": "모래 필터",
 
   "thirst.ponder.sand_filter.header": "Purifying Water with a Sand Filter",
   "thirst.ponder.sand_filter.text_1": "A Sand Filter purifies by one step water pumped through it",

@@ -33,8 +33,6 @@ public class HUDOverlayHandler {
     private static float flashAlpha = 0f;
     private static byte alphaDir = 1;
     protected static int foodIconsOffset;
-
-    public static final Vector<IntPoint> healthBarOffsets = new Vector<>();
     public static final Vector<IntPoint> foodBarOffsets = new Vector<>();
     private static final Random random = new Random();
 
@@ -47,8 +45,9 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayBelow(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Exhaustion", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements())
-            {
+            boolean isAlive = mc.player.isAlive();
+            //stop getExhaustion when player is dead to prevent error log spam
+            if (isAlive && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
                 renderExhaustion(gui, mStack);
             }
         });
@@ -56,7 +55,7 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayAbove(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Overlay", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get())
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.CancelRender)
             {
                 renderThirstOverlay(mStack);
             }
@@ -93,15 +92,11 @@ public class HUDOverlayHandler {
 
         generateHungerBarOffsets(top, right, mc.gui.getGuiTicks(), player);
 
-        // cancel render overlay event when configuration disabled.
-        /*if (!ModConfig.SHOW_SATURATION_OVERLAY.get())
-            saturationRenderEvent.setCanceled(true);*/
-
         drawSaturationOverlay(0, thirstData.getQuenched(), mc, mStack, right, top, 1f);
 
         // try to get the item stack in the player hand
         ItemStack heldItem = player.getMainHandItem();
-        if (/*ModConfig.SHOW_FOOD_VALUES_OVERLAY_WHEN_OFFHAND.get() && */!ThirstHelper.itemRestoresThirst(heldItem))
+        if (ModConfig.SHOW_FOOD_VALUES_OVERLAY_WHEN_OFFHAND.get() && !ThirstHelper.itemRestoresThirst(heldItem))
             heldItem = player.getOffhandItem();
 
         boolean shouldRenderHeldItemValues = !heldItem.isEmpty() && ThirstHelper.itemRestoresThirst(heldItem);

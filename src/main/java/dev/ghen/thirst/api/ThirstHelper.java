@@ -10,7 +10,6 @@ import dev.momostudios.coldsweat.api.util.TempHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +62,7 @@ public class ThirstHelper
      * Adds a hydration and "quenchness" value to an item via code, and treats it as food.
      * Can be overwritten by the player in the config.
      * */
+    @SuppressWarnings("unused")
     public static void addFood(Item item, int thirst, int quenched)
     {
         VALID_FOODS.put(item, new Number[]{thirst, quenched});
@@ -71,6 +72,7 @@ public class ThirstHelper
      * Adds a hydration and "quenchness" value to an item via code, and treats it as a drink.
      * Can be overwritten by the player in the config.
      * */
+    @SuppressWarnings("unused")
     public static void addDrink(Item item, int thirst, int quenched)
     {
         VALID_DRINKS.put(item, new Number[]{thirst, quenched});
@@ -80,8 +82,14 @@ public class ThirstHelper
     {
         Item item = itemStack.getItem();
 
-        if(VALID_DRINKS.containsKey(item))
+        if(VALID_DRINKS.containsKey(item)) {
+            if (!CommonConfig.ENABLE_DRINKS_NUTRITION.get()){
+                if (item.getFoodProperties() != null) {
+                    Objects.requireNonNull(item.getFoodProperties()).nutrition = 0;
+                }
+            }
             return VALID_DRINKS.get(item)[0].intValue();
+        }
         else
             return VALID_FOODS.get(item)[0].intValue();
     }
@@ -175,7 +183,7 @@ public class ThirstHelper
 
     private static boolean checkKeywords(ItemStack itemStack)
     {
-        if(!CommonConfig.ENABLE_KEYWORD_CONFIG.get())
+        if(!KeyWordConfig.ENABLE_KEYWORD_CONFIG.get())
             return false;
 
         if(!itemStack.isEdible())
@@ -185,7 +193,7 @@ public class ThirstHelper
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        if(matcher.find()|| itemStack.getItem() instanceof BlockItem)
+        if(matcher.find())
             return false;
 
         pattern = keywordDrink;
