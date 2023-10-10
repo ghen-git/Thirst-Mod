@@ -18,6 +18,7 @@ public class MixinFluidView {
         if(WaterPurity.hasPurity(instance)){
             return Component.literal(Objects.requireNonNull(
                     WaterPurity.getPurityText(WaterPurity.getPurity(instance))))
+                    .append(" ")
                     .append(instance.getDisplayName());
 
         }

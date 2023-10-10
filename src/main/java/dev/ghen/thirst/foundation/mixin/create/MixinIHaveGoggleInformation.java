@@ -1,45 +1,29 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.LangBuilder;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(value = FluidTankBlockEntity.class,remap = false)
-public abstract class MixinFluidTankBlockEntity implements IHaveGoggleInformation {
-    @Shadow public abstract FluidTankBlockEntity getControllerBE();
-
+@Mixin(value = IHaveGoggleInformation.class,remap = false)
+public interface MixinIHaveGoggleInformation {
     /**
      * @author mlus
      * @reason add purity information
      */
     @Overwrite
-    @Override
-    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        FluidTankBlockEntity controllerBE = getControllerBE();
-        if (controllerBE == null)
-            return false;
-        if (controllerBE.boiler.addToGoggleTooltip(tooltip, isPlayerSneaking, controllerBE.getTotalTankSize()))
-            return true;
-        return this.containedFluidTooltip(tooltip, isPlayerSneaking,
-                controllerBE.getCapability(ForgeCapabilities.FLUID_HANDLER));
-    }
-
-    public boolean containedFluidTooltip(List<Component> tooltip, boolean isPlayerSneaking,
-                                         LazyOptional<IFluidHandler> handler) {
+    default boolean containedFluidTooltip(List<Component> tooltip, boolean isPlayerSneaking,
+                                          LazyOptional<IFluidHandler> handler) {
         Optional<IFluidHandler> resolve = handler.resolve();
         if (resolve.isEmpty())
             return false;
@@ -61,8 +45,9 @@ public abstract class MixinFluidTankBlockEntity implements IHaveGoggleInformatio
             if(WaterPurity.hasPurity(fluidStack)){
                 int purity = WaterPurity.getPurity(fluidStack);
                 ChatFormatting color = getPurityColor(purity);
-                Lang.fluidName(fluidStack)
-                        .text(" "+WaterPurity.getPurityText(purity))
+                Lang.builder()
+                        .text(WaterPurity.getPurityText(purity)+" ")
+                        .add(fluidStack.getDisplayName().copy())
                         .style(color)
                         .forGoggles(tooltip, 1);
             }else {
@@ -105,11 +90,11 @@ public abstract class MixinFluidTankBlockEntity implements IHaveGoggleInformatio
         return true;
     }
 
-    public ChatFormatting getPurityColor(int purity){
+    default ChatFormatting getPurityColor(int purity){
         if(purity == 3){
-            return ChatFormatting.BLUE;
+            return ChatFormatting.AQUA;
         }else if(purity == 2){
-            return ChatFormatting.DARK_BLUE;
+            return ChatFormatting.BLUE;
         }else if(purity == 1){
             return ChatFormatting.GRAY;
         }else if(purity == 0){
