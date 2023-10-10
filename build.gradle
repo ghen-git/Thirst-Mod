@@ -127,6 +127,7 @@ dependencies {
     implementation fg.deobf("curse.maven:brewin-and-chewin-637808:3854764")
     implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599771")
     implementation fg.deobf("curse.maven:tough-as-nails-246391:3804267")
+    implementation fg.deobf("curse.maven:jade-324717:4575623")
 
     implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4082397")
     implementation fg.deobf("curse.maven:corail-tombstone-243707:4775782")
