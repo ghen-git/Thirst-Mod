@@ -1,6 +1,7 @@
 package dev.ghen.thirst.foundation.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import de.teamlapen.vampirism.api.VampirismAPI;
 import net.minecraft.client.gui.GuiGraphics;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
@@ -14,6 +15,7 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.fml.ModList;
 
 public class ThirstBarRenderer
 {
@@ -21,13 +23,22 @@ public class ThirstBarRenderer
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
 
     public static final ResourceLocation MC_ICONS = new ResourceLocation("textures/gui/icons.png");
+    public static Boolean CancelRender = false;
     static Minecraft minecraft = Minecraft.getInstance();
     protected final static RandomSource random = RandomSource.create();
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
+        CancelRender=true;
         if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
         {
+            if(ModList.get().isLoaded("vampirism"))
+            {
+                if(VampirismAPI.getVampirePlayer(minecraft.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false)){
+                    CancelRender=true;
+                    return;
+                }
+            }
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);
         }
