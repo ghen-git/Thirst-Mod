@@ -1,0 +1,22 @@
+{
+  "death.attack.dehydrate": "%1$s zmarł od odwodnienia",
+  "death.attack.dehydrate.player": "%1$s zmarł od odwodnienia podczas walki z %2$s",
+  "item.thirst.wooden_water_bowl": "Drewniana Miska z Wodą",
+  "item.thirst.terracotta_water_bowl": "Miska z Wodą z Terakoty",
+  "item.thirst.terracotta_bowl": "Miska z Terakoty",
+  "item.thirst.clay_bowl": "Gliniana Miska",
+  "thirst.container.kettle.no_water": "Brak Wody",
+  "thirst.container.kettle.has_single_water": "Zawiera 1 szklankę %s wody",
+  "thirst.container.kettle.has_many_water": "Zawiera %1$s szklanki %2$s wody",
+  "itemGroup.thirst": "Pragnienie",
+  "thirst.purity.dirty": "Brudna",
+  "thirst.purity.slightly_dirty": "Lekko Zabrudzona",
+  "thirst.purity.acceptable": "Akceptowalna",
+  "thirst.purity.purified": "Oczyszczona",
+  "block.thirst.sand_filter": "Filtr Piaskowy",
+
+  "thirst.ponder.sand_filter.header": "Oczyszczanie wody Filtrem Piaskowym",
+  "thirst.ponder.sand_filter.text_1": "Filter Piaskowy oczyszcza w jednym stopniu pompowaną przez niego wodę",
+  "thirst.ponder.sand_filter.text_2": "Brudna Woda musi być pompowana z góry...",
+  "thirst.ponder.sand_filter.text_3": "a Oczyszczona Woda może być wypompowywana z dołu"
+}

@@ -9,22 +9,22 @@ import umpaz.brewinandchewin.common.crafting.KegRecipe;
 
 import java.util.Optional;
 
-@Mixin(KegBlockEntity.class)
+@Mixin(value = KegBlockEntity.class,remap = false)
 public interface KegBlockEntityAccessor
 {
-    @Invoker(remap = false)
+    @Invoker
     boolean invokeHasInput();
-    @Invoker(remap = false)
+    @Invoker
     Optional<KegRecipe> invokeGetMatchingRecipe(RecipeWrapper inventoryWrapper);
-    @Invoker(remap = false)
+    @Invoker
     boolean invokeCanFerment(KegRecipe recipe);
-    @Invoker(remap = false)
+    @Invoker
     boolean invokeDoesDrinkHaveContainer(ItemStack meal);
-    @Invoker(remap = false)
+    @Invoker
     void invokeMoveDrinkToOutput();
-    @Invoker(remap = false)
+    @Invoker
     void invokeUseStoredContainersOnMeal();
 
-    @Invoker(remap = false)
+    @Invoker
     boolean invokeProcessFermenting(KegRecipe recipe, KegBlockEntity keg);
 }

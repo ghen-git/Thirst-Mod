@@ -1,5 +1,6 @@
 package dev.ghen.thirst.content.thirst;
 
+import de.teamlapen.vampirism.api.VampirismAPI;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
@@ -80,6 +81,16 @@ public class PlayerThirst implements IThirst
 
         if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
             return;
+
+        if(ModList.get().isLoaded("tombstone") && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape)) {
+            return;
+        }
+
+        if(ModList.get().isLoaded("vampirism"))
+        {
+            if(VampirismAPI.getVampirePlayer(player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
+                return;
+        }
 
         if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
                 updateExhaustion(player);

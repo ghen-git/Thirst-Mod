@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = "1.3.2"
+version = "${mod_version}"
 group = 'dev.ghen.thirst'
 
 java {
@@ -138,6 +138,10 @@ dependencies {
     implementation fg.deobf("curse.maven:collectors-reap-807101:4485855")
     implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599830")
     implementation fg.deobf("curse.maven:tough-as-nails-246391:3871450")
+    implementation fg.deobf("curse.maven:jade-324717:4719987")
+
+    implementation fg.deobf("curse.maven:corail-tombstone-243707:4775786")
+    implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4649951")
 
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))

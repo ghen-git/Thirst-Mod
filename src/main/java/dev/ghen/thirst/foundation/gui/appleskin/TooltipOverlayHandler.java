@@ -23,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import squeek.appleskin.ModConfig;
-import squeek.appleskin.api.food.FoodValues;
 import squeek.appleskin.helpers.KeyHelper;
 
 @OnlyIn(Dist.CLIENT)
@@ -95,8 +94,6 @@ public class TooltipOverlayHandler {
     }
 
     static class FoodTooltip implements TooltipComponent {
-        private FoodValues defaultFood;
-        private FoodValues modifiedFood;
         private final int biggestHunger;
         private final float biggestSaturationIncrement;
         private int hungerBars;
