@@ -1,5 +1,6 @@
 package dev.ghen.thirst.api;
 
+import com.momosoftworks.coldsweat.api.util.Temperature;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.config.KeyWordConfig;
@@ -149,8 +150,9 @@ public class ThirstHelper
             float temp = biome.getBaseTemperature() + 0.2f;
 
             if(useColdSweatCaps)
-                {}
-//                temp = (float) (Temperature.get(player, Temperature.Type.BODY) / 100f);
+                {
+                    temp = (float) (Temperature.get(player, Temperature.Type.BODY) / 100f);
+                }
             else
             {
                 if(temp <= 0)

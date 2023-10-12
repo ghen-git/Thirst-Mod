@@ -131,7 +131,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("curse.maven:appleskin-248787:4605078")
-//    implementation fg.deobf("curse.maven:cold-sweat-506194:4613946")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:4787218")
     implementation fg.deobf("curse.maven:farmers-delight-398521:4638874")
 //    implementation fg.deobf("curse.maven:farmers-respite-551453:4081312")
 //    implementation fg.deobf("curse.maven:brewin-and-chewin-637808:4468049")
