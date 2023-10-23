@@ -58,6 +58,9 @@ public abstract class MixinFoodData
     )
     private void healWithHunger(Player player, float amount)
     {
+        if(!player.getCapability(ModCapabilities.PLAYER_THIRST).isPresent())
+            return;
+
         IThirst thirstData =  player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
         boolean shouldHeal = !CommonConfig.DEHYDRATION_HALTS_HEALTH_REGEN.get() || thirstData.getThirst() > 18;
 
