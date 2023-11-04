@@ -10,8 +10,6 @@ import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -116,10 +114,6 @@ public class PlayerThirst implements IThirst
         {
             updateThirstData(player);
             syncTimer = 0;
-        }
-
-        if(thirst<=6 && CommonConfig.MOVE_SLOW_WHEN_THIRSTY.get() && (!player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) || player.getEffect(MobEffect.byId(2)).getDuration()<5*20)){
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,20*9,0));
         }
         if (thirst <= 0)
         {
