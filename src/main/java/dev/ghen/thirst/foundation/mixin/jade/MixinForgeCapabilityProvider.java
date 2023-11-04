@@ -27,7 +27,7 @@ public class MixinForgeCapabilityProvider {
                 text = new TranslatableComponent("jade.fluid.empty");
             } else {
                 String amountText = VanillaPlugin.getDisplayHelper().humanReadableNumber(fluidStack.getAmount(), "B", true);
-                if(WaterPurity.hasPurity(fluidStack)){
+                if(WaterPurity.hasPurity(fluidStack) && WaterPurity.getPurity(fluidStack) != -1){
                     text = new TextComponent(WaterPurity.getPurityText(WaterPurity.getPurity(fluidStack))+" "+
                             new TranslatableComponent("jade.fluid",fluidStack.getDisplayName(), amountText).getString()
                             );
