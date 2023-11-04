@@ -42,7 +42,7 @@ public interface MixinIHaveGoggleInformation {
             if (fluidStack.isEmpty())
                 continue;
 
-            if(WaterPurity.hasPurity(fluidStack)){
+            if(WaterPurity.hasPurity(fluidStack) && WaterPurity.getPurity(fluidStack) != -1){
                 int purity = WaterPurity.getPurity(fluidStack);
                 ChatFormatting color = getPurityColor(purity);
                 Lang.builder()
