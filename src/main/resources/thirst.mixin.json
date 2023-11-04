@@ -32,6 +32,7 @@
     "toughasnails.MixinThirstHelperImpl"
   ],
   "client": [
+    "MixinLocalPlayer",
     "farmersrespite.MixinKettleScreen"
   ],
   "minVersion": "0.8"
