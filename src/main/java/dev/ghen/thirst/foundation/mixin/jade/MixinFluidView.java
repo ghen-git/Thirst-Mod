@@ -17,7 +17,9 @@ public class MixinFluidView {
     @Redirect(method ="readDefault", at = @At(value = "INVOKE",target = "Lsnownee/jade/util/CommonProxy;getFluidName(Lsnownee/jade/api/fluid/JadeFluidObject;)Lnet/minecraft/network/chat/Component;"))
     private static Component read(JadeFluidObject fluid){
         FluidStack instance = CommonProxy.toFluidStack(fluid);
-        if(WaterPurity.hasPurity(instance)){
+        if(instance.isEmpty()) return CommonProxy.getFluidName(fluid);
+
+        if(WaterPurity.hasPurity(instance) && WaterPurity.getPurity(instance)!=-1){
             return Component.literal(Objects.requireNonNull(
                     WaterPurity.getPurityText(WaterPurity.getPurity(instance))))
                     .append(" ")
