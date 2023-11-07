@@ -39,19 +39,23 @@ public class Thirst
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::clientSetup);
         modBus.addListener(this::registerCapabilities);
-        modBus.addListener(ThirstBarRenderer::registerThirstOverlay);
+
+        if(FMLEnvironment.dist.isClient()){
+            modBus.addListener(ThirstBarRenderer::registerThirstOverlay);
+
+            if(ModList.get().isLoaded("appleskin"))
+            {
+                HUDOverlayHandler.init();
+                TooltipOverlayHandler.init();
+                modBus.addListener(this::onRegisterClientTooltipComponentFactories);
+            }
+        }
 
         ItemInit.ITEMS.register(modBus);
 
         if(ModList.get().isLoaded("create"))
         {
             CreateRegistry.register();
-        }
-        if(ModList.get().isLoaded("appleskin") && FMLEnvironment.dist.isClient())
-        {
-            HUDOverlayHandler.init();
-            TooltipOverlayHandler.init();
-            modBus.addListener(this::onRegisterClientTooltipComponentFactories);
         }
 
         ThirstTab.register(modBus);

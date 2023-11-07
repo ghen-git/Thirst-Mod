@@ -27,6 +27,7 @@
     "toughasnails.MixinTooltipHandler"
   ],
   "client": [
+    "MixinLocalPlayer"
   ],
   "minVersion": "0.8"
 }
