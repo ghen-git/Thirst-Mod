@@ -29,6 +29,7 @@ public class ThirstBarRenderer
     public static final IIngameOverlay THIRST_OVERLAY = OverlayRegistry.registerOverlayAbove(ForgeIngameGui.FOOD_LEVEL_ELEMENT, "Thirst Level", (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = minecraft.player.getVehicle() instanceof LivingEntity;
+        CancelRender=false;
         if (!isMounted && !minecraft.options.hideGui && gui.shouldDrawSurvivalElements())
         {
             if(ModList.get().isLoaded("vampirism"))
