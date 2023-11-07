@@ -27,7 +27,7 @@ public class ThirstBarRenderer
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
-        CancelRender=true;
+        CancelRender=false;
         if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
         {
             if(ModList.get().isLoaded("vampirism"))
@@ -41,7 +41,6 @@ public class ThirstBarRenderer
             render(gui, screenWidth, screenHeight, poseStack);
         }
     };
-
     public static void registerThirstOverlay(RegisterGuiOverlaysEvent event)
     {
         event.registerAbove(VanillaGuiOverlay.FOOD_LEVEL.id(), "thirst_level", THIRST_OVERLAY);

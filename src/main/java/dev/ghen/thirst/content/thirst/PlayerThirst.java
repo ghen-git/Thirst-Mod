@@ -115,7 +115,6 @@ public class PlayerThirst implements IThirst
             updateThirstData(player);
             syncTimer = 0;
         }
-
         if (thirst <= 0)
         {
             ++damageTimer;

@@ -15,7 +15,7 @@ public class MixinFluidView {
 
     @Redirect(method ="read", at = @At(value = "INVOKE",target = "Lnet/minecraftforge/fluids/FluidStack;getDisplayName()Lnet/minecraft/network/chat/Component;"))
     private static Component read(FluidStack instance){
-        if(WaterPurity.hasPurity(instance)){
+        if(WaterPurity.hasPurity(instance) && WaterPurity.getPurity(instance) != -1){
             return Component.literal(Objects.requireNonNull(
                     WaterPurity.getPurityText(WaterPurity.getPurity(instance))))
                     .append(" ")
