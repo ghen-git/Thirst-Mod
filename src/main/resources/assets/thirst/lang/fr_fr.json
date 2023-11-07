@@ -1,0 +1,22 @@
+{
+  "death.attack.dehydrate": "%1$s est mort(e) de déshydratation",
+  "death.attack.dehydrate.player": "%1$s est mort(e) de déshydratation en combattant %2$s",
+  "item.thirst.wooden_water_bowl": "Bol d'eau en bois",
+  "item.thirst.terracotta_water_bowl": "Bol d'eau en terre cuite",
+  "item.thirst.terracotta_bowl": "Bol en terre cuite",
+  "item.thirst.clay_bowl": "Bol en argile",
+  "thirst.container.kettle.no_water": "Pas d'eau",
+  "thirst.container.kettle.has_single_water": "Contient 1 verre d'eau %s",
+  "thirst.container.kettle.has_many_water": "Contient %1$s verres d'eau %2$s",
+  "itemGroup.thirst": "Thirst was Taken",
+  "thirst.purity.dirty": "Sale",
+  "thirst.purity.slightly_dirty": "Un peu sale",
+  "thirst.purity.acceptable": "Buvable",
+  "thirst.purity.purified": "Purifiée",
+  "block.thirst.sand_filter": "Filtre à sable",
+
+  "thirst.ponder.sand_filter.header": "Purifier de l'eau avec un Filtre à sable",
+  "thirst.ponder.sand_filter.text_1": "Un Filtre à sable effectue une étape de purification quand de l'eau y est pompée à travers",
+  "thirst.ponder.sand_filter.text_2": "L'eau sale doit être pompée dans le filtre par dessus...",
+  "thirst.ponder.sand_filter.text_3": "et l'eau purifiée peut être pompée par le dessous"
+}
