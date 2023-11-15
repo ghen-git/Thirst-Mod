@@ -7,7 +7,7 @@ license="MIT license"
 issueTrackerURL="https://github.com/ghen-git/Thirst-Mod/issues"
 [[mods]]
 modId="thirst"
-version="${file.jarVersion}"
+version="1.3.5"
 displayName="Thirst was Taken"
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional

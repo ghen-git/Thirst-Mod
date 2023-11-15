@@ -51,8 +51,8 @@ public class CommonConfig
     {
         BUILDER.push("General");
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
-        MOVE_SLOW_WHEN_THIRSTY=BUILDER.comment("Whether players will get slowness effect when thirsty").define("moveSlowWhenThirsty",true);
-        ENABLE_DRINKS_NUTRITION=BUILDER.comment("Whether foods considered as drinks should have nutrition").define("enableDrinksNutrition",true);
+        MOVE_SLOW_WHEN_THIRSTY=BUILDER.comment("Whether players won't be able to sprint if their thirst bar is 3 droplets or less").define("moveSlowWhenThirsty",true);
+        ENABLE_DRINKS_NUTRITION=BUILDER.comment("Whether foods labeled as drinks will restore hunger").define("enableDrinksNutrition",true);
         BUILDER.pop();
 
         BUILDER.push("Drinking Mechanics");

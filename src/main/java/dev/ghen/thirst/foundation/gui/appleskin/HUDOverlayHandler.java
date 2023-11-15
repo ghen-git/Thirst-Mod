@@ -6,6 +6,7 @@ import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -47,7 +48,7 @@ public class HUDOverlayHandler {
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
             boolean isAlive = mc.player.isAlive();
             //stop getExhaustion when player is dead to prevent error log spam
-            if (isAlive && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
+            if (isAlive && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.cancelRender) {
                 renderExhaustion(gui, mStack);
             }
         });
@@ -55,7 +56,7 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayAbove(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Overlay", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.CancelRender)
+            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.cancelRender)
             {
                 renderThirstOverlay(mStack);
             }
@@ -70,8 +71,8 @@ public class HUDOverlayHandler {
         Player player = mc.player;
         assert player != null;
 
-        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91;
-        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
+        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get();
+        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset + ClientConfig.THIRST_BAR_Y_OFFSET.get();
         float exhaustion = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null).getExhaustion();
 
         drawExhaustionOverlay(exhaustion, mc, mStack, right, top);
@@ -87,8 +88,8 @@ public class HUDOverlayHandler {
         assert player != null;
         IThirst thirstData = player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
 
-        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset;
-        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91; // right of food bar
+        int top = mc.getWindow().getGuiScaledHeight() - foodIconsOffset + ClientConfig.THIRST_BAR_Y_OFFSET.get();
+        int right = mc.getWindow().getGuiScaledWidth() / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get(); // right of food bar
 
         generateHungerBarOffsets(top, right, mc.gui.getGuiTicks(), player);
 

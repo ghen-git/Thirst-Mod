@@ -1,6 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
 import de.teamlapen.vampirism.api.VampirismAPI;
+import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
@@ -21,6 +22,9 @@ import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirst implements IThirst
 {
+    public static boolean checkTombstoneEffects = false;
+    public static boolean checkFDEffects = false;
+    public static boolean checkVampirismEffects = false;
 
     int thirst = 20;
     int quenched = 5;
@@ -84,19 +88,14 @@ public class PlayerThirst implements IThirst
         if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
             return;
 
-        if(ModList.get().isLoaded("tombstone") && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape)) {
+        if(checkTombstoneEffects && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape))
             return;
-        }
 
-        if(ModList.get().isLoaded("vampirism"))
-        {
-            if(VampirismAPI.getVampirePlayer(player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
-                return;
-        }
+        if(checkVampirismEffects && Helper.isVampire(player))
+            return;
 
-        if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
-                updateExhaustion(player);
-        }
+        if (!checkFDEffects|| !player.hasEffect(ModEffects.NOURISHMENT.get()))
+            updateExhaustion(player);
 
         if (exhaustion > 4)
         {
@@ -117,10 +116,7 @@ public class PlayerThirst implements IThirst
             updateThirstData(player);
             syncTimer = 0;
         }
-
-        if(thirst<=6 && CommonConfig.MOVE_SLOW_WHEN_THIRSTY.get() && (!player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) || player.getEffect(MobEffect.byId(2)).getDuration()<5*20)){
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,20*9,0));
-        }
+        
         if (thirst <= 0)
         {
             ++damageTimer;
