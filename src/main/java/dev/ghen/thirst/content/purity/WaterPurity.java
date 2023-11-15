@@ -191,6 +191,10 @@ public class WaterPurity
 
                 TickHelper.nextTick(level, () -> {
                     BlockState blockState1 = level.getBlockState(pos);
+
+                    if(!blockState1.hasProperty(BLOCK_PURITY))
+                        return;
+
                     level.setBlock(
                             pos,
                             blockState1.setValue(BLOCK_PURITY, Math.min(purity, blockPurity) + 1),
@@ -232,46 +236,46 @@ public class WaterPurity
     @SubscribeEvent
     static void harvestRunningWater(PlayerInteractEvent.RightClickItem event)
     {
-        if(event.getEntity() != null)
+        if (event.getEntity() == null)
+            return;
+        ItemStack item = event.getItemStack();
+
+        if (!canHarvestRunningWater(item))
+            return;
+
+        Player player = event.getEntity();
+        Level level = player.level();
+        BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
+
+        if (!level.getFluidState(blockPos).is(FluidTags.WATER))
+            return;
+
+        SoundEvent sound;
+        ItemStack filledItem;
+
+        if(item.getItem() == Items.GLASS_BOTTLE && !level.getFluidState(blockPos).isSource())
         {
-            ItemStack item = event.getItemStack();
-            if(canHarvestRunningWater(item))
-            {
-                Player player = event.getEntity();
-                Level level = player.level();
-                BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
-
-                if(level.getFluidState(blockPos).is(FluidTags.WATER))
-                {
-                    SoundEvent sound;
-                    ItemStack filledItem;
-
-                    if(item.getItem() == Items.GLASS_BOTTLE && !level.getFluidState(blockPos).isSource())
-                    {
-                        sound = SoundEvents.BOTTLE_FILL;
-                        filledItem = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-                    }
-                    else if(item.getItem() == ItemInit.TERRACOTTA_BOWL.get())
-                    {
-                        sound = SoundEvents.BUCKET_FILL;
-                        filledItem = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
-                    }
-                    else
-                        return;
-
-                    level.playSound(player, player.getX(), player.getY(), player.getZ(), sound, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
-
-                    CompoundTag tag = filledItem.getOrCreateTag();
-                    tag.putInt("Purity", getBlockPurity(level, blockPos));
-
-                    ItemStack result = ItemUtils.createFilledResult(item, player, filledItem);
-
-                    player.setItemInHand(event.getHand(), result);
-                    event.setCanceled(true);
-                }
-            }
+            sound = SoundEvents.BOTTLE_FILL;
+            filledItem = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
         }
+        else if(item.getItem() == ItemInit.TERRACOTTA_BOWL.get())
+        {
+            sound = SoundEvents.BUCKET_FILL;
+            filledItem = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
+        }
+        else
+            return;
+
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), sound, SoundSource.NEUTRAL, 1.0F, 1.0F);
+        level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
+
+        CompoundTag tag = filledItem.getOrCreateTag();
+        tag.putInt("Purity", getBlockPurity(level, blockPos));
+
+        ItemStack result = ItemUtils.createFilledResult(item, player, filledItem);
+
+        player.setItemInHand(event.getHand(), result);
+        event.setCanceled(true);
     }
 
     /**
@@ -319,34 +323,18 @@ public class WaterPurity
 
     static boolean isFillableBlock(Block block)
     {
-        Iterator<Block> var1 = fillablesWithPurity.iterator();
+        for (Block fillable : fillablesWithPurity)
+        {
+            if (fillable == block)
+                return  true;
+        }
 
-        Block fillable;
-        do {
-            if (!var1.hasNext()) {
-                return false;
-            }
-
-            fillable = var1.next();
-        } while(fillable != block);
-
-        return true;
+        return false;
     }
 
     static boolean isFillableBlock(BlockState blockState)
     {
-        Iterator<Block> var1 = fillablesWithPurity.iterator();
-
-        Block fillable;
-        do {
-            if (!var1.hasNext()) {
-                return false;
-            }
-
-            fillable = var1.next();
-        } while(!blockState.is(fillable));
-
-        return true;
+        return isFillableBlock(blockState.getBlock());
     }
 
     static boolean canHarvestRunningWater(ItemStack item)
@@ -522,8 +510,7 @@ public class WaterPurity
         if(getPurity(item)!=-1)
             return givePurityEffects(player, ThirstHelper.getPurity(item));
         else
-            //this made item without purity considered as dirty
-            return givePurityEffects(player, 0);
+            return givePurityEffects(player, CommonConfig.DEFAULT_PURITY.get());
     }
 
     /**
@@ -623,7 +610,7 @@ public class WaterPurity
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
         DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
-        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
+        DispenseItemBehavior bottleDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
