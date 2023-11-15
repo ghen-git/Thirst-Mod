@@ -139,6 +139,9 @@ dependencies {
     implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599830")
     implementation fg.deobf("curse.maven:tough-as-nails-246391:3871450")
     implementation fg.deobf("curse.maven:jade-324717:4719987")
+    implementation fg.deobf("curse.maven:supplementaries-412082:4855909")
+    implementation fg.deobf("curse.maven:selene-499980:4843863")
+    implementation fg.deobf("curse.maven:lets-do-bakery-886559:4780907")
 
     implementation fg.deobf("curse.maven:corail-tombstone-243707:4775786")
     implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4649951")

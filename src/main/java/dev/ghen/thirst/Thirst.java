@@ -5,6 +5,7 @@ import dev.ghen.thirst.compat.create.CreateRegistry;
 import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.content.thirst.PlayerThirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.loot.ModLootModifiers;
 import dev.ghen.thirst.foundation.config.ClientConfig;
@@ -73,12 +74,29 @@ public class Thirst
 
         if(ModList.get().isLoaded("coldsweat"))
             ThirstHelper.shouldUseColdSweatCaps(true);
+
+        if(ModList.get().isLoaded("tombstone"))
+            PlayerThirst.checkTombstoneEffects = true;
+
+        if(ModList.get().isLoaded("vampirism"))
+            PlayerThirst.checkVampirismEffects = true;
+
+        if(ModList.get().isLoaded("farmersdelight"))
+            PlayerThirst.checkFDEffects = true;
+
+        if(ModList.get().isLoaded("bakery"))
+            PlayerThirst.checkLetsDoBakeryEffects = true;
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
     {
         if(ModList.get().isLoaded("create")){
             event.enqueueWork(ThirstPonders::register);
+        }
+
+        if(ModList.get().isLoaded("vampirism"))
+        {
+            ThirstBarRenderer.checkIfPlayerIsVampire = true;
         }
     }
 

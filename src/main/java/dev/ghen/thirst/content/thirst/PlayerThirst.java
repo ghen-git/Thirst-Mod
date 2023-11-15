@@ -1,6 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
 import de.teamlapen.vampirism.api.VampirismAPI;
+import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
@@ -19,6 +20,10 @@ import vectorwing.farmersdelight.common.registry.ModEffects;
 
 public class PlayerThirst implements IThirst
 {
+    public static boolean checkTombstoneEffects = false;
+    public static boolean checkFDEffects = false;
+    public static boolean checkVampirismEffects = false;
+    public static boolean checkLetsDoBakeryEffects = false;
 
     int thirst = 20;
     int quenched = 5;
@@ -82,18 +87,19 @@ public class PlayerThirst implements IThirst
         if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
             return;
 
-        if(ModList.get().isLoaded("tombstone") && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape)) {
+        if(checkTombstoneEffects && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape))
             return;
-        }
 
-        if(ModList.get().isLoaded("vampirism"))
+        if(checkVampirismEffects && Helper.isVampire(player))
+            return;
+
+        boolean isNourished = checkFDEffects && player.hasEffect(ModEffects.NOURISHMENT.get());
+        boolean isStuffed = checkLetsDoBakeryEffects &&
+                player.getActiveEffects().stream().anyMatch(e -> e.getDescriptionId().contains("stuffed"));
+
+        if (!isNourished && !isStuffed)
         {
-            if(VampirismAPI.getVampirePlayer(player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false))
-                return;
-        }
-
-        if (!ModList.get().isLoaded("farmersdelight") || !player.hasEffect(ModEffects.NOURISHMENT.get())) {
-                updateExhaustion(player);
+            updateExhaustion(player);
         }
 
         if (exhaustion > 4)

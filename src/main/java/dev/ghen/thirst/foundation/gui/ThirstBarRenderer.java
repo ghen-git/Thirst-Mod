@@ -2,10 +2,11 @@ package dev.ghen.thirst.foundation.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import de.teamlapen.vampirism.api.VampirismAPI;
+import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -21,19 +22,21 @@ public class ThirstBarRenderer
 {
     public static IThirst PLAYER_THIRST = null;
     public static ResourceLocation THIRST_ICONS = Thirst.asResource("textures/gui/thirst_icons.png");
-    public static Boolean CancelRender = false;
+    public static Boolean cancelRender = false;
+    public static Boolean checkIfPlayerIsVampire = false;
     static Minecraft minecraft = Minecraft.getInstance();
     protected final static RandomSource random = RandomSource.create();
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
         boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
-        CancelRender=false;
+        cancelRender =false;
         if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
         {
-            if(ModList.get().isLoaded("vampirism"))
+            if(checkIfPlayerIsVampire)
             {
-                if(VampirismAPI.getVampirePlayer(minecraft.player).lazyMap(vampire -> vampire.getLevel() > 0).orElse(false)){
-                    CancelRender=true;
+                if(Helper.isVampire(gui.getMinecraft().player))
+                {
+                    cancelRender =true;
                     return;
                 }
             }
@@ -56,8 +59,8 @@ public class ThirstBarRenderer
 
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, THIRST_ICONS);
-        int left = width / 2 + 91;
-        int top = height - gui.rightHeight;
+        int left = width / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get();
+        int top = height - gui.rightHeight + ClientConfig.THIRST_BAR_Y_OFFSET.get();
         gui.rightHeight += 10;
 
         int level = PLAYER_THIRST.getThirst();
