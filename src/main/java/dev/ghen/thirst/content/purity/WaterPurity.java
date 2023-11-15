@@ -191,6 +191,10 @@ public class WaterPurity
 
                 TickHelper.nextTick(level, () -> {
                     BlockState blockState1 = level.getBlockState(pos);
+
+                    if(!blockState1.hasProperty(BLOCK_PURITY))
+                        return;
+
                     level.setBlock(
                             pos,
                             blockState1.setValue(BLOCK_PURITY, Math.min(purity, blockPurity) + 1),
@@ -507,8 +511,7 @@ public class WaterPurity
         if(getPurity(item)!=-1)
             return givePurityEffects(player, ThirstHelper.getPurity(item));
         else
-            //this made item without purity considered as dirty
-            return givePurityEffects(player, 0);
+            return givePurityEffects(player, CommonConfig.DEFAULT_PURITY.get());
     }
 
     /**
@@ -608,7 +611,7 @@ public class WaterPurity
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
         DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
-        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
+        DispenseItemBehavior bottleDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.MethodReflection(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
