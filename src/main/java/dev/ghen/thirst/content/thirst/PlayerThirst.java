@@ -1,6 +1,5 @@
 package dev.ghen.thirst.content.thirst;
 
-import de.teamlapen.vampirism.api.VampirismAPI;
 import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
@@ -14,7 +13,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -84,7 +82,7 @@ public class PlayerThirst implements IThirst
     {
         Difficulty difficulty = player.level.getDifficulty();
 
-        if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
+        if(player.getAbilities().invulnerable || (!CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get() && player.hasEffect(MobEffects.FIRE_RESISTANCE)))
             return;
 
         if(checkTombstoneEffects && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape))

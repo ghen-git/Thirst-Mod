@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -57,7 +56,7 @@ import vectorwing.farmersdelight.common.registry.ModItems;
 import java.lang.reflect.Method;
 import java.util.*;
 
-
+@SuppressWarnings("SpellCheckingInspection")
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
@@ -79,7 +78,6 @@ public class WaterPurity
     public static final IntegerProperty BLOCK_PURITY = IntegerProperty.create("purity", 0, 4);
     public static boolean FarmersDelightLoaded = false;
     public static boolean TANLoaded=false;
-
     public static void init()
     {
         registerDispenserBehaviours();
@@ -626,7 +624,7 @@ public class WaterPurity
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
         DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
-        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
+        DispenseItemBehavior bottleDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
