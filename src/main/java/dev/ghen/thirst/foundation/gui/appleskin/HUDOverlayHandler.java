@@ -66,8 +66,9 @@ public class HUDOverlayHandler {
             Minecraft mc = Minecraft.getInstance();
             ForgeGui gui = (ForgeGui)mc.gui;
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
+            boolean isAlive = mc.player.isAlive();
 
-            if (ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
+            if (isAlive && ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.CancelRender) {
                 renderThirstOverlay(event.getGuiGraphics());
             }
         }

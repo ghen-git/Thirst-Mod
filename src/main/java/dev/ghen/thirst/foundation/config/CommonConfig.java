@@ -16,6 +16,7 @@ public class CommonConfig
 
 
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> FIRE_RESISTANCE_DEHYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MOVE_SLOW_WHEN_THIRSTY;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DRINKS_NUTRITION;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
@@ -51,6 +52,7 @@ public class CommonConfig
     {
         BUILDER.push("General");
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
+        FIRE_RESISTANCE_DEHYDRATION = BUILDER.comment("Whether players with fire resistance should deplete hydration").define("fireResistanceDehydration", false);
         MOVE_SLOW_WHEN_THIRSTY=BUILDER.comment("Whether players will get slowness effect when thirsty").define("moveSlowWhenThirsty",true);
         ENABLE_DRINKS_NUTRITION=BUILDER.comment("Whether foods considered as drinks should have nutrition").define("enableDrinksNutrition",true);
         BUILDER.pop();

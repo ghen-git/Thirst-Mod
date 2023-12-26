@@ -1,12 +1,15 @@
 package dev.ghen.thirst.content.purity;
 
+import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.foundation.util.MathHelper;
+import dev.ghen.thirst.foundation.util.ReflectionUtil;
 import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -44,10 +47,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
-import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.foundation.config.CommonConfig;
-import dev.ghen.thirst.foundation.util.MathHelper;
-import dev.ghen.thirst.foundation.util.ReflectionUtil;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -623,7 +622,7 @@ public class WaterPurity
         Method getDispenseMethod = ObfuscationReflectionHelper.findMethod(DispenserBlock.class, "m_7216_", ItemStack.class);
 
         DispenseItemBehavior bucketDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.BUCKET));
-        OptionalDispenseItemBehavior bottleDefaultBehaviour = (OptionalDispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
+        DispenseItemBehavior bottleDefaultBehaviour = (DispenseItemBehavior) ReflectionUtil.fuckYouReflections(getDispenseMethod, Blocks.DISPENSER, new ItemStack(Items.GLASS_BOTTLE));
 
         //mappings (the default is execute)
         Method execute = ObfuscationReflectionHelper.findMethod(DefaultDispenseItemBehavior.class, "m_7498_", BlockSource.class, ItemStack.class);
