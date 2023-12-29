@@ -2,12 +2,11 @@ package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.foundation.fluid.FluidHelper;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,14 +42,11 @@ public class MixinBasinRecipe {
             .orElse(null);
 
         if(availableFluids == null)
-            return -1;
+            return WaterPurity.MAX_PURITY;
 
         for (int tank = 0; tank < availableFluids.getTanks(); tank++)
         {
             FluidStack fluidStack = availableFluids.getFluidInTank(tank);
-
-            if(FluidHelper.isWater(fluidStack.getFluid()))
-                continue;
 
             if(WaterPurity.hasPurity(fluidStack))
                 return WaterPurity.getPurity(fluidStack);
