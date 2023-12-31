@@ -56,7 +56,8 @@ public class HUDOverlayHandler {
         OverlayRegistry.registerOverlayAbove(ThirstBarRenderer.THIRST_OVERLAY, "AppleSkin Thirst Overlay", (gui, mStack, partialTicks, screenWidth, screenHeight) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
-            if (!isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.cancelRender)
+            boolean isAlive = mc.player.isAlive();
+            if (isAlive && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && ModConfig.SHOW_FOOD_EXHAUSTION_UNDERLAY.get() && !ThirstBarRenderer.cancelRender)
             {
                 renderThirstOverlay(mStack);
             }

@@ -1,6 +1,5 @@
 package dev.ghen.thirst.content.thirst;
 
-import de.teamlapen.vampirism.api.VampirismAPI;
 import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
@@ -11,12 +10,8 @@ import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -85,7 +80,7 @@ public class PlayerThirst implements IThirst
     {
         Difficulty difficulty = player.level.getDifficulty();
 
-        if(player.getAbilities().invulnerable || player.hasEffect(MobEffects.FIRE_RESISTANCE))
+        if(player.getAbilities().invulnerable)
             return;
 
         if(checkTombstoneEffects && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape))
@@ -116,7 +111,6 @@ public class PlayerThirst implements IThirst
             updateThirstData(player);
             syncTimer = 0;
         }
-        
         if (thirst <= 0)
         {
             ++damageTimer;
@@ -172,7 +166,9 @@ public class PlayerThirst implements IThirst
         else
             exhaustion += (amount *
                     ThirstHelper.getExhaustionBiomeModifier(player) *
-                    ThirstHelper.getExhaustionFireProtModifier(player));
+                    ThirstHelper.getExhaustionFireProtModifier(player)*
+                    ThirstHelper.getExhaustionFireResistanceModifier(player)
+            );
 
         if(justHealed)
             justHealed = false;

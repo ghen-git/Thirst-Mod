@@ -1,24 +1,23 @@
 package dev.ghen.thirst.content.purity;
 
+import com.brewinandchewin.core.registry.BCItems;
 import com.farmersrespite.core.registry.FRBlocks;
+import com.farmersrespite.core.registry.FRItems;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
-import dev.ghen.thirst.foundation.util.TickHelper;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.block.Block;
-import toughasnails.api.item.TANItems;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
+import dev.ghen.thirst.foundation.util.TickHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -33,6 +32,7 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -48,14 +48,17 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
-import com.brewinandchewin.core.registry.BCItems;
-import com.farmersrespite.core.registry.FRItems;
+import toughasnails.api.item.TANItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 
+@SuppressWarnings("SpellCheckingInspection")
 @Mod.EventBusSubscriber
 public class WaterPurity
 {
@@ -482,7 +485,8 @@ public class WaterPurity
      */
     public static int getBlockPurity(Level level, BlockPos pos)
     {
-        int purity = (pos.getY() > CommonConfig.MOUNTAINS_Y.get().intValue() || pos.getY() < CommonConfig.CAVES_Y.get().intValue())
+        int purity = (pos.getY() > CommonConfig.MOUNTAINS_Y.get().intValue() ||
+                pos.getY() < CommonConfig.CAVES_Y.get().intValue())
                 && pos.getY() < CommonConfig.MOUNTAINS_Y.get().intValue() - 32 ? 1 : 0;
 
         if(level.getFluidState(pos).is(FluidTags.WATER))
@@ -508,7 +512,7 @@ public class WaterPurity
     {
         if(!isWaterFilledContainer(item)) return true;
         if(!hasPurity(item)) return true;
-        if(getPurity(item)!=-1)
+        if(getPurity(item) != -1)
             return givePurityEffects(player, ThirstHelper.getPurity(item));
         else
             return givePurityEffects(player, CommonConfig.DEFAULT_PURITY.get());

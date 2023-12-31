@@ -15,7 +15,7 @@ public class MixinLocalPlayer{
 
     /**
      * @reason prevent sprinting when thirst
-     * @return return food level or thirst level
+     * @return food level or thirst level
      */
 
     @Redirect(method ="aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;getFoodLevel()I"))
