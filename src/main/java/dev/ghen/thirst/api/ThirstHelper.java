@@ -7,6 +7,7 @@ import dev.ghen.thirst.foundation.config.KeyWordConfig;
 import dev.ghen.thirst.foundation.util.ConfigHelper;
 import dev.ghen.thirst.foundation.util.LoadedValue;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -122,6 +123,12 @@ public class ThirstHelper
         int totalLevels = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), player.damageSources().onFire()) / 2;
 
         return 1.0f - ((totalLevels * perLevelMultiplier) * 0.75f);
+    }
+
+    public static float getExhaustionFireResistanceModifier(Player player){
+        if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
+            return CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get();
+        }else return 1.0f;
     }
 
     /**
