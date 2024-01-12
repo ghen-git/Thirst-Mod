@@ -127,7 +127,7 @@ public class ThirstHelper
 
     public static float getExhaustionFireResistanceModifier(Player player){
         if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
-            return CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get();
+            return (float) CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get() /100;
         }else return 1.0f;
     }
 
