@@ -196,7 +196,7 @@ public class ThirstHelper
         if(!itemStack.isEdible())
             return false;
 
-        String pattern= keywordBlackList;
+        String pattern = keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
@@ -207,7 +207,7 @@ public class ThirstHelper
         matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        boolean hasWater=matcher.find();
+        boolean hasWater = matcher.find();
         if(hasWater)
         {
             VALID_DRINKS.put(itemStack.getItem(), new Number[]{
@@ -217,11 +217,11 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordSoup;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordSoup;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        hasWater=matcher.find();
+        hasWater = matcher.find();
         if(hasWater)
         {
             VALID_FOODS.put(itemStack.getItem(), new Number[]{
@@ -231,11 +231,11 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordFruit;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordFruit;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        hasWater=matcher.find();
+        hasWater = matcher.find();
         if(hasWater)
             VALID_FOODS.put(itemStack.getItem(), new Number[]{
                     KeyWordConfig.getFruitHydration(),

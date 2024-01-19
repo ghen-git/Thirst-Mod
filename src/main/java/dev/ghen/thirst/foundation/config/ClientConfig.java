@@ -30,6 +30,7 @@ public class ClientConfig
         THIRST_BAR_X_OFFSET = BUILDER.comment("How many pixels should the thirst bar be shifted horizontally from its original position").define("thirstBarXOffset", 0);
         BUILDER.pop();
 
+        BUILDER.push("Client Drink Mechanics");
         DRINK_BOTH_HAND_NEEDED = BUILDER.comment("Whether players needs two hands available to drink water from source").define("DrinkBothHandNeeded",true);
         BUILDER.pop();
 
