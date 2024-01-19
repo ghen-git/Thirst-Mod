@@ -195,7 +195,7 @@ public class ThirstHelper
         if(!itemStack.isEdible())
             return false;
 
-        String pattern= keywordBlackList;
+        String pattern = keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
