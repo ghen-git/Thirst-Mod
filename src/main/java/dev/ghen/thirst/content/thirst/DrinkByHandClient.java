@@ -1,6 +1,6 @@
 package dev.ghen.thirst.content.thirst;
 
-import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.foundation.config.ClientConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
 import dev.ghen.thirst.foundation.util.MathHelper;
@@ -30,7 +30,7 @@ public class DrinkByHandClient
 
         if (level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
 
-            if(!CommonConfig.DRINK_BOTH_HAND_NEEDED.get()){
+            if(!ClientConfig.DRINK_BOTH_HAND_NEEDED.get()){
                 HandAvailable = player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
             }else {
                 HandAvailable = player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && player.getItemInHand(InteractionHand.OFF_HAND).isEmpty();
