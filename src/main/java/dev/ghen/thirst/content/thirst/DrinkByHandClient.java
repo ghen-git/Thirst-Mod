@@ -1,5 +1,7 @@
 package dev.ghen.thirst.content.thirst;
 
+import dev.ghen.thirst.foundation.config.ClientConfig;
+import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.DrinkByHandMessage;
 import dev.ghen.thirst.foundation.util.MathHelper;
@@ -25,11 +27,19 @@ public class DrinkByHandClient
         Player player = mc.player;
         Level level = mc.level;
         BlockPos blockPos = MathHelper.getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY).getBlockPos();
+        boolean HandAvailable;
 
-        if ((player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && player.getItemInHand(InteractionHand.OFF_HAND).isEmpty()) &&
-                level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
-            level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
-            ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
+        if (level.getFluidState(blockPos).is(FluidTags.WATER) && player.isCrouching() && !player.isInvulnerable()) {
+
+            if(!ClientConfig.DRINK_BOTH_HAND_NEEDED.get()){
+                HandAvailable = player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty();
+            }else {
+                HandAvailable = player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && player.getItemInHand(InteractionHand.OFF_HAND).isEmpty();
+            }
+            if(HandAvailable){
+                level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                ThirstModPacketHandler.INSTANCE.sendToServer(new DrinkByHandMessage(blockPos));
+            }
         }
     }
 }

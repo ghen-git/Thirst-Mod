@@ -128,7 +128,7 @@ public class ThirstHelper
 
     public static float getExhaustionFireResistanceModifier(Player player){
         if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
-            return CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get();
+            return (float) CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get() /100;
         }else return 1.0f;
     }
 
@@ -195,7 +195,7 @@ public class ThirstHelper
         if(!itemStack.isEdible())
             return false;
 
-        String pattern= keywordBlackList;
+        String pattern = keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
