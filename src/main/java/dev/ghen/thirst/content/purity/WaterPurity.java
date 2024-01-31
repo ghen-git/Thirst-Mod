@@ -35,10 +35,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -189,8 +191,10 @@ public class WaterPurity
             Level level = player.getLevel();
             BlockPos pos = event.getHitVec().getBlockPos();
             BlockState blockState = level.getBlockState(pos);
+            //Trying to make compat with unregistered fluid container
+            BlockEntity entity = level.getBlockEntity(pos);
 
-            if (isFillableBlock(blockState))
+            if (isFillableBlock(blockState) ||(entity != null&& entity.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()))
             {
                 int purity = getPurity(event.getItemStack());
 
