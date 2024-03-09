@@ -357,7 +357,7 @@ public class WaterPurity
     {
         if(!item.getOrCreateTag().contains("Purity"))
         {
-            item.getOrCreateTag().putInt("Purity", -1);
+            item.getOrCreateTag().putInt("Purity", CommonConfig.DEFAULT_PURITY.get());
 
             if(tanLoaded && Objects.equals(item.getItem().getCreatorModId(item), "toughasnails"))
                 tanPurity(item);
@@ -389,7 +389,7 @@ public class WaterPurity
     public static int getPurity(FluidStack fluid)
     {
         if(!fluid.getOrCreateTag().contains("Purity"))
-            fluid.getOrCreateTag().putInt("Purity", -1);
+            fluid.getOrCreateTag().putInt("Purity", CommonConfig.DEFAULT_PURITY.get());
 
         return fluid.getTag().getInt("Purity");
     }
@@ -500,7 +500,7 @@ public class WaterPurity
             return level.getBlockState(pos).getValue(BLOCK_PURITY) - 1;
         }
         else
-            return -1;
+            return CommonConfig.DEFAULT_PURITY.get();
     }
 
     /**

@@ -143,7 +143,7 @@ public class ThirstHelper
         Level level = player.level();
 
         if(level.dimensionType().ultraWarm())
-            return 3.0f;
+            return CommonConfig.NETHER_THIRST_DEPLETION_MODIFIER.get().floatValue();
         else
         {
             Biome biome = level.getBiome(pos).value();
