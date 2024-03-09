@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Mixin(BasinRecipe.class)
 public class MixinBasinRecipe {
 
@@ -29,17 +32,21 @@ public class MixinBasinRecipe {
         int purity = getWaterPurity(basin);
         NonNullList<FluidStack> outputFluids = ((BasinRecipe) recipe).getFluidResults();
 
+        Pattern pattern = Pattern.compile("tea", Pattern.CASE_INSENSITIVE);
+
         outputFluids.forEach(fluid ->
         {
-            if(fluid.getTranslationKey().contains("tea"))
-                WaterPurity.addPurity(fluid, Math.min(purity + 1, WaterPurity.MAX_PURITY));
+            Matcher matcher =  pattern.matcher(fluid.getTranslationKey());
+            if(matcher.find()) {
+                WaterPurity.addPurity(fluid, Math.min(purity, WaterPurity.MAX_PURITY));
+            }
         });
     }
 
     private static int getWaterPurity(BasinBlockEntity basin)
     {
         IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                .orElse(null);
+            .orElse(null);
 
         if(availableFluids == null)
             return WaterPurity.MAX_PURITY;

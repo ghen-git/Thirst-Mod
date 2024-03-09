@@ -127,7 +127,7 @@ public class ThirstHelper
 
     public static float getExhaustionFireResistanceModifier(Player player){
         if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
-            return CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get();
+            return (float) CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get() /100;
         }else return 1.0f;
     }
 
@@ -143,7 +143,7 @@ public class ThirstHelper
         Level level = player.level();
 
         if(level.dimensionType().ultraWarm())
-            return 3.0f;
+            return CommonConfig.NETHER_THIRST_DEPLETION_MODIFIER.get().floatValue();
         else
         {
             Biome biome = level.getBiome(pos).value();
@@ -196,7 +196,7 @@ public class ThirstHelper
         if(!itemStack.isEdible())
             return false;
 
-        String pattern= keywordBlackList;
+        String pattern = keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
@@ -217,8 +217,8 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordSoup;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordSoup;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
         hasWater=matcher.find();
@@ -231,11 +231,11 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordFruit;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordFruit;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        hasWater=matcher.find();
+        hasWater = matcher.find();
         if(hasWater)
             VALID_FOODS.put(itemStack.getItem(), new Number[]{
                     KeyWordConfig.getFruitHydration(),

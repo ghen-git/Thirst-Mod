@@ -34,10 +34,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,6 +49,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
+import umpaz.brewinandchewin.common.registry.BCItems;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -140,17 +143,17 @@ public class WaterPurity
 
     private static void registerBrewinAndChewinContainers()
     {
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STEEL_TOE_STOUT.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.GLITTERING_GRENADINE.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BLOODY_MARY.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RED_RUM.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.WITHERING_DROSS.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STEEL_TOE_STOUT.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.GLITTERING_GRENADINE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BLOODY_MARY.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RED_RUM.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.WITHERING_DROSS.get())));
 //        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.KOMBUCHA.get())));
     }
 
@@ -179,8 +182,10 @@ public class WaterPurity
             Level level = player.level();
             BlockPos pos = event.getHitVec().getBlockPos();
             BlockState blockState = level.getBlockState(pos);
+            //Trying to make compat with unregistered fluid container
+            BlockEntity entity = level.getBlockEntity(pos);
 
-            if (isFillableBlock(blockState))
+            if (isFillableBlock(blockState) ||(entity != null&& entity.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()))
             {
                 int purity = getPurity(event.getItemStack());
 
@@ -352,7 +357,7 @@ public class WaterPurity
     {
         if(!item.getOrCreateTag().contains("Purity"))
         {
-            item.getOrCreateTag().putInt("Purity", -1);
+            item.getOrCreateTag().putInt("Purity", CommonConfig.DEFAULT_PURITY.get());
 
             if(tanLoaded && Objects.equals(item.getItem().getCreatorModId(item), "toughasnails"))
                 tanPurity(item);
@@ -384,7 +389,7 @@ public class WaterPurity
     public static int getPurity(FluidStack fluid)
     {
         if(!fluid.getOrCreateTag().contains("Purity"))
-            fluid.getOrCreateTag().putInt("Purity", -1);
+            fluid.getOrCreateTag().putInt("Purity", CommonConfig.DEFAULT_PURITY.get());
 
         return fluid.getTag().getInt("Purity");
     }
@@ -495,7 +500,7 @@ public class WaterPurity
             return level.getBlockState(pos).getValue(BLOCK_PURITY) - 1;
         }
         else
-            return -1;
+            return CommonConfig.DEFAULT_PURITY.get();
     }
 
     /**
