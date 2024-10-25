@@ -11,7 +11,8 @@
     "type": "forge:nbt",
     "item":"minecraft:potion",
     "nbt": {
-      "Potion": "minecraft:water"
+      "Potion": "minecraft:water",
+      "Purity": 2
     }
   },
   "experience": 0.35,

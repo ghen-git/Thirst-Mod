@@ -19,7 +19,7 @@ public class ItemSettingsConfig
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> DRINKS;
     public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> FOODS;
-    public static final ForgeConfigSpec.ConfigValue<List<String>> ITEMS_BLACKLIST;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_BLACKLIST;
 
 
     static
@@ -145,7 +145,11 @@ public class ItemSettingsConfig
         ITEMS_BLACKLIST = BUILDER.comment("A mod may have added thirst compatibility to an item via code. If you want to edit the thirst values",
                 "of that item, add an entry in one of the first two lists. If instead you want to remove thirst support for that item, add an entry in this list",
                 "Format: [\"examplemod:example_item_1\", \"examplemod:example_item_2\"]")
-                .define("itemsBlacklist", new ArrayList<>());
+                .defineList("itemsBlacklist", Arrays.asList(
+                                        "examplemod:example_item_1",
+                                        "examplemod:example_item_2"
+                        ),
+                        it -> it instanceof String);
 
 
 

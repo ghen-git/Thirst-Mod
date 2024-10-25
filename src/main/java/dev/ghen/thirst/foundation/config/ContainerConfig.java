@@ -14,18 +14,18 @@ import java.util.List;
 public class ContainerConfig {
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final ForgeConfigSpec.ConfigValue<List<String>> CONTAINERS;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> CONTAINERS;
 
     static {
         BUILDER.push("Container");
 
         CONTAINERS = BUILDER.comment("Defineds drinks will be influenced by purity"
                         ,"Format: [\"examplemod:example_item_1\", \"examplemod:example_item_2\"]")
-                .define("Containers", Arrays.asList(
+                .defineList("Containers", Arrays.asList(
                         "collectorsreap:pomegranate_black_tea",
                         "collectorsreap:lime_green_tea",
                         "create:builders_tea"
-                ));
+                ), it-> it instanceof String);
 
         BUILDER.pop();
 

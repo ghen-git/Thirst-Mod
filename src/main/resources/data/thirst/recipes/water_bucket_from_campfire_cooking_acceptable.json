@@ -8,7 +8,10 @@
     }
   ],
   "result": {
-    "item": "minecraft:water_bucket"
+    "item": "minecraft:water_bucket",
+    "nbt": {
+      "Purity": 2
+    }
   },
   "experience": 0.35,
   "cookingtime": 300

@@ -8,7 +8,10 @@
     }
   ],
   "result": {
-    "item": "thirst:terracotta_water_bowl"
+    "item": "thirst:terracotta_water_bowl",
+    "nbt": {
+      "Purity": 2
+    }
   },
   "experience": 0.35,
   "cookingtime": 300

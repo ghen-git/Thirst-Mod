@@ -123,7 +123,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.1.0'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
 
     implementation fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-9:slim") { transitive = false }
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
