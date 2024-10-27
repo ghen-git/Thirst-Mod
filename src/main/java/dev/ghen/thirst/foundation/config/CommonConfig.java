@@ -14,7 +14,6 @@ public class CommonConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
     public static final ForgeConfigSpec.ConfigValue<Boolean> THIRST_DEPLETION_IN_PEACEFUL;
     public static final ForgeConfigSpec.DoubleValue NETHER_THIRST_DEPLETION_MODIFIER;
@@ -28,6 +27,7 @@ public class CommonConfig
     public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT;
     public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEPLETES_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_BY_HAND;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> EXTRA_HYDRATION_CONVERT_TO_QUENCHED;
 
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
@@ -75,6 +75,7 @@ public class CommonConfig
         CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
+        EXTRA_HYDRATION_CONVERT_TO_QUENCHED =BUILDER.comment("Whether extra hydration will convert to quenched").define("ExtraHydrationConvertToQuenched",true);
         BUILDER.pop();
 
         BUILDER.push("World");
@@ -84,7 +85,7 @@ public class CommonConfig
         BUILDER.pop();
 
         BUILDER.push("Purity-related Effects");
-        DEFAULT_PURITY =  BUILDER.comment("Purity for drinks that normally have purity but for whatever reason don't have a value set").define("defaultPurity", 3);
+        DEFAULT_PURITY =  BUILDER.comment("Purity for drinks that normally have purity but for whatever reason don't have a value set").define("defaultPurity", 2);
         QUENCH_THIRST_WHEN_DEBUFFED =  BUILDER.comment("Whether player should gain hydration even if they recieved a purity-related debuff").define("quenchThirstWhenDebuffed", true);
         DIRTY_POISON_PERCENTAGE =  BUILDER.comment("% of getting poisoned after drinking dirty water").define("dirtyPoisonPercentage", 30);
         DIRTY_NAUSEA_PERCENTAGE =  BUILDER.comment("% of getting sick (hunger and nausea) after drinking dirty water").define("dirtyNauseaPercentage", 100);

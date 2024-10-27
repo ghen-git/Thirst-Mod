@@ -72,6 +72,8 @@ public class PlayerThirst implements IThirst
     public void drink(Player player, int thirst, int quenched)
     {
         int extra_quenched = Math.max(this.thirst + thirst - 20, 0);
+        if(!CommonConfig.EXTRA_HYDRATION_CONVERT_TO_QUENCHED.get())
+            extra_quenched = 0;
         this.thirst = Math.min(this.thirst + thirst, 20);
         this.quenched = Math.min(this.quenched + quenched + extra_quenched, this.thirst);
     }
@@ -101,11 +103,18 @@ public class PlayerThirst implements IThirst
             return;
 
         boolean isNourished = checkFDEffects && player.hasEffect(ModEffects.NOURISHMENT.get());
-
+        boolean isHunger = player.hasEffect(MobEffects.HUNGER);
         boolean isSitting = player.isPassenger();
 
         if(CommonConfig.DEPLETES_WHEN_NAUSEA.get() && player.getActiveEffects().stream().anyMatch(e->e.getEffect().equals(MobEffects.CONFUSION))){
             addExhaustion(player,0.06F);
+        }
+
+        if(isHunger){
+            exhaustion -= 0.005F * (float)(player.getEffect(MobEffects.HUNGER).getAmplifier() + 1) *
+                    ThirstHelper.getExhaustionBiomeModifier(player) *
+                    ThirstHelper.getExhaustionFireProtModifier(player)*
+                    ThirstHelper.getExhaustionFireResistanceModifier(player);
         }
 
         if (!isSitting && !isNourished)
