@@ -132,7 +132,6 @@ dependencies {
     implementation fg.deobf("curse.maven:selene-499980:4747959")
 
     implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4082397")
-    implementation fg.deobf("curse.maven:corail-tombstone-243707:4775782")
 }
 
 mixin {

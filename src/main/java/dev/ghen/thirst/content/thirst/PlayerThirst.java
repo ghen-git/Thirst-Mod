@@ -9,6 +9,7 @@ import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -69,8 +70,11 @@ public class PlayerThirst implements IThirst
 
     public void drink(Player player, int thirst, int quenched)
     {
+        int extra_quenched = Math.max(this.thirst + thirst - 20, 0);
+        if(!CommonConfig.EXTRA_HYDRATION_CONVERT_TO_QUENCHED.get())
+            extra_quenched = 0;
         this.thirst = Math.min(this.thirst + thirst, 20);
-        this.quenched = Math.min(this.quenched + quenched, this.thirst);
+        this.quenched = Math.min(this.quenched + quenched + extra_quenched, this.thirst);
     }
 
     /**
@@ -98,11 +102,18 @@ public class PlayerThirst implements IThirst
             return;
 
         boolean isNourished = checkFDEffects && player.hasEffect(ModEffects.NOURISHMENT.get());
-
+        boolean isHunger = player.hasEffect(MobEffects.HUNGER);
         boolean isSitting = player.isPassenger();
 
         if(CommonConfig.DEPLETES_WHEN_NAUSEA.get() && player.getActiveEffects().stream().anyMatch(e->e.getEffect().equals(MobEffects.CONFUSION))){
             addExhaustion(player,0.06F);
+        }
+
+        if(isHunger){
+            exhaustion -= 0.005F * (float)(player.getEffect(MobEffects.HUNGER).getAmplifier() + 1) *
+                    ThirstHelper.getExhaustionBiomeModifier(player) *
+                    ThirstHelper.getExhaustionFireProtModifier(player)*
+                    ThirstHelper.getExhaustionFireResistanceModifier(player);
         }
 
         if (!isSitting && !isNourished)
@@ -129,6 +140,14 @@ public class PlayerThirst implements IThirst
             if(difficulty == Difficulty.PEACEFUL && !CommonConfig.THIRST_DEPLETION_IN_PEACEFUL.get()){
                 thirst = Math.min(thirst + 1,20);
             }
+
+            final float angle = Mth.wrapDegrees(player.getXRot());
+            if (angle <= -80  && player.level.isRainingAt(player.blockPosition().above()) && CommonConfig.CAN_DRINK_RAIN_WATETR.get())
+            {
+                thirst = Math.min(thirst + 1,20);
+                quenched = Math.min(quenched +1,20);
+            }
+
             updateThirstData(player);
             syncTimer = 0;
         }
