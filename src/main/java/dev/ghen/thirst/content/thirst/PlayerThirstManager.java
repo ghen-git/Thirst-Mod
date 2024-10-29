@@ -22,6 +22,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -131,5 +132,10 @@ public class PlayerThirstManager
             }
             oldPlayer.invalidateCaps();
         }
+    }
+
+    @SubscribeEvent
+    public static void initDrinks(ServerStartedEvent event){
+        ThirstHelper.init();
     }
 }
