@@ -72,7 +72,7 @@ public class CommonConfig
         DEHYDRATION_HALTS_HEALTH_REGEN = BUILDER.comment("Whether the player can't regenerate as fast when hydration isn't full (like hunger)").define("dehydrationHaltsHealthRegen", true);
         HEALTH_REGEN_DEPLETES_HYDRATION = BUILDER.comment("Whether hydration depletes when the player's health is regenerating (like hunger)").define("healthRegenDepletesHydration", true);
         HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT = BUILDER.comment("Whether dehydration from regenerating health (if enabled above) should take into account temperature and humidity").define("healthRegenDehydrationIsBiomeDependent", true);
-        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
+        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand. Attention: it needs to be enable on both server and client sides").define("canDrinkByHand", false);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
         EXTRA_HYDRATION_CONVERT_TO_QUENCHED =BUILDER.comment("Whether extra hydration will convert to quenched").define("ExtraHydrationConvertToQuenched",true);

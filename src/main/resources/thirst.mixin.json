@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
+    "MixinAbstractCookingRecipe",
     "MixinAbstractFurnaceEntity",
     "MixinBootstrap",
     "MixinBottleItem",
