@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.utility.LangBuilder;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -42,7 +43,7 @@ public interface MixinIHaveGoggleInformation {
             if (fluidStack.isEmpty())
                 continue;
 
-            if(WaterPurity.hasPurity(fluidStack) && WaterPurity.getPurity(fluidStack) != -1){
+            if((WaterPurity.hasPurity(fluidStack) || fluidStack.getFluid().equals(Fluids.WATER)) && WaterPurity.getPurity(fluidStack) != -1){
                 int purity = WaterPurity.getPurity(fluidStack);
                 ChatFormatting color = getPurityColor(purity);
                 Lang.builder()

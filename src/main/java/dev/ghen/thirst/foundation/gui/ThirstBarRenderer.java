@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
@@ -62,7 +61,6 @@ public class ThirstBarRenderer
             PLAYER_THIRST = minecraft.player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
         }
 
-        Player player = (Player) gui.getMinecraft().getCameraEntity();
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, THIRST_ICONS);
         int left = width / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get();

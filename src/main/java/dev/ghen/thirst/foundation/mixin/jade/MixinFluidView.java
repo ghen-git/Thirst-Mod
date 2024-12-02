@@ -2,6 +2,7 @@ package dev.ghen.thirst.foundation.mixin.jade;
 
 import dev.ghen.thirst.content.purity.WaterPurity;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +20,7 @@ public class MixinFluidView {
         FluidStack instance = CommonProxy.toFluidStack(fluid);
         if(instance.isEmpty()) return CommonProxy.getFluidName(fluid);
 
-        if(WaterPurity.hasPurity(instance) && WaterPurity.getPurity(instance)!=-1){
+        if((WaterPurity.hasPurity(instance) || instance.getFluid().equals(Fluids.WATER)) && WaterPurity.getPurity(instance)!=-1){
             return Component.literal(Objects.requireNonNull(
                     WaterPurity.getPurityText(WaterPurity.getPurity(instance))))
                     .append(" ")
