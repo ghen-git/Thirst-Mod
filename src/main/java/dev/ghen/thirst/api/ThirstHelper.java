@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -45,6 +46,8 @@ public class ThirstHelper
     public static void init(){
         ThirstEventFactory.onRegisterThirstValue();
         for (Item item : containers){
+            if(item.equals(Items.AIR))
+                continue;
             WaterPurity.addContainer(new ContainerWithPurity(new ItemStack(item)));
         }
 
