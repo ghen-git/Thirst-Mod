@@ -82,9 +82,24 @@ public class ItemSettingsConfig
 
                                         Arrays.asList("toughasnails:dirty_water_bottle", 6, 8),
                                         Arrays.asList("toughasnails:purified_water_bottle", 8, 10),
-                                        Arrays.asList("toughasnails:dirty_water_canteen", 8, 10),
-                                        Arrays.asList("toughasnails:water_canteen", 9, 11),
-                                        Arrays.asList("toughasnails:purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:leather_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:leather_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:leather_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:copper_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:copper_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:copper_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:iron_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:iron_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:iron_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:gold_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:gold_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:gold_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:diamond_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:diamond_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:diamond_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:netherite_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:netherite_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:netherite_purified_water_canteen", 10, 12),
                                         Arrays.asList("toughasnails:melon_juice", 8, 13),
                                         Arrays.asList("toughasnails:apple_juice", 8, 13),
                                         Arrays.asList("toughasnails:cactus_juice", 8, 13),
@@ -93,7 +108,8 @@ public class ItemSettingsConfig
                                         Arrays.asList("toughasnails:chorus_fruit_juice", 8, 13),
                                         Arrays.asList("toughasnails:suspicious_water_cup", 8, 13),
                                         Arrays.asList("toughasnails:pumpkin_juice", 8, 13),
-                                        Arrays.asList("toughasnails:sweet_berry_juice", 8, 13)
+                                        Arrays.asList("toughasnails:sweet_berry_juice", 8, 13),
+                                        Arrays.asList("toughasnails:ice_cream", 6, 12)
 
                                 ),
                         it -> it instanceof List && ((List<?>) it).get(0) instanceof String && ((List<?>) it).get(1) instanceof Number);
