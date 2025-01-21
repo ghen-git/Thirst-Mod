@@ -34,8 +34,7 @@ public class MixinKettleBlockEntity {
     private boolean canBrew(FluidStack stack1, FluidStack other){
         FluidStack stack = stack1.copy();
         stack.removeChildTag("Purity");
-        return (stack.getTag() == null || stack.getTag().isEmpty()) ?
-                (other.getTag() == null || other.getTag().isEmpty()) : other.getTag() != null && stack.getTag().equals(other.getTag());
+        return WaterPurity.matchRecipe(stack,other);
     }
 
     /**

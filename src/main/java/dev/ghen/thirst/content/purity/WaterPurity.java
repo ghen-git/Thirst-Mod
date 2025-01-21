@@ -49,7 +49,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.NotNull;
 import toughasnails.api.item.TANItems;
 import toughasnails.item.EmptyCanteenItem;
-import umpaz.brewinandchewin.common.registry.BCItems;
+import umpaz.brewinandchewin.common.registry.BnCItems;
 import umpaz.farmersrespite.common.registry.FRItems;
 
 import java.lang.reflect.Method;
@@ -155,18 +155,18 @@ public class WaterPurity
 
     private static void registerBrewinAndChewinContainers()
     {
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BEER.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.VODKA.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RICE_WINE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STRONGROOT_ALE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.PALE_JANE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.SALTY_FOLLY.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.STEEL_TOE_STOUT.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.GLITTERING_GRENADINE.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.BLOODY_MARY.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.RED_RUM.get())));
-        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.WITHERING_DROSS.get())));
-//        waterContainers.add(new ContainerWithPurity(new ItemStack(BCItems.KOMBUCHA.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.BEER.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.VODKA.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.RICE_WINE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.STRONGROOT_ALE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.PALE_JANE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.SALTY_FOLLY.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.STEEL_TOE_STOUT.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.GLITTERING_GRENADINE.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.BLOODY_MARY.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.RED_RUM.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.WITHERING_DROSS.get())));
+        waterContainers.add(new ContainerWithPurity(new ItemStack(BnCItems.KOMBUCHA.get())));
     }
 
     private static void registerToughAsNailsContainers()
@@ -703,5 +703,10 @@ public class WaterPurity
 
             return item;
         }
+    }
+
+    public static boolean matchRecipe(FluidStack stack, FluidStack other) {
+        return (stack.getTag() == null || stack.getTag().isEmpty()) ?
+                (other.getTag() == null || other.getTag().isEmpty()) : other.getTag() != null && stack.getTag().equals(other.getTag());
     }
 }
