@@ -35,7 +35,8 @@
     "toughasnails.MixinEmptyCanteenItem",
     "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
-    "toughasnails.MixinThirstHelperImpl"
+    "toughasnails.MixinThirstHelperImpl",
+    "botania.MixinBotania"
   ],
   "client": [
     "MixinLocalPlayer",
