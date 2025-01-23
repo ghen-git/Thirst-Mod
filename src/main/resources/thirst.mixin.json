@@ -32,7 +32,8 @@
     "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
     "toughasnails.MixinThirstHelperImpl",
-    "toughasnails.MixinTooltipHandler"
+    "toughasnails.MixinTooltipHandler",
+    "botania.BotaniaMixin"
   ],
   "client": [
     "MixinLocalPlayer",
