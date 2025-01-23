@@ -3,7 +3,6 @@ package dev.ghen.thirst.foundation.mixin
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
@@ -17,17 +16,18 @@ import vazkii.botania.xplat.XplatAbstractions;
 
 
 @Mixin(ForgeXplatImpl.class)
-public abstract class TestMixin implements XplatAbstractions {
-    @Inject(method = "extractFluidFromPlayerItem",at = @At("HEAD"), cancellable = true,remap = false)
+public abstract class MixinBotania implements XplatAbstractions {
+    @Inject(method = "extractFluidFromPlayerItem", at = @At("HEAD"), cancellable = true, remap = false)
     public void extractFluidFromPlayerItem(Player player, InteractionHand hand, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         cir.cancel();
-        ItemStack abc = player.getItemInHand(hand);
+        ItemStack a = player.getItemInHand(hand);
+        ItemStack abc = new ItemStack(a.getItem());
         cir.setReturnValue(abc.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map((h) -> {
-            FluidStack ex = h.drain(new FluidStack(fluid,1000),IFluidHandler.FluidAction.SIMULATE);
+            FluidStack ex = h.drain(new FluidStack(fluid, 1000), IFluidHandler.FluidAction.SIMULATE);
             boolean su = ex.getFluid() == fluid && ex.getAmount() == 1000;
-            if(su && !player.getAbilities().instabuild){
-                h.drain(new FluidStack(fluid,1000),IFluidHandler.FluidAction.EXECUTE);
-                player.setItemInHand(hand,h.getContainer());
+            if (su && !player.getAbilities().instabuild) {
+                h.drain(new FluidStack(fluid, 1000), IFluidHandler.FluidAction.EXECUTE);
+                player.setItemInHand(hand, h.getContainer());
             }
             return su;
         }).orElse(false));
