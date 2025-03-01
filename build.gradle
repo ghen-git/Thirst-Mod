@@ -134,7 +134,7 @@ dependencies {
     implementation fg.deobf("curse.maven:cold-sweat-506194:4787218")
     implementation fg.deobf("curse.maven:farmers-delight-398521:5051242")
     implementation fg.deobf("curse.maven:farmers-respite-551453:5543547")
-    implementation fg.deobf("curse.maven:brewin-and-chewin-637808:6107897")
+    implementation fg.deobf("curse.maven:brewin-and-chewin-637808:6237884")
 //    implementation fg.deobf("curse.maven:create-central-kitchen-820977:5232178")
     implementation fg.deobf("curse.maven:glitchcore-955399:5787839")
     compileOnly fg.deobf("curse.maven:tough-as-nails-246391:5815863")
