@@ -1,9 +1,10 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.foundation.utility.CreateLang;
 import dev.ghen.thirst.content.purity.WaterPurity;
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
@@ -33,8 +34,8 @@ public interface MixinIHaveGoggleInformation {
         if (tank.getTanks() == 0)
             return false;
 
-        LangBuilder mb = Lang.translate("generic.unit.millibuckets");
-        Lang.translate("gui.goggles.fluid_container")
+        LangBuilder mb = CreateLang.translate("generic.unit.millibuckets");
+        CreateLang.translate("gui.goggles.fluid_container")
                 .forGoggles(tooltip);
 
         boolean isEmpty = true;
@@ -46,25 +47,25 @@ public interface MixinIHaveGoggleInformation {
             if((WaterPurity.hasPurity(fluidStack) || fluidStack.getFluid().equals(Fluids.WATER)) && WaterPurity.getPurity(fluidStack) != -1){
                 int purity = WaterPurity.getPurity(fluidStack);
                 ChatFormatting color = getPurityColor(purity);
-                Lang.builder()
+                CreateLang.builder()
                         .text(WaterPurity.getPurityText(purity)+" ")
                         .add(fluidStack.getDisplayName().copy())
                         .style(color)
                         .forGoggles(tooltip, 1);
             }else {
-                Lang.fluidName(fluidStack)
+                CreateLang.fluidName(fluidStack)
                         .style(ChatFormatting.GRAY)
                         .forGoggles(tooltip, 1);
             }
 
 
 
-            Lang.builder()
-                    .add(Lang.number(fluidStack.getAmount())
+            CreateLang.builder()
+                    .add(CreateLang.number(fluidStack.getAmount())
                             .add(mb)
                             .style(ChatFormatting.GOLD))
                     .text(ChatFormatting.GRAY, " / ")
-                    .add(Lang.number(tank.getTankCapacity(i))
+                    .add(CreateLang.number(tank.getTankCapacity(i))
                             .add(mb)
                             .style(ChatFormatting.DARK_GRAY))
                     .forGoggles(tooltip, 1);
@@ -81,8 +82,8 @@ public interface MixinIHaveGoggleInformation {
         if (!isEmpty)
             return true;
 
-        Lang.translate("gui.goggles.fluid_container.capacity")
-                .add(Lang.number(tank.getTankCapacity(0))
+        CreateLang.translate("gui.goggles.fluid_container.capacity")
+                .add(CreateLang.number(tank.getTankCapacity(0))
                         .add(mb)
                         .style(ChatFormatting.GOLD))
                 .style(ChatFormatting.GRAY)

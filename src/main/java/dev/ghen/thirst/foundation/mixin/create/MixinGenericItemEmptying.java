@@ -1,9 +1,8 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
-import com.simibubi.create.foundation.utility.Pair;
 import dev.ghen.thirst.content.purity.WaterPurity;
-import net.minecraft.nbt.CompoundTag;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;

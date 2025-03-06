@@ -1,26 +1,39 @@
 package dev.ghen.thirst.compat.create.ponder;
 
-import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
-import com.simibubi.create.foundation.ponder.PonderTag;
-import com.simibubi.create.infrastructure.ponder.AllPonderTags;
-import dev.ghen.thirst.compat.create.ponder.scene.SandFilterScene;
+
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
+import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.compat.create.CreateRegistry;
+import dev.ghen.thirst.compat.create.ponder.scene.SandFilterScene;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.minecraft.resources.ResourceLocation;
 
 
 public class ThirstPonders {
-    public static final PonderTag PURIFICATION = new PonderTag(Thirst.asResource("purification"))
-            .item(CreateRegistry.SAND_FILTER_BLOCK.get().asItem(), true, false)
-            .defaultLang("Purification", "Components which purifying water");
+    public static final ResourceLocation PURIFICATION = Thirst.asResource("purification");
 
-    static final PonderRegistrationHelper HELPER = new PonderRegistrationHelper(Thirst.ID);
+    public static void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
+        PonderTagRegistrationHelper<RegistryEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
 
-    public static void register(){
+        HELPER.registerTag(PURIFICATION)
+                .addToIndex()
+                .item(CreateRegistry.SAND_FILTER_BLOCK, true, false)
+                .title("Purification")
+                .description("Components which purifying water")
+                .register();
+    }
+
+    public static void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        PonderSceneRegistrationHelper<ItemProviderEntry<?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);
+
         HELPER.addStoryBoard(
                 CreateRegistry.SAND_FILTER_BLOCK,
                 "sand_filter",
                 SandFilterScene::filtering,
-                AllPonderTags.FLUIDS,
+                AllCreatePonderTags.FLUIDS,
                 PURIFICATION
         );
     }

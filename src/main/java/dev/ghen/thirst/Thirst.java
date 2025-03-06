@@ -1,8 +1,8 @@
 package dev.ghen.thirst;
 
 import dev.ghen.thirst.api.ThirstHelper;
-//import dev.ghen.thirst.compat.create.CreateRegistry;
-//import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
+import dev.ghen.thirst.compat.create.CreateRegistry;
+import dev.ghen.thirst.compat.create.ponder.ThirstPonderPlugin;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.content.thirst.PlayerThirst;
@@ -13,6 +13,7 @@ import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
 import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.tab.ThirstTab;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -51,10 +52,10 @@ public class Thirst
 
         ItemInit.ITEMS.register(modBus);
 
-       // if(ModList.get().isLoaded("create"))
-        //{
-        //    CreateRegistry.register();
-        //}
+        if(ModList.get().isLoaded("create"))
+        {
+            CreateRegistry.register();
+        }
 
         ThirstTab.register(modBus);
 
@@ -92,9 +93,9 @@ public class Thirst
 
     private void clientSetup(final FMLClientSetupEvent event)
     {
-        //if(ModList.get().isLoaded("create")){
-            //event.enqueueWork(ThirstPonders::register);
-        //}
+        if(ModList.get().isLoaded("create")){
+            PonderIndex.addPlugin(new ThirstPonderPlugin());
+        }
 
         if(ModList.get().isLoaded("vampirism"))
         {

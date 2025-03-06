@@ -120,13 +120,15 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven { url = "https://maven.createmod.net" }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
 
-    implementation fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-9:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-1.20.1:0.6.9-5")
+    implementation fg.deobf("com.simibubi.create:create-1.20.1:6.0.2-112:slim") { transitive = false }
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51") { transitive = false }
     implementation fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -140,6 +142,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:tough-as-nails-246391:5815863")
     implementation fg.deobf("curse.maven:jade-324717:4768593")
     compileOnly fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4783000")
+    compileOnly fg.deobf("curse.maven:botania-225643:6172172")
 
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))

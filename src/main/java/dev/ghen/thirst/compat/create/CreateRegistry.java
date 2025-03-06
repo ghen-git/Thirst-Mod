@@ -13,19 +13,19 @@ import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 public class CreateRegistry
 {
-    public static final NonNullSupplier<Registrate> REGISTRATE=NonNullSupplier.lazy(() ->Registrate.create(Thirst.ID));
+    public static final NonNullSupplier<Registrate> REGISTRATE = NonNullSupplier.lazy(() ->Registrate.create(Thirst.ID));
 
     public static void register(){}
 
 
-    public static final BlockEntry<SandFilterBlock> SAND_FILTER_BLOCK= REGISTRATE.get()
+    public static final BlockEntry<SandFilterBlock> SAND_FILTER_BLOCK = REGISTRATE.get()
             .block("sand_filter", SandFilterBlock::new)
             .initialProperties(SharedProperties::copperMetal)
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
             .item(AssemblyOperatorBlockItem::new)
             .transform(customItemModel())
             .register();
-    public static final BlockEntityEntry<SandFilterTileEntity> SAND_FILTER_TE= REGISTRATE.get()
+    public static final BlockEntityEntry<SandFilterTileEntity> SAND_FILTER_TE = REGISTRATE.get()
             .blockEntity("sand_filter",SandFilterTileEntity::new)
             .validBlocks(SAND_FILTER_BLOCK)
             .register();

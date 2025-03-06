@@ -54,8 +54,8 @@ public class ThirstTab
         list.add(ItemInit.TERRACOTTA_WATER_BOWL.get().getDefaultInstance());
 
         // for some fucking reason the game crashes if you don't do it here
-        //if(ModList.get().isLoaded("create"))
-            //list.add(CreateRegistry.SAND_FILTER_BLOCK.asStack());
+        if(ModList.get().isLoaded("create"))
+            list.add(CreateRegistry.SAND_FILTER_BLOCK.asStack());
 
         return list;
     }

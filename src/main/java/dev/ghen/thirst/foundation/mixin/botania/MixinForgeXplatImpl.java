@@ -15,8 +15,8 @@ import vazkii.botania.forge.xplat.ForgeXplatImpl;
 import vazkii.botania.xplat.XplatAbstractions;
 
 
-@Mixin(ForgeXplatImpl.class)
-public abstract class BotaniaMixin implements XplatAbstractions {
+@Mixin(value = ForgeXplatImpl.class,remap = false)
+public abstract class MixinForgeXplatImpl implements XplatAbstractions {
     @Inject(method = "extractFluidFromPlayerItem", at = @At("HEAD"), cancellable = true, remap = false)
     public void extractFluidFromPlayerItem(Player player, InteractionHand hand, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         cir.cancel();
