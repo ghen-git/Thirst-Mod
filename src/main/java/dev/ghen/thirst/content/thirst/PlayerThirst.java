@@ -2,7 +2,9 @@ package dev.ghen.thirst.content.thirst;
 
 import de.teamlapen.vampirism.util.Helper;
 import dev.ghen.thirst.api.ThirstHelper;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
+import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
 import dev.ghen.thirst.foundation.common.damagesource.ModDamageSource;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
@@ -13,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.PacketDistributor;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -34,6 +37,23 @@ public class PlayerThirst implements IThirst
     boolean shouldTickThirst = true;
     boolean exhaustionRecalculate = false;
     boolean init = true;
+
+    /**
+     * Attempts to give hydration to player if item restores thirst.
+     * @param item
+     * @param player
+     */
+    public static void drink(ItemStack item, Player player)
+    {
+        if(ThirstHelper.itemRestoresThirst(item))
+        {
+            player.getCapability(ModCapabilities.PLAYER_THIRST,null).ifPresent(cap ->
+            {
+                if(WaterPurity.givePurityEffects(player, item))
+                    cap.drink(player, ThirstHelper.getThirst(item), ThirstHelper.getQuenched(item));
+            });
+        }
+    }
 
     public int getThirst()
     {

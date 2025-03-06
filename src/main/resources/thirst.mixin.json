@@ -16,6 +16,7 @@
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
     "MixinPotionItem",
+    "MixinPlayer",
     "accessors.brewinandchewin.KegBlockEntityAccessor",
     "brewinandchewin.MixinKegBlockEntity",
     "brewinandchewin.MixinKegFermentingRecipe",

@@ -87,7 +87,7 @@ public class PlayerThirstManager
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void drink(LivingEntityUseItemEvent.Finish event)
     {
         if(event.getEntity() instanceof Player && ThirstHelper.itemRestoresThirst(event.getItem()))
@@ -99,7 +99,7 @@ public class PlayerThirstManager
                     cap.drink((Player) event.getEntity(), ThirstHelper.getThirst(item), ThirstHelper.getQuenched(item));
             });
         }
-    }
+    }*/
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
