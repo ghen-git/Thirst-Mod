@@ -52,6 +52,10 @@ public class DrinkableItem extends Item
         {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer)player, item);
         }
+        if(player != null)
+        {
+            PlayerThirst.drink(item, player);
+        }
 
         if (player != null)
         {
@@ -74,11 +78,6 @@ public class DrinkableItem extends Item
                 ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY(), player.getZ(), new ItemStack(container));
                 level.addFreshEntity(itemEntity);
             }
-        }
-
-        if(player != null)
-        {
-            PlayerThirst.drink(item, player);
         }
         level.gameEvent(entity, GameEvent.ITEM_INTERACT_FINISH, entity.getEyePosition());
         return item;

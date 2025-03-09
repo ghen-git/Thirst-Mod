@@ -25,7 +25,7 @@ public class MixinPotionItem {
         return true;
     }
 
-    @Inject(method = "finishUsingItem", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
+    @Inject(method = "finishUsingItem", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
     public void onFinishUsingItem(ItemStack item, Level level, LivingEntity livingEntity, CallbackInfoReturnable<ItemStack> cir, Player player)
     {
         if(player != null)
