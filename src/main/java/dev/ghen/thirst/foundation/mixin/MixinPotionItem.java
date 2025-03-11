@@ -2,7 +2,6 @@ package dev.ghen.thirst.foundation.mixin;
 
 import dev.ghen.thirst.content.thirst.PlayerThirst;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +19,9 @@ public class MixinPotionItem {
 
     @Redirect(method = "finishUsingItem",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Inventory;add(Lnet/minecraft/world/item/ItemStack;)Z"))
     public boolean finishUsingItem(Inventory instance, ItemStack stack){
-        ItemEntity itemEntity = new ItemEntity(instance.player.level(), instance.player.getX(), instance.player.getY(), instance.player.getZ(), stack);
-        instance.player.level().addFreshEntity(itemEntity);
+        if (!instance.add(stack)) {
+            instance.player.drop(stack, false);
+        }
         return true;
     }
 
