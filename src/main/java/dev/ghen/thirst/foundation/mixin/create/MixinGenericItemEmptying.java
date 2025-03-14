@@ -1,9 +1,8 @@
 package dev.ghen.thirst.foundation.mixin.create;
 
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
-import com.simibubi.create.foundation.utility.Pair;
 import dev.ghen.thirst.content.purity.WaterPurity;
-import net.minecraft.nbt.CompoundTag;
+import net.createmod.catnip.data.Pair;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,9 +21,8 @@ public class MixinGenericItemEmptying
         Pair<FluidStack,ItemStack> output= cir.getReturnValue();
         if(WaterPurity.hasPurity(stack)){
             FluidStack fluidStack=output.getFirst();
-            CompoundTag tag = fluidStack.getOrCreateTag();
-            tag.putInt("Purity", WaterPurity.getPurity(stack));
-            fluidStack.setTag(tag);
+            if(fluidStack.isEmpty()) return;
+            WaterPurity.addPurity(fluidStack,WaterPurity.getPurity(stack));
             cir.setReturnValue(Pair.of(fluidStack,output.getSecond()));
         }
     }

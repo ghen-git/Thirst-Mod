@@ -1,23 +1,20 @@
 package dev.ghen.thirst.foundation.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import de.teamlapen.vampirism.api.VampirismAPI;
 import de.teamlapen.vampirism.util.Helper;
-import dev.ghen.thirst.foundation.config.ClientConfig;
-import net.minecraft.client.gui.GuiGraphics;
 import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.config.ClientConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.fml.ModList;
 
 public class ThirstBarRenderer
 {
@@ -31,9 +28,9 @@ public class ThirstBarRenderer
     protected final static RandomSource random = RandomSource.create();
     public static IGuiOverlay THIRST_OVERLAY = (gui, poseStack, partialTicks, screenWidth, screenHeight) ->
     {
-        boolean isMounted = gui.getMinecraft().player.getVehicle() instanceof LivingEntity;
+        boolean isMounted = minecraft.player.getVehicle() instanceof LivingEntity;
         cancelRender =false;
-        if (!isMounted && !gui.getMinecraft().options.hideGui && gui.shouldDrawSurvivalElements())
+        if (!isMounted && !minecraft.options.hideGui && gui.shouldDrawSurvivalElements())
         {
             if(checkIfPlayerIsVampire)
             {
@@ -42,6 +39,10 @@ public class ThirstBarRenderer
                     cancelRender =true;
                     return;
                 }
+            }
+            if(minecraft.player.isAlive() && !minecraft.player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null).getShouldTickThirst()){
+                cancelRender = true;
+                return;
             }
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);
@@ -60,7 +61,6 @@ public class ThirstBarRenderer
             PLAYER_THIRST = minecraft.player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null);
         }
 
-        Player player = (Player) gui.getMinecraft().getCameraEntity();
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, THIRST_ICONS);
         int left = width / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get();

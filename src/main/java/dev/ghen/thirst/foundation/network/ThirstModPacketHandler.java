@@ -8,7 +8,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ThirstModPacketHandler
 {
-    private static final String PROTOCOL_VERSION = "0.1.1";
+    private static final String PROTOCOL_VERSION = "0.1.2";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             Thirst.asResource("main"),
             () -> PROTOCOL_VERSION,

@@ -2,20 +2,18 @@ package dev.ghen.thirst;
 
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.compat.create.CreateRegistry;
-import dev.ghen.thirst.compat.create.ponder.ThirstPonders;
+import dev.ghen.thirst.compat.create.ponder.ThirstPonderPlugin;
+import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.registry.ItemInit;
 import dev.ghen.thirst.content.thirst.PlayerThirst;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
-import dev.ghen.thirst.foundation.config.ClientConfig;
-import dev.ghen.thirst.foundation.config.CommonConfig;
-import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
-import dev.ghen.thirst.foundation.config.KeyWordConfig;
+import dev.ghen.thirst.foundation.config.*;
 import dev.ghen.thirst.foundation.gui.ThirstBarRenderer;
 import dev.ghen.thirst.foundation.gui.appleskin.HUDOverlayHandler;
 import dev.ghen.thirst.foundation.gui.appleskin.TooltipOverlayHandler;
 import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
-import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.tab.ThirstTab;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -27,11 +25,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+
 @Mod(Thirst.ID)
 public class Thirst
 {
     public static final String ID = "thirst";
-
     public Thirst()
     {
 
@@ -66,6 +64,7 @@ public class Thirst
         CommonConfig.setup();
         ClientConfig.setup();
         KeyWordConfig.setup();
+        ContainerConfig.setup();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -87,14 +86,21 @@ public class Thirst
 
         if(ModList.get().isLoaded("bakery"))
             PlayerThirst.checkLetsDoBakeryEffects = true;
+
+        if(ModList.get().isLoaded("brewery"))
+            PlayerThirst.checkLetsDoBreweryEffects = true;
     }
 
     private void clientSetup(final FMLClientSetupEvent event)
     {
         if(ModList.get().isLoaded("create")){
-            event.enqueueWork(ThirstPonders::register);
+            event.enqueueWork(()-> new Object()
+            {
+                public void registerPonderPlugin(){
+                    PonderIndex.addPlugin(new ThirstPonderPlugin());
+                }
+            }.registerPonderPlugin());
         }
-
         if(ModList.get().isLoaded("vampirism"))
         {
             ThirstBarRenderer.checkIfPlayerIsVampire = true;

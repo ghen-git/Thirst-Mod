@@ -14,16 +14,21 @@ public class CommonConfig
     private static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-
     public static final ForgeConfigSpec.ConfigValue<Number> THIRST_DEPLETION_MODIFIER;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> THIRST_DEPLETION_IN_PEACEFUL;
+    public static final ForgeConfigSpec.DoubleValue NETHER_THIRST_DEPLETION_MODIFIER;
     public static final ForgeConfigSpec.IntValue FIRE_RESISTANCE_DEHYDRATION;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DEPLETES_WHEN_NAUSEA;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MOVE_SLOW_WHEN_THIRSTY;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_RAIN_WATETR;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DRINKS_NUTRITION;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BOTTLE_STACKSIZE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DEHYDRATION_HALTS_HEALTH_REGEN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT;
     public static final ForgeConfigSpec.ConfigValue<Boolean> HEALTH_REGEN_DEPLETES_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CAN_DRINK_BY_HAND;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> EXTRA_HYDRATION_CONVERT_TO_QUENCHED;
+
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_HYDRATION;
     public static final ForgeConfigSpec.ConfigValue<Number> HAND_DRINKING_QUENCHED;
 
@@ -53,9 +58,13 @@ public class CommonConfig
     {
         BUILDER.push("General");
         THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much faster is hydration depletion relative to hunger (1 means they will deplete at the same speed)").define("thirstDepletionModifier", 1.2);
-        FIRE_RESISTANCE_DEHYDRATION = BUILDER.comment("How much faster is hydration depletion when players with fire resistance(Range 0 to 100, 0 means not to depletion)").defineInRange("fireResistanceDehydration",0,0,100);
-        MOVE_SLOW_WHEN_THIRSTY=BUILDER.comment("Whether players won't be able to sprint if their thirst bar is 3 droplets or less").define("moveSlowWhenThirsty",true);
-        ENABLE_DRINKS_NUTRITION=BUILDER.comment("Whether foods labeled as drinks will restore hunger").define("enableDrinksNutrition",true);
+        THIRST_DEPLETION_IN_PEACEFUL = BUILDER.comment("Whether hydration depletion in peaceful mode").define("thirstDepletionInPeace",false);
+        NETHER_THIRST_DEPLETION_MODIFIER = BUILDER.comment("How much is hydration depletion in nether faster than overworld").defineInRange("netherThirstDeletionModifier",3.0D,1.0D,5.0D);
+        FIRE_RESISTANCE_DEHYDRATION = BUILDER.comment("How much faster is hydration depletion when players with fire resistance(Range 0 to 100, 0 means not to depletion,100 means depletion like normal)").defineInRange("fireResistanceDehydration",50,0,100);
+        DEPLETES_WHEN_NAUSEA = BUILDER.comment("Whether thirst depletes when player is nausea").define("depletesWhenNausea",true);
+        MOVE_SLOW_WHEN_THIRSTY = BUILDER.comment("Whether players won't be able to sprint if their thirst bar is 3 droplets or less").define("moveSlowWhenThirsty",true);
+        CAN_DRINK_RAIN_WATETR = BUILDER.comment("Whether players can drink rain water").define("DrinkRainWater",true);
+        ENABLE_DRINKS_NUTRITION = BUILDER.comment("Whether foods labeled as drinks will restore hunger").define("enableDrinksNutrition",true);
         BUILDER.pop();
 
         BUILDER.push("Drinking Mechanics");
@@ -63,9 +72,10 @@ public class CommonConfig
         DEHYDRATION_HALTS_HEALTH_REGEN = BUILDER.comment("Whether the player can't regenerate as fast when hydration isn't full (like hunger)").define("dehydrationHaltsHealthRegen", true);
         HEALTH_REGEN_DEPLETES_HYDRATION = BUILDER.comment("Whether hydration depletes when the player's health is regenerating (like hunger)").define("healthRegenDepletesHydration", true);
         HEALTH_REGEN_DEHYDRATION_IS_BIOME_DEPENDENT = BUILDER.comment("Whether dehydration from regenerating health (if enabled above) should take into account temperature and humidity").define("healthRegenDehydrationIsBiomeDependent", true);
-        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand").define("canDrinkByHand", false);
+        CAN_DRINK_BY_HAND = BUILDER.comment("Whether players can drink by shift-right-clicking water with an empty hand. Attention: it needs to be enable on both server and client sides").define("canDrinkByHand", false);
         HAND_DRINKING_HYDRATION = BUILDER.comment("How much the player is hydrated when drinking by hand").define("handDrinkingHydration", 3);
         HAND_DRINKING_QUENCHED = BUILDER.comment("How much the player thirst is quenched when drinking by hand").define("handDrinkingQuenched", 2);
+        EXTRA_HYDRATION_CONVERT_TO_QUENCHED =BUILDER.comment("Whether extra hydration will convert to quenched").define("ExtraHydrationConvertToQuenched",true);
         BUILDER.pop();
 
         BUILDER.push("World");
@@ -75,7 +85,7 @@ public class CommonConfig
         BUILDER.pop();
 
         BUILDER.push("Purity-related Effects");
-        DEFAULT_PURITY =  BUILDER.comment("Purity for drinks that normally have purity but for whatever reason don't have a value set").define("defaultPurity", 3);
+        DEFAULT_PURITY =  BUILDER.comment("Purity for drinks that normally have purity but for whatever reason don't have a value set").define("defaultPurity", 2);
         QUENCH_THIRST_WHEN_DEBUFFED =  BUILDER.comment("Whether player should gain hydration even if they recieved a purity-related debuff").define("quenchThirstWhenDebuffed", true);
         DIRTY_POISON_PERCENTAGE =  BUILDER.comment("% of getting poisoned after drinking dirty water").define("dirtyPoisonPercentage", 30);
         DIRTY_NAUSEA_PERCENTAGE =  BUILDER.comment("% of getting sick (hunger and nausea) after drinking dirty water").define("dirtyNauseaPercentage", 100);

@@ -1,5 +1,7 @@
 package dev.ghen.thirst.foundation.mixin.toughasnails;
 
+import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.util.MathHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -8,6 +10,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.ClipContext;
@@ -20,17 +23,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import toughasnails.api.block.TANBlocks;
-import toughasnails.api.item.TANItems;
 import toughasnails.block.RainCollectorBlock;
 import toughasnails.item.EmptyCanteenItem;
-import dev.ghen.thirst.content.purity.WaterPurity;
-import dev.ghen.thirst.foundation.util.MathHelper;
 
-@Mixin(EmptyCanteenItem.class)
+@Mixin(value = EmptyCanteenItem.class,remap = false)
 public abstract class MixinEmptyCanteenItem {
 
     @Shadow(remap = false)
     protected abstract ItemStack replaceCanteen(ItemStack stack, Player player, ItemStack filledItem);
+
+    @Shadow public abstract Item getPurifiedWaterCanteen();
+
+    @Shadow public abstract Item getWaterCanteen();
+
+    @Shadow public abstract Item getDirtyWaterCanteen();
+
     @Inject(method = "use",at =@At("HEAD"), cancellable = true)
     private void use(Level world, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir){
         ItemStack stack = player.getItemInHand(hand);
@@ -53,11 +60,11 @@ public abstract class MixinEmptyCanteenItem {
 
             int purity=WaterPurity.getBlockPurity(level, blockPos);
             if(purity==3){
-                filledItem = TANItems.PURIFIED_WATER_CANTEEN.get().getDefaultInstance();
+                filledItem = getPurifiedWaterCanteen().getDefaultInstance();
             } else if (purity==2) {
-                filledItem = TANItems.WATER_CANTEEN.get().getDefaultInstance();
+                filledItem = getWaterCanteen().getDefaultInstance();
             }else {
-                filledItem = TANItems.DIRTY_WATER_CANTEEN.get().getDefaultInstance();
+                filledItem = getDirtyWaterCanteen().getDefaultInstance();
             }
 
             ItemStack result = ItemUtils.createFilledResult(stack, player, filledItem);
@@ -68,8 +75,8 @@ public abstract class MixinEmptyCanteenItem {
             int waterLevel = state.getValue(RainCollectorBlock.LEVEL);
             if (waterLevel > 0 && !world.isClientSide()) {
                 world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                ((RainCollectorBlock) TANBlocks.RAIN_COLLECTOR.get()).setWaterLevel(world, blockPos, state, waterLevel - 1);
-                cir.setReturnValue(InteractionResultHolder.success(replaceCanteen(stack, player, new ItemStack(TANItems.PURIFIED_WATER_CANTEEN.get()))));
+                ((RainCollectorBlock) TANBlocks.RAIN_COLLECTOR).setWaterLevel(world, blockPos, state, waterLevel - 1);
+                cir.setReturnValue(InteractionResultHolder.success(replaceCanteen(stack, player, getPurifiedWaterCanteen().getDefaultInstance())));
             }
         }
     }

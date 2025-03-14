@@ -1,7 +1,12 @@
 package dev.ghen.thirst.api;
 
 import com.momosoftworks.coldsweat.api.util.Temperature;
+import dev.ghen.thirst.content.purity.ContainerWithPurity;
+import dev.ghen.thirst.content.purity.WaterPurity;
+import dev.ghen.thirst.foundation.common.event.RegisterThirstValueEvent;
+import dev.ghen.thirst.foundation.common.event.ThirstEventFactory;
 import dev.ghen.thirst.foundation.config.CommonConfig;
+import dev.ghen.thirst.foundation.config.ContainerConfig;
 import dev.ghen.thirst.foundation.config.ItemSettingsConfig;
 import dev.ghen.thirst.foundation.config.KeyWordConfig;
 import dev.ghen.thirst.foundation.util.ConfigHelper;
@@ -11,12 +16,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +38,27 @@ public class ThirstHelper
     public static Map<Item, Number[]> VALID_FOODS = LoadedValue.of(() -> ConfigHelper
             .getItemsWithValues(ItemSettingsConfig.FOODS.get()))
             .get();
+
+    public static List<Item> containers = LoadedValue.of(() -> ConfigHelper
+                    .getItems(ContainerConfig.CONTAINERS.get()))
+            .get();
+
+    public static void init(){
+        ThirstEventFactory.onRegisterThirstValue();
+        for (Item item : containers){
+            if(item.equals(Items.AIR))
+                continue;
+            WaterPurity.addContainer(new ContainerWithPurity(new ItemStack(item)));
+        }
+
+        VALID_DRINKS.forEach((item, numbers) -> {
+            if (item.getFoodProperties() != null) {
+                if (!CommonConfig.ENABLE_DRINKS_NUTRITION.get()){
+                    item.getFoodProperties().nutrition = 0;
+                }
+            }
+        });
+    }
 
     public static String keywordBlackList = KeyWordConfig.KEYWORD_BLACKLIST.get();
     public static String keywordDrink = KeyWordConfig.KEYWORD_DRINK.get();
@@ -58,35 +85,24 @@ public class ThirstHelper
     }
 
     /**
-     * Adds a hydration and "quenchness" value to an item via code, and treats it as food.
-     * Can be overwritten by the player in the config.
+     * Subscribe #{@link RegisterThirstValueEvent} to use the api.
      * */
+    @Deprecated
     @SuppressWarnings("unused")
-    public static void addFood(Item item, int thirst, int quenched)
-    {
-        VALID_FOODS.put(item, new Number[]{thirst, quenched});
-    }
+    public static void addFood(Item item, int thirst, int quenched) {}
 
     /**
-     * Adds a hydration and "quenchness" value to an item via code, and treats it as a drink.
-     * Can be overwritten by the player in the config.
+     * Subscribe #{@link RegisterThirstValueEvent} to use the api.
      * */
+    @Deprecated
     @SuppressWarnings("unused")
-    public static void addDrink(Item item, int thirst, int quenched)
-    {
-        VALID_DRINKS.put(item, new Number[]{thirst, quenched});
-    }
+    public static void addDrink(Item item, int thirst, int quenched) {}
 
     public static int getThirst(ItemStack itemStack)
     {
         Item item = itemStack.getItem();
 
         if(VALID_DRINKS.containsKey(item)) {
-            if (!CommonConfig.ENABLE_DRINKS_NUTRITION.get()){
-                if (item.getFoodProperties() != null) {
-                    Objects.requireNonNull(item.getFoodProperties()).nutrition = 0;
-                }
-            }
             return VALID_DRINKS.get(item)[0].intValue();
         }
         else
@@ -106,7 +122,7 @@ public class ThirstHelper
     public static int getPurity(ItemStack item)
     {
         if(!hasPurity(item))
-            return -1;
+            return CommonConfig.DEFAULT_PURITY.get();
         else {
             assert item.getTag() != null;
             return item.getTag().getInt("Purity");
@@ -127,7 +143,7 @@ public class ThirstHelper
 
     public static float getExhaustionFireResistanceModifier(Player player){
         if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
-            return CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get();
+            return (float) CommonConfig.FIRE_RESISTANCE_DEHYDRATION.get() /100;
         }else return 1.0f;
     }
 
@@ -143,7 +159,7 @@ public class ThirstHelper
         Level level = player.level();
 
         if(level.dimensionType().ultraWarm())
-            return 3.0f;
+            return CommonConfig.NETHER_THIRST_DEPLETION_MODIFIER.get().floatValue();
         else
         {
             Biome biome = level.getBiome(pos).value();
@@ -196,7 +212,7 @@ public class ThirstHelper
         if(!itemStack.isEdible())
             return false;
 
-        String pattern= keywordBlackList;
+        String pattern = keywordBlackList;
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
@@ -217,8 +233,8 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordSoup;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordSoup;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
         hasWater=matcher.find();
@@ -231,11 +247,11 @@ public class ThirstHelper
             return true;
         }
 
-        pattern=keywordFruit;
-        matcher= Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
+        pattern = keywordFruit;
+        matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE)
                 .matcher(itemStack.getDescriptionId());
 
-        hasWater=matcher.find();
+        hasWater = matcher.find();
         if(hasWater)
             VALID_FOODS.put(itemStack.getItem(), new Number[]{
                     KeyWordConfig.getFruitHydration(),

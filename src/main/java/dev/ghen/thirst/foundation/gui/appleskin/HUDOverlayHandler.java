@@ -121,13 +121,6 @@ public class HUDOverlayHandler {
         }
 
         ThirstValues thirstValues = new ThirstValues(ThirstHelper.getThirst(heldItem), ThirstHelper.getQuenched(heldItem));
-        //FoodValuesEvent foodValuesEvent = new FoodValuesEvent(player, heldItem, FoodHelper.getDefaultFoodValues(heldItem, player), modifiedFoodValues);
-
-        // notify everyone that we should render hunger hud overlay
-        /*HUDOverlayEvent.HungerRestored renderRenderEvent = new HUDOverlayEvent.HungerRestored(stats.getFoodLevel(), heldItem, modifiedFoodValues, right, top, poseStack);
-        MinecraftForge.EVENT_BUS.post(renderRenderEvent);
-        if (renderRenderEvent.isCanceled())
-            return;*/
 
         // calculate the final hunger and saturation
         int drinkThirst = thirstValues.thirst;

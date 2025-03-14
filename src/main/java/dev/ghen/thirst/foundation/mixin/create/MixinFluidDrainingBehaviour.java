@@ -20,9 +20,7 @@ public abstract class MixinFluidDrainingBehaviour
         FluidDrainingBehaviour behaviour = ((FluidDrainingBehaviour)(Object) this);
         FluidStack output=cir.getReturnValue();
         if (FluidHelper.isWater(output.getFluid())){
-            CompoundTag tag = output.getOrCreateTag();
-                tag.putInt("Purity", WaterPurity.getBlockPurity(behaviour.getWorld(), rootPos));
-                output.setTag(tag);
+                WaterPurity.addPurity(output,WaterPurity.getBlockPurity(behaviour.getWorld(), rootPos));
                 cir.setReturnValue(output);
         }
     }

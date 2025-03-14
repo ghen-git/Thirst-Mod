@@ -3,12 +3,12 @@ package dev.ghen.thirst.foundation.mixin.toughasnails;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import toughasnails.config.ServerConfig;
+import toughasnails.config.ThirstConfig;
 
-@Mixin(value = ServerConfig.class,remap = false)
+@Mixin(value = ThirstConfig.class,remap = false)
 public class MixinServerConfig {
-    @ModifyArg(method ="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/ForgeConfigSpec$Builder;define(Ljava/lang/String;Z)Lnet/minecraftforge/common/ForgeConfigSpec$BooleanValue;", ordinal = 0),index = 1)
-    private static boolean modifyBoolean(boolean defaultValue) {
+    @ModifyArg(method ="load", at = @At(value = "INVOKE", target = "Ljava/lang/Boolean;valueOf(Z)Ljava/lang/Boolean;", ordinal = 0),index = 0)
+    private boolean modifyBoolean(boolean defaultValue) {
         return false;
     }
 }

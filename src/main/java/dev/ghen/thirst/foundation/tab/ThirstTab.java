@@ -48,6 +48,9 @@ public class ThirstTab
         list.add(WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), 3));
         list.add(ItemInit.CLAY_BOWL.get().getDefaultInstance());
         list.add(ItemInit.TERRACOTTA_BOWL.get().getDefaultInstance());
+        list.add(WaterPurity.addPurity(new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), 0));
+        list.add(WaterPurity.addPurity(new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), 1));
+        list.add(WaterPurity.addPurity(new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), 2));
         list.add(ItemInit.TERRACOTTA_WATER_BOWL.get().getDefaultInstance());
 
         // for some fucking reason the game crashes if you don't do it here

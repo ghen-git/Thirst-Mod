@@ -20,6 +20,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -87,20 +88,6 @@ public class PlayerThirstManager
     }
 
     @SubscribeEvent
-    public static void drink(LivingEntityUseItemEvent.Finish event)
-    {
-        if(event.getEntity() instanceof Player && ThirstHelper.itemRestoresThirst(event.getItem()))
-        {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                ItemStack item = event.getItem();
-                if(WaterPurity.givePurityEffects((Player) event.getEntity(), item))
-                    cap.drink((Player) event.getEntity(), ThirstHelper.getThirst(item), ThirstHelper.getQuenched(item));
-            });
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayer serverPlayer)
@@ -116,15 +103,25 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void endFix(PlayerEvent.Clone event)
     {
-        if (!event.isWasDeath() && !event.getEntity().level().isClientSide)
+        if (!event.getEntity().level().isClientSide)
         {
             Player oldPlayer = event.getOriginal();
             oldPlayer.reviveCaps();
 
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-                    oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy));
-
+            if(!event.isWasDeath()) {
+                event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+                        oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap::copy));
+            }
+            else {
+                event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
+                        oldPlayer.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(oldCap->cap.setShouldTickThirst(oldCap.getShouldTickThirst())));
+            }
             oldPlayer.invalidateCaps();
         }
+    }
+
+    @SubscribeEvent
+    public static void initDrinks(ServerStartedEvent event){
+        ThirstHelper.init();
     }
 }

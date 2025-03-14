@@ -4,15 +4,22 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "thirst.refmap.json",
   "mixins": [
+    "MixinAbstractCookingRecipe",
+    "MixinAbstractFurnaceEntity",
     "MixinBootstrap",
     "MixinBottleItem",
     "MixinBucketItem",
     "MixinCampfireBlockEntity",
+    "MixinFluidBucketWrapper",
+    "MixinFluidUtil",
     "MixinFoodData",
     "MixinItemStack",
     "MixinLayeredCauldronBlock",
-    "accessors.create.IFluidDrainingBehaviourAccessor",
-    "accessors.supplementaries.FaucetBehaviorsManagerAccessor",
+    "MixinPotionItem",
+    "MixinPlayer",
+    "accessors.brewinandchewin.KegBlockEntityAccessor",
+    "brewinandchewin.MixinKegBlockEntity",
+    "brewinandchewin.MixinKegFermentingRecipe",
     "create.MixinBasinRecipe",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
@@ -20,16 +27,18 @@
     "create.MixinGenericItemFilling",
     "create.MixinIHaveGoggleInformation",
     "create.MixinOpenEndedPipe",
+    "farmersrespite.MixinKettleBlockEntity",
     "jade.MixinFluidView",
-    "supplementaries.MixinWaterBlockInteraction",
     "toughasnails.MixinEmptyCanteenItem",
     "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
     "toughasnails.MixinThirstHelperImpl",
-    "toughasnails.MixinTooltipHandler"
+    "toughasnails.MixinTooltipHandler",
+    "botania.MixinForgeXplatImpl"
   ],
   "client": [
-    "MixinLocalPlayer"
+    "MixinLocalPlayer",
+    "farmersrespite.MixinKettleScreen"
   ],
   "minVersion": "0.8"
 }

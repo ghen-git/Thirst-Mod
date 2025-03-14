@@ -5,9 +5,6 @@
   "item.thirst.terracotta_water_bowl": "裝水的陶碗",
   "item.thirst.terracotta_bowl": "陶碗",
   "item.thirst.clay_bowl": "黏土碗",
-  "thirst.container.kettle.no_water": "沒有水",
-  "thirst.container.kettle.has_single_water": "含有一杯%s的水",
-  "thirst.container.kettle.has_many_water": "含有%1$s杯%2$s的水",
   "itemGroup.thirst": "Thirst",
   "thirst.purity.dirty": "骯髒",
   "thirst.purity.slightly_dirty": "有點髒",
@@ -18,5 +15,9 @@
   "thirst.ponder.sand_filter.header": "用砂濾器淨化水",
   "thirst.ponder.sand_filter.text_1": "砂濾器會淨化鄰近泵入的水",
   "thirst.ponder.sand_filter.text_2": "髒水需要從上方泵入...",
-  "thirst.ponder.sand_filter.text_3": "淨化後的水會從底部泵出"
+  "thirst.ponder.sand_filter.text_3": "淨化後的水會從底部泵出",
+  "command.thirst.query": "當前口渴值: %1$s, 當前解渴值: %2$s",
+  "command.thirst.set": "設置口渴值为 %1$s,解渴值为 %2$s",
+  "command.thirst.enable": "已為玩家 %1$s 啟用口渴",
+  "command.thirst.disable": "已為玩家 %1$s 禁用口渴"
 }

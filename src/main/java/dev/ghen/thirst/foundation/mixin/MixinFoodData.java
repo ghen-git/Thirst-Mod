@@ -9,13 +9,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FoodData.class)
 public abstract class MixinFoodData
 {
     @Shadow
     public abstract void addExhaustion(float p_38704_);
+
+    @Shadow private float exhaustionLevel;
     @Unique
     private int dehydratedHealTimer = 0;
 
@@ -72,5 +76,12 @@ public abstract class MixinFoodData
         }
         else
             this.addExhaustion(-6.0F);
+    }
+
+    @Inject(method = "tick",at = @At(value = "HEAD"))
+    private void DealWithExhaustionBySaturation(Player player, CallbackInfo ci){
+        if(exhaustionLevel>4.0F){
+            player.getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(IThirst::ExhaustionRecalculate);
+        }
     }
 }

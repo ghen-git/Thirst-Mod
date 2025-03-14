@@ -37,9 +37,7 @@ public class MixinOpenEndedPipe
                 FluidStack stack = new FluidStack(fluidState.getType(), 1000);
                 if(FluidHelper.isWater(stack.getFluid()))
                 {
-                    CompoundTag tag = stack.getOrCreateTag();
-                    tag.putInt("Purity", WaterPurity.getBlockPurity(pipe.getWorld(), pipe.getOutputPos()));
-                    stack.setTag(tag);
+                    WaterPurity.addPurity(stack, WaterPurity.getBlockPurity(pipe.getWorld(), pipe.getOutputPos()));
 
                     if (simulate)
                     {

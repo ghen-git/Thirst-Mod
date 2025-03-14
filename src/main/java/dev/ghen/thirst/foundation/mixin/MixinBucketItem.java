@@ -40,8 +40,7 @@ public class MixinBucketItem
     {
         if(shouldModify)
         {
-            CompoundTag tag = result.getOrCreateTag();
-            tag.putInt("Purity", purity);
+            WaterPurity.addPurity(result,purity);
         }
 
         return result;

@@ -19,7 +19,8 @@ public class ItemSettingsConfig
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> DRINKS;
     public static final ForgeConfigSpec.ConfigValue<List<? extends List<?>>> FOODS;
-    public static final ForgeConfigSpec.ConfigValue<List<String>> ITEMS_BLACKLIST;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_BLACKLIST;
+
 
     static
     {
@@ -32,11 +33,28 @@ public class ItemSettingsConfig
                                         Arrays.asList("minecraft:potion", 6, 8),
                                         Arrays.asList("thirst:terracotta_water_bowl", 4, 5),
                                         Arrays.asList("farmersrespite:green_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:long_green_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:strong_green_tea", 10, 14),
                                         Arrays.asList("farmersrespite:yellow_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:long_yellow_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:strong_yellow_tea", 10, 14),
                                         Arrays.asList("farmersrespite:black_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:long_black_tea", 10, 14),
+                                        Arrays.asList("farmersrespite:strong_black_tea", 10, 14),
                                         Arrays.asList("farmersrespite:rose_hip_tea", 12, 22),
+                                        Arrays.asList("farmersrespite:long_rose_hip_tea", 12, 22),
+                                        Arrays.asList("farmersrespite:strong_rose_hip_tea", 12, 22),
                                         Arrays.asList("farmersrespite:dandelion_tea", 12, 22),
-                                        Arrays.asList("farmersrespite:coffee",6,11),
+                                        Arrays.asList("farmersrespite:long_dandelion_tea", 12, 22),
+                                        Arrays.asList("farmersrespite:strong_dandelion_tea", 12, 22),
+                                        Arrays.asList("farmersrespite:gamblers_tea", 6, 11),
+                                        Arrays.asList("farmersrespite:long_gamblers_tea", 6, 11),
+                                        Arrays.asList("farmersrespite:strong_gamblers_tea", 6, 11),
+                                        Arrays.asList("farmersrespite:coffee", 6, 11),
+                                        Arrays.asList("farmersrespite:long_coffee", 6, 11),
+                                        Arrays.asList("farmersrespite:stong_coffee", 6, 11),
+                                        Arrays.asList("farmersrespite:strong_melon_juice", 8, 13),
+                                        Arrays.asList("farmersrespite:strong_apple_cider", 8, 13),
                                         Arrays.asList("create:builders_tea", 12, 22),
                                         Arrays.asList("farmersdelight:apple_cider", 8, 13),
                                         Arrays.asList("farmersdelight:melon_juice", 8, 13),
@@ -64,9 +82,24 @@ public class ItemSettingsConfig
 
                                         Arrays.asList("toughasnails:dirty_water_bottle", 6, 8),
                                         Arrays.asList("toughasnails:purified_water_bottle", 8, 10),
-                                        Arrays.asList("toughasnails:dirty_water_canteen", 8, 10),
-                                        Arrays.asList("toughasnails:water_canteen", 9, 11),
-                                        Arrays.asList("toughasnails:purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:leather_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:leather_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:leather_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:copper_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:copper_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:copper_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:iron_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:iron_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:iron_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:gold_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:gold_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:gold_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:diamond_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:diamond_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:diamond_purified_water_canteen", 10, 12),
+                                        Arrays.asList("toughasnails:netherite_dirty_water_canteen", 8, 10),
+                                        Arrays.asList("toughasnails:netherite_water_canteen", 9, 11),
+                                        Arrays.asList("toughasnails:netherite_purified_water_canteen", 10, 12),
                                         Arrays.asList("toughasnails:melon_juice", 8, 13),
                                         Arrays.asList("toughasnails:apple_juice", 8, 13),
                                         Arrays.asList("toughasnails:cactus_juice", 8, 13),
@@ -75,7 +108,8 @@ public class ItemSettingsConfig
                                         Arrays.asList("toughasnails:chorus_fruit_juice", 8, 13),
                                         Arrays.asList("toughasnails:suspicious_water_cup", 8, 13),
                                         Arrays.asList("toughasnails:pumpkin_juice", 8, 13),
-                                        Arrays.asList("toughasnails:sweet_berry_juice", 8, 13)
+                                        Arrays.asList("toughasnails:sweet_berry_juice", 8, 13),
+                                        Arrays.asList("toughasnails:ice_cream", 6, 12)
 
                                 ),
                         it -> it instanceof List && ((List<?>) it).get(0) instanceof String && ((List<?>) it).get(1) instanceof Number);
@@ -127,7 +161,13 @@ public class ItemSettingsConfig
         ITEMS_BLACKLIST = BUILDER.comment("A mod may have added thirst compatibility to an item via code. If you want to edit the thirst values",
                 "of that item, add an entry in one of the first two lists. If instead you want to remove thirst support for that item, add an entry in this list",
                 "Format: [\"examplemod:example_item_1\", \"examplemod:example_item_2\"]")
-                .define("itemsBlacklist", new ArrayList<>());
+                .defineList("itemsBlacklist", Arrays.asList(
+                                        "examplemod:example_item_1",
+                                        "examplemod:example_item_2"
+                        ),
+                        it -> it instanceof String);
+
+
 
         SPEC = BUILDER.build();
     }

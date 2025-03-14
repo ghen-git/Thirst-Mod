@@ -1,22 +1,23 @@
 package dev.ghen.thirst.compat.create;
 
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.LangBuilder;
+import com.simibubi.create.foundation.utility.CreateLang;
 import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.config.CommonConfig;
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -79,7 +80,7 @@ public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggl
         {
             FluidStack water = dirtyTank.getPrimaryHandler().drain(CommonConfig.SAND_FILTER_MB_PER_TICK.get().intValue(), IFluidHandler.FluidAction.EXECUTE);
 
-            if(WaterPurity.hasPurity(water))
+            if(water.getFluid().equals(Fluids.WATER))
                 WaterPurity.addPurity(water, Math.min(WaterPurity.getPurity(water) + CommonConfig.SAND_FILTER_FILTRATION_AMOUNT.get().intValue(), WaterPurity.MAX_PURITY));
 
             purifiedTank.getPrimaryHandler().fill(water, IFluidHandler.FluidAction.EXECUTE);
@@ -89,8 +90,8 @@ public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggl
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking)
     {
-            LangBuilder mb = Lang.translate("generic.unit.millibuckets");
-            Lang.translate("gui.goggles.fluid_container")
+            LangBuilder mb = CreateLang.translate("generic.unit.millibuckets");
+            CreateLang.translate("gui.goggles.fluid_container")
                     .forGoggles(tooltip);
 
             int dirtyWaterAmount = dirtyTank.getPrimaryHandler().getFluidAmount();
@@ -101,8 +102,8 @@ public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggl
         buildTooltip(tooltip, mb, purifiedWaterAmount, purifiedTank);
 
         if(dirtyTank.isEmpty() && purifiedTank.isEmpty()){
-            Lang.translate("gui.goggles.fluid_container.capacity")
-                    .add(Lang.number(dirtyTank.getPrimaryHandler().getTankCapacity(0))
+            CreateLang.translate("gui.goggles.fluid_container.capacity")
+                    .add(CreateLang.number(dirtyTank.getPrimaryHandler().getTankCapacity(0))
                             .add(mb)
                             .style(ChatFormatting.GOLD))
                     .style(ChatFormatting.GRAY)
@@ -115,19 +116,19 @@ public class SandFilterTileEntity extends SmartBlockEntity implements IHaveGoggl
     private void buildTooltip(List<Component> tooltip, LangBuilder mb, int purifiedWaterAmount, SmartFluidTankBehaviour purifiedTank) {
         if(!purifiedTank.isEmpty())
         {
-            Lang.builder()
+            CreateLang.builder()
                     .text(WaterPurity.getPurityText(WaterPurity.getPurity(purifiedTank.getPrimaryHandler().getFluid())))
-                    .add(Lang.text(" "))
-                    .add(Lang.fluidName(purifiedTank.getPrimaryHandler().getFluid()))
+                    .add(CreateLang.text(" "))
+                    .add(CreateLang.fluidName(purifiedTank.getPrimaryHandler().getFluid()))
                     .style(ChatFormatting.GRAY)
                     .forGoggles(tooltip);
 
-            Lang.builder()
-                    .add(Lang.number(purifiedWaterAmount)
+            CreateLang.builder()
+                    .add(CreateLang.number(purifiedWaterAmount)
                             .add(mb)
                             .style(ChatFormatting.GOLD))
                     .text(ChatFormatting.GRAY, " / ")
-                    .add(Lang.number(purifiedTank.getPrimaryHandler().getCapacity())
+                    .add(CreateLang.number(purifiedTank.getPrimaryHandler().getCapacity())
                             .add(mb)
                             .style(ChatFormatting.DARK_GRAY))
                     .forGoggles(tooltip, 1);

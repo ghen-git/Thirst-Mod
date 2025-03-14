@@ -16,12 +16,19 @@ public class PlayerThirstSyncMessage
     public int thirst;
     public int quenched;
     public float exhaustion;
+    public boolean enable;
 
-    public PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion)
+    public PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion,boolean enable)
     {
         this.thirst = thirst;
         this.quenched = quenched;
         this.exhaustion = exhaustion;
+        this.enable = enable;
+    }
+
+    public PlayerThirstSyncMessage(boolean enable)
+    {
+        this.enable = enable;
     }
 
     public static void encode(PlayerThirstSyncMessage message, FriendlyByteBuf buffer)
@@ -29,11 +36,12 @@ public class PlayerThirstSyncMessage
         buffer.writeInt(message.thirst);
         buffer.writeInt(message.quenched);
         buffer.writeFloat(message.exhaustion);
+        buffer.writeBoolean(message.enable);
     }
 
     public static PlayerThirstSyncMessage decode(FriendlyByteBuf buffer)
     {
-        return new PlayerThirstSyncMessage(buffer.readInt(), buffer.readInt(), buffer.readFloat());
+        return new PlayerThirstSyncMessage(buffer.readInt(), buffer.readInt(), buffer.readFloat(),buffer.readBoolean());
     }
 
     public static void handle(PlayerThirstSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier)
@@ -63,6 +71,7 @@ class ClientThirstSyncMessage
                 cap.setThirst(message.thirst);
                 cap.setQuenched(message.quenched);
                 cap.setExhaustion(message.exhaustion);
+                cap.setShouldTickThirst(message.enable);
             });
         }
     }

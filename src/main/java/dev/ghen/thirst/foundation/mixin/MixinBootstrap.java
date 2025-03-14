@@ -32,8 +32,6 @@ import java.util.function.Predicate;
 @Mixin({Bootstrap.class})
 public class MixinBootstrap
 {
-    public MixinBootstrap() { }
-
     @Inject(
             method = {"bootStrap"},
             at = {@At(
