@@ -16,7 +16,6 @@ import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.fml.ModList;
 
 public class ThirstBarRenderer
 {
@@ -39,6 +38,11 @@ public class ThirstBarRenderer
                     cancelRender =true;
                     return;
                 }
+            }
+
+            if(minecraft.player.isAlive() && !minecraft.player.getCapability(ModCapabilities.PLAYER_THIRST).orElse(null).getShouldTickThirst()){
+                cancelRender = true;
+                return;
             }
             gui.setupOverlayRenderState(true, false);
             render(gui, screenWidth, screenHeight, poseStack);

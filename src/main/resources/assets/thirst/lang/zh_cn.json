@@ -18,5 +18,9 @@
   "thirst.ponder.sand_filter.header": "用砂滤器净化水",
   "thirst.ponder.sand_filter.text_1": "砂滤器会净化邻近泵入的水",
   "thirst.ponder.sand_filter.text_2": "脏水需要从上方泵入...",
-  "thirst.ponder.sand_filter.text_3": "净化后的水会从底部泵出"
+  "thirst.ponder.sand_filter.text_3": "净化后的水会从底部泵出",
+  "command.thirst.query": "当前口渴值: %1$s, 当前解渴值: %2$s",
+  "command.thirst.set": "设置口渴值为 %1$s,解渴值为 %2$s",
+  "command.thirst.enable": "已为玩家 %1$s 启用口渴",
+  "command.thirst.disable": "已为玩家 %1$s 禁用口渴"
 }

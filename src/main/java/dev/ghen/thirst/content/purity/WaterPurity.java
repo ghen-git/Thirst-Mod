@@ -2,6 +2,7 @@ package dev.ghen.thirst.content.purity;
 
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.content.registry.ItemInit;
+import dev.ghen.thirst.foundation.common.event.RegisterThirstValueEvent;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import dev.ghen.thirst.foundation.util.MathHelper;
 import dev.ghen.thirst.foundation.util.ReflectionUtil;
@@ -54,7 +55,10 @@ import umpaz.farmersrespite.common.registry.FRItems;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 @SuppressWarnings("SpellCheckingInspection")
 @Mod.EventBusSubscriber
@@ -216,7 +220,10 @@ public class WaterPurity
     }
     /**
      * Registers new custom water container
+     * the container will be taken into consider of purity
+     * Don't use it directly. Trying to subscribe #{@link RegisterThirstValueEvent}
      */
+    @Deprecated
     @SuppressWarnings("unused")
     public static void addContainer(ContainerWithPurity container)
     {

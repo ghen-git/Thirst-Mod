@@ -139,10 +139,9 @@ dependencies {
     implementation fg.deobf("curse.maven:create-central-kitchen-820977:4599830")
     implementation fg.deobf("curse.maven:tough-as-nails-246391:3871450")
     implementation fg.deobf("curse.maven:jade-324717:4719987")
-    implementation fg.deobf("curse.maven:supplementaries-412082:4855909")
+    implementation fg.deobf("curse.maven:supplementaries-412082:5152602")
     implementation fg.deobf("curse.maven:selene-499980:4843863")
 
-    implementation fg.deobf("curse.maven:corail-tombstone-243707:4775786")
     implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4649951")
 
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
@@ -161,8 +160,8 @@ jar {
                 "Specification-Title"     : "thirst",
                 "Specification-Vendor"    : "thirstsareus",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Title"    : "ThirstWasTaken",
+                "Implementation-Version"  : mod_version,
                 "Implementation-Vendor"   : "thirstsareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs"            : "thirst.mixin.json"
@@ -174,13 +173,22 @@ jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        mavenJava(MavenPublication.class) {
+            groupId = group
+            artifactId = "ThirstWasTaken"
+            version = "${mod_version}"
+            from components.java
         }
     }
     repositories {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
+            allowInsecureProtocol = true
+            name = 'maven'
+            credentials (PasswordCredentials.class)
+            authentication {
+                basic(BasicAuthentication)
+            }
         }
     }
 }
