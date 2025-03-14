@@ -1,0 +1,22 @@
+{
+  "death.attack.dehydrate": "%1$s умер от обезвоживания",
+  "death.attack.dehydrate.player": "%1$s умер от обезвоживания, пока сражался с %2$s",
+  "item.thirst.wooden_water_bowl": "Деревянная миска с водой",
+  "item.thirst.terracotta_water_bowl": "Обожжённая глиняная миска с водой",
+  "item.thirst.terracotta_bowl": "Обожённая глиняная миска",
+  "item.thirst.clay_bowl": "Глиняная миска",
+  "thirst.container.kettle.no_water": "Пусто.",
+  "thirst.container.kettle.has_single_water": "Содерджит 1 пузырёк с %s водой",
+  "thirst.container.kettle.has_many_water": "Содержит %1$s пузырка %2$s воды",
+  "itemGroup.thirst": "Thirst was Taken",
+  "thirst.purity.dirty": "Грязная",
+  "thirst.purity.slightly_dirty": "Грязноватая",
+  "thirst.purity.acceptable": "Приемлемая",
+  "thirst.purity.purified": "Чистая",
+  "block.thirst.sand_filter": "Песочный фильтр",
+
+  "thirst.ponder.sand_filter.header": "Очищайте воду с помощью песочного фильтра",
+  "thirst.ponder.sand_filter.text_1": "Песочный фильтр за один этап очищает прокачиваемую через него воду",
+  "thirst.ponder.sand_filter.text_2": "Грязную воду нужно закачивать сверху...",
+  "thirst.ponder.sand_filter.text_3": "и очищенную воду, соответственно, снизу."
+}

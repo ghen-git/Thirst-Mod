@@ -121,7 +121,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("curse.maven:appleskin-248787:3927564")
-    implementation fg.deobf("curse.maven:cold-sweat-506194:3988033")
+    implementation fg.deobf("curse.maven:cold-sweat-506194:5015720")
     implementation fg.deobf("curse.maven:farmers-delight-398521:4679315")
     implementation fg.deobf("curse.maven:farmers-respite-551453:3859156")
     implementation fg.deobf("curse.maven:brewin-and-chewin-637808:3854764")
@@ -132,7 +132,6 @@ dependencies {
     implementation fg.deobf("curse.maven:selene-499980:4747959")
 
     implementation fg.deobf("curse.maven:vampirism-become-a-vampire-233029:4082397")
-    implementation fg.deobf("curse.maven:corail-tombstone-243707:4775782")
 }
 
 mixin {
@@ -146,8 +145,8 @@ jar {
                 "Specification-Title"     : "thirst",
                 "Specification-Vendor"    : "thirstsareus",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Title"    : "ThirstWasTaken",
+                "Implementation-Version"  : mod_version,
                 "Implementation-Vendor"   : "thirstsareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs"            : "thirst.mixin.json"
@@ -159,13 +158,22 @@ jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        mavenJava(MavenPublication.class) {
+            groupId = group
+            artifactId = "ThirstWasTaken"
+            version = "${mod_version}"
+            from components.java
         }
     }
     repositories {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
+            allowInsecureProtocol = true
+            name = 'maven'
+            credentials (PasswordCredentials.class)
+            authentication {
+                basic(BasicAuthentication)
+            }
         }
     }
 }

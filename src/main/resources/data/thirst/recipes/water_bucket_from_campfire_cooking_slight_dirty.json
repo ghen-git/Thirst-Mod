@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient":[
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:water_bucket",
+      "nbt": "{Purity:0}"
+    },
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:water_bucket",
+      "nbt": "{Purity:-1}"
+    }
+  ],
+  "result": {
+    "item": "minecraft:water_bucket",
+    "nbt": {
+      "Purity": 1
+    }
+  },
+  "experience": 0.35,
+  "cookingtime": 300
+}

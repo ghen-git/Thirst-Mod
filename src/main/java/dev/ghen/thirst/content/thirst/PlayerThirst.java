@@ -9,9 +9,10 @@ import dev.ghen.thirst.foundation.network.ThirstModPacketHandler;
 import dev.ghen.thirst.foundation.network.message.PlayerThirstSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -28,14 +29,9 @@ public class PlayerThirst implements IThirst
     int syncTimer = 0;
     float prevTickExhaustion = 0.0F;
     boolean justHealed = false;
-    Vec3 lastPos = Vec3.ZERO;
-
-    public Vec3 getLastPos()
-    {
-        return lastPos;
-    }
-
-    private static final float exhaustionMultiplier = 0.175f;
+    boolean shouldTickThirst = true;
+    boolean exhaustionRecalculate = false;
+    boolean init = true;
 
     public int getThirst()
     {
@@ -67,10 +63,18 @@ public class PlayerThirst implements IThirst
         exhaustion = value;
     }
 
+    @Override
+    public void setShouldTickThirst(boolean value){shouldTickThirst = value;}
+    @Override
+    public boolean getShouldTickThirst(){return shouldTickThirst;}
+
     public void drink(Player player, int thirst, int quenched)
     {
+        int extra_quenched = Math.max(this.thirst + thirst - 20, 0);
+        if(!CommonConfig.EXTRA_HYDRATION_CONVERT_TO_QUENCHED.get())
+            extra_quenched = 0;
         this.thirst = Math.min(this.thirst + thirst, 20);
-        this.quenched = Math.min(this.quenched + quenched, this.thirst);
+        this.quenched = Math.min(this.quenched + quenched + extra_quenched, this.thirst);
     }
 
     /**
@@ -83,14 +87,39 @@ public class PlayerThirst implements IThirst
         if(player.getAbilities().invulnerable)
             return;
 
-        if(checkTombstoneEffects && player.hasEffect(ovh.corail.tombstone.registry.ModEffects.ghostly_shape))
+        if(!shouldTickThirst) {
+            if (init) {
+                init = false;
+                updateThirstData(player);
+            }
+            return;
+        }
+
+        if(checkTombstoneEffects && player.getActiveEffects().stream().anyMatch(e -> e.getDescriptionId().contains("ghostly_shape")))
             return;
 
         if(checkVampirismEffects && Helper.isVampire(player))
             return;
 
-        if (!checkFDEffects|| !player.hasEffect(ModEffects.NOURISHMENT.get()))
+        boolean isNourished = checkFDEffects && player.hasEffect(ModEffects.NOURISHMENT.get());
+        boolean isHunger = player.hasEffect(MobEffects.HUNGER);
+        boolean isSitting = player.isPassenger();
+
+        if(CommonConfig.DEPLETES_WHEN_NAUSEA.get() && player.getActiveEffects().stream().anyMatch(e->e.getEffect().equals(MobEffects.CONFUSION))){
+            addExhaustion(player,0.06F);
+        }
+
+        if(isHunger){
+            exhaustion -= 0.005F * (float)(player.getEffect(MobEffects.HUNGER).getAmplifier() + 1) *
+                    ThirstHelper.getExhaustionBiomeModifier(player) *
+                    ThirstHelper.getExhaustionFireProtModifier(player)*
+                    ThirstHelper.getExhaustionFireResistanceModifier(player);
+        }
+
+        if (!isSitting && !isNourished)
+        {
             updateExhaustion(player);
+        }
 
         if (exhaustion > 4)
         {
@@ -99,7 +128,7 @@ public class PlayerThirst implements IThirst
             {
                 quenched--;
             }
-            else if (difficulty != Difficulty.PEACEFUL)
+            else if (difficulty != Difficulty.PEACEFUL || CommonConfig.THIRST_DEPLETION_IN_PEACEFUL.get())
             {
                 thirst = Math.max(thirst - 1, 0);
             }
@@ -108,6 +137,17 @@ public class PlayerThirst implements IThirst
         ++syncTimer;
         if(syncTimer > 10 && !player.getLevel().isClientSide())
         {
+            if(difficulty == Difficulty.PEACEFUL && !CommonConfig.THIRST_DEPLETION_IN_PEACEFUL.get()){
+                thirst = Math.min(thirst + 1,20);
+            }
+
+            final float angle = Mth.wrapDegrees(player.getXRot());
+            if (angle <= -80  && player.level.isRainingAt(player.blockPosition().above()) && CommonConfig.CAN_DRINK_RAIN_WATETR.get())
+            {
+                thirst = Math.min(thirst + 1,20);
+                quenched = Math.min(quenched +1,20);
+            }
+
             updateThirstData(player);
             syncTimer = 0;
         }
@@ -130,7 +170,10 @@ public class PlayerThirst implements IThirst
     void updateExhaustion(Player player)
     {
         float hungerExhaustion = player.getFoodData().getExhaustionLevel();
-        float normalizedHungerExhaustion = hungerExhaustion < this.prevTickExhaustion ? hungerExhaustion + 4.0F : hungerExhaustion;
+        float normalizedHungerExhaustion = hungerExhaustion < this.prevTickExhaustion ? (exhaustionRecalculate ? hungerExhaustion + 4.0F : hungerExhaustion) : hungerExhaustion;
+        if(exhaustionRecalculate){
+            exhaustionRecalculate = false;
+        }
         float deltaExhaustion = normalizedHungerExhaustion - this.prevTickExhaustion;
         this.addExhaustion(player, deltaExhaustion);
         this.prevTickExhaustion = hungerExhaustion;
@@ -139,8 +182,17 @@ public class PlayerThirst implements IThirst
     public void updateThirstData(Player player)
     {
         ThirstModPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                new PlayerThirstSyncMessage(thirst, quenched, exhaustion));
+                new PlayerThirstSyncMessage(thirst, quenched, exhaustion,shouldTickThirst));
     }
+
+    @Override
+    public void setJustHealed()
+    {
+        justHealed = true;
+    }
+
+    @Override
+    public void ExhaustionRecalculate(){exhaustionRecalculate = true;}
 
     @Override
     public void copy(IThirst cap)
@@ -148,12 +200,7 @@ public class PlayerThirst implements IThirst
         thirst = cap.getThirst();
         quenched = cap.getQuenched();
         exhaustion = cap.getExhaustion();
-    }
-
-    @Override
-    public void setJustHealed()
-    {
-        justHealed = true;
+        shouldTickThirst = cap.getShouldTickThirst();
     }
 
     public void addExhaustion(Player player, float amount)
@@ -183,6 +230,7 @@ public class PlayerThirst implements IThirst
         nbt.putInt("thirst", thirst);
         nbt.putInt("quenched", quenched);
         nbt.putFloat("exhaustion", exhaustion);
+        nbt.putBoolean("enable",shouldTickThirst);
 
         return nbt;
     }
@@ -192,6 +240,6 @@ public class PlayerThirst implements IThirst
         thirst = nbt.getInt("thirst");
         quenched = nbt.getInt("quenched");
         exhaustion = nbt.getFloat("exhaustion");
-
+        shouldTickThirst = !nbt.contains("enable") || nbt.getBoolean("enable");
     }
 }

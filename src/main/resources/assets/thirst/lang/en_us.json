@@ -18,5 +18,9 @@
   "thirst.ponder.sand_filter.header": "Purifying Water with a Sand Filter",
   "thirst.ponder.sand_filter.text_1": "A Sand Filter purifies by one step water pumped through it",
   "thirst.ponder.sand_filter.text_2": "Dirty Water needs to be pumped in from the top...",
-  "thirst.ponder.sand_filter.text_3": "and Purified Water can be pumped out from the bottom"
+  "thirst.ponder.sand_filter.text_3": "and Purified Water can be pumped out from the bottom",
+  "command.thirst.query": "Current Thirst: %1$s, Current Quenched: %2$s",
+  "command.thirst.set": "set thirst to %1$s, set quenched to %2$s",
+  "command.thirst.enable": "Enable tick Thirst for %1$s",
+  "command.thirst.disable": "Disable tick Thirst for %1$s"
 }
