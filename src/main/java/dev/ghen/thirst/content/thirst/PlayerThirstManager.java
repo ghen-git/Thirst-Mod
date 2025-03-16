@@ -3,13 +3,16 @@ package dev.ghen.thirst.content.thirst;
 import dev.ghen.thirst.api.ThirstHelper;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.common.item.DrinkableItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -85,6 +88,21 @@ public class PlayerThirstManager
     {
         if(CommonConfig.CAN_DRINK_BY_HAND.get() && event.getEntity().level().isClientSide)
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> DrinkByHandClient::drinkByHand);
+    }
+
+    @SubscribeEvent
+    public static void drink(LivingEntityUseItemEvent.Finish event)
+    {
+        if(event.getEntity() instanceof Player && ThirstHelper.itemRestoresThirst(event.getItem()))
+        {
+            if(event.getItem().getItem() instanceof PotionItem)
+                return;
+            if(event.getItem().getItem().isEdible())
+                return;
+            if(event.getItem().getItem() instanceof DrinkableItem)
+                return;
+            PlayerThirst.drink(event.getItem(), (Player) event.getEntity());
+        }
     }
 
     @SubscribeEvent
