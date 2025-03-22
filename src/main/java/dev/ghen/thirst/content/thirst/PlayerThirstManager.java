@@ -93,23 +93,15 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void drink(LivingEntityUseItemEvent.Finish event)
     {
-        if(event.getItem().getItem() instanceof PotionItem)
-            return;
-        if(event.getItem().getItem().isEdible())
-            return;
-        if(event.getItem().getItem() instanceof DrinkableItem)
-            return;
-
         if(event.getEntity() instanceof Player && ThirstHelper.itemRestoresThirst(event.getItem()))
         {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                ItemStack item = event.getItem();
-                if(WaterPurity.givePurityEffects((Player) event.getEntity(), item)){
-
-                    cap.drink((Player) event.getEntity(), ThirstHelper.getThirst(item), ThirstHelper.getQuenched(item));
-                }
-            });
+            if(event.getItem().getItem() instanceof PotionItem)
+                return;
+            if(event.getItem().getItem().isEdible())
+                return;
+            if(event.getItem().getItem() instanceof DrinkableItem)
+                return;
+            PlayerThirst.drink(event.getItem(), (Player) event.getEntity());
         }
     }
 
