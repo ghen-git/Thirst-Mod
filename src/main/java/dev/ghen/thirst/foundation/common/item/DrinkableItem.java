@@ -1,6 +1,5 @@
 package dev.ghen.thirst.foundation.common.item;
 
-import dev.ghen.thirst.content.thirst.PlayerThirst;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -50,10 +49,6 @@ public class DrinkableItem extends Item
         if (player instanceof ServerPlayer)
         {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer)player, item);
-        }
-        if(player != null)
-        {
-            PlayerThirst.drink(item, player);
         }
 
         if (player != null)
