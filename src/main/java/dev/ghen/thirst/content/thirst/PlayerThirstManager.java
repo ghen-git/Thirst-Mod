@@ -1,17 +1,18 @@
 package dev.ghen.thirst.content.thirst;
 
-import dev.ghen.thirst.Thirst;
 import dev.ghen.thirst.api.ThirstHelper;
-import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.foundation.common.capability.IThirst;
 import dev.ghen.thirst.foundation.common.capability.ModCapabilities;
+import dev.ghen.thirst.foundation.common.item.DrinkableItem;
 import dev.ghen.thirst.foundation.config.CommonConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -26,6 +27,8 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import dev.ghen.thirst.Thirst;
+import dev.ghen.thirst.content.purity.WaterPurity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -90,18 +93,15 @@ public class PlayerThirstManager
     @SubscribeEvent
     public static void drink(LivingEntityUseItemEvent.Finish event)
     {
-        if(event.getItem().getItem().isEdible())
-            return;
-
         if(event.getEntity() instanceof Player && ThirstHelper.itemRestoresThirst(event.getItem()))
         {
-            event.getEntity().getCapability(ModCapabilities.PLAYER_THIRST).ifPresent(cap ->
-            {
-                ItemStack item = event.getItem();
-                if(WaterPurity.givePurityEffects((Player) event.getEntity(), item)){
-                    cap.drink((Player) event.getEntity(), ThirstHelper.getThirst(item), ThirstHelper.getQuenched(item));
-                }
-            });
+            if(event.getItem().getItem() instanceof PotionItem)
+                return;
+            if(event.getItem().getItem().isEdible())
+                return;
+            if(event.getItem().getItem() instanceof DrinkableItem)
+                return;
+            PlayerThirst.drink(event.getItem(), (Player) event.getEntity());
         }
     }
 
