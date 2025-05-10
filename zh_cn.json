@@ -1,0 +1,23 @@
+{
+  "death.attack.dehydrate": "%1$s脱水而死",
+  "death.attack.dehydrate.player": "%1$s在与%2$s战斗时脱水而死",
+  "item.thirst.wooden_water_bowl": "装水的木碗",
+  "item.thirst.terracotta_water_bowl": "装水的陶碗",
+  "item.thirst.terracotta_bowl": "陶碗",
+  "item.thirst.clay_bowl": "黏土碗",
+  "itemGroup.thirst": "口渴",
+  "thirst.purity.dirty": "肮脏",
+  "thirst.purity.slightly_dirty": "有点脏",
+  "thirst.purity.acceptable": "可接受的",
+  "thirst.purity.purified": "纯净",
+  "block.thirst.sand_filter": "砂滤器",
+
+  "thirst.ponder.sand_filter.header": "使用砂滤器净化水",
+  "thirst.ponder.sand_filter.text_1": "砂滤器会净化泵入的水",
+  "thirst.ponder.sand_filter.text_2": "脏水需要从上方泵入……",
+  "thirst.ponder.sand_filter.text_3": "净化后的水可以从底部抽出",
+  "command.thirst.query": "当前口渴值: %1$s, 当前解渴值: %2$s",
+  "command.thirst.set": "设置口渴值为 %1$s,解渴值为 %2$s",
+  "command.thirst.enable": "已为玩家 %1$s 启用口渴",
+  "command.thirst.disable": "已为玩家 %1$s 禁用口渴"
+}
