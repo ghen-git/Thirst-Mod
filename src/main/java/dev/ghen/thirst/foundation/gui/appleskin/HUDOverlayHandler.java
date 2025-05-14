@@ -69,7 +69,7 @@ public class HUDOverlayHandler {
             boolean isMounted = mc.player.getVehicle() instanceof LivingEntity;
             boolean isAlive = mc.player.isAlive();
 
-            if (isAlive && ModConfig.SHOW_SATURATION_OVERLAY.get() && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.cancelRender) {
+            if (isAlive && !isMounted && !mc.options.hideGui && gui.shouldDrawSurvivalElements() && !ThirstBarRenderer.cancelRender) {
                 renderThirstOverlay(event.getGuiGraphics());
             }
         }
@@ -105,8 +105,9 @@ public class HUDOverlayHandler {
         int right = mc.getWindow().getGuiScaledWidth() / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get(); // right of food bar
 
         generateHungerBarOffsets(top, right, mc.gui.getGuiTicks(), player);
-
-        drawSaturationOverlay(0, thirstData.getQuenched(), guiGraphics , right, top, 1f);
+        if(ModConfig.SHOW_SATURATION_OVERLAY.get()){
+            drawSaturationOverlay(0, thirstData.getQuenched(), guiGraphics , right, top, 1f);
+        }
 
         // try to get the item stack in the player hand
         ItemStack heldItem = player.getMainHandItem();
