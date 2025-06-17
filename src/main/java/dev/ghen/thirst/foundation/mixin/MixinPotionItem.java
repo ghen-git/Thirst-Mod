@@ -1,5 +1,6 @@
 package dev.ghen.thirst.foundation.mixin;
 
+import dev.ghen.thirst.content.purity.WaterPurity;
 import dev.ghen.thirst.content.thirst.PlayerThirst;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +34,9 @@ public class MixinPotionItem {
         Player player = livingEntity instanceof Player ? (Player)livingEntity : null;
         if(player != null)
         {
-            PlayerThirst.drink(item, player);
+            if (WaterPurity.givePurityEffects((Player) livingEntity, item)){
+                PlayerThirst.drink(item, player);
+            }
         }
     }
 }
