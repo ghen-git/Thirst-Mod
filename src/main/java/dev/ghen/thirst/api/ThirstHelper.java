@@ -168,7 +168,7 @@ public class ThirstHelper
             //humidity range: 0 - 0.8 == 0.8 midpoint: 0.4
             float humidity = biome.getModifiedClimateSettings().downfall() + 0.6f;
             if(humidity <= 0.6)
-                humidity += 0.5;
+                humidity += 0.5f;
 
             //temperature range: -0.8 - 2 == 2.8 midpoint: 0.8
             float temp = biome.getBaseTemperature() + 0.2f;
