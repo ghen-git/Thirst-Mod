@@ -137,7 +137,8 @@ public class ThirstHelper
     {
         final float perLevelMultiplier = 0.0625f;
         int totalLevels = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), player.damageSources().onFire()) / 2;
-
+        //In some situations, the player can have more than 12 levels of fire protection due to some bugs
+        if(totalLevels>12) totalLevels=12;
         return 1.0f - ((totalLevels * perLevelMultiplier) * 0.75f);
     }
 
@@ -167,7 +168,7 @@ public class ThirstHelper
             //humidity range: 0 - 0.8 == 0.8 midpoint: 0.4
             float humidity = biome.getModifiedClimateSettings().downfall() + 0.6f;
             if(humidity <= 0.6)
-                humidity += 0.5;
+                humidity += 0.5f;
 
             //temperature range: -0.8 - 2 == 2.8 midpoint: 0.8
             float temp = biome.getBaseTemperature() + 0.2f;

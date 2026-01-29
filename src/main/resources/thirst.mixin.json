@@ -33,12 +33,12 @@
     "toughasnails.MixinServerConfig",
     "toughasnails.MixinThirstHandler",
     "toughasnails.MixinThirstHelperImpl",
-    "toughasnails.MixinTooltipHandler",
     "botania.MixinForgeXplatImpl"
   ],
   "client": [
     "MixinLocalPlayer",
-    "farmersrespite.MixinKettleScreen"
+    "farmersrespite.MixinKettleScreen",
+    "toughasnails.MixinTooltipHandler"
   ],
   "minVersion": "0.8"
 }

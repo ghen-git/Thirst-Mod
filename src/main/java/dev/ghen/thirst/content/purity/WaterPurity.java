@@ -688,7 +688,9 @@ public class WaterPurity
         level.gameEvent(null, GameEvent.FLUID_PICKUP, blockpos);
         addPurity(result, blockpos, level);
 
-        if(pickupBlock)
+
+        BlockState state = level.getBlockState(blockpos);
+        if(pickupBlock && state.getBlock() instanceof BucketPickup)
             ((BucketPickup)level.getBlockState(blockpos).getBlock()).pickupBlock(level, blockpos, level.getBlockState(blockpos));
 
         item.shrink(1);
